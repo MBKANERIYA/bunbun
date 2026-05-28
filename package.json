@@ -1,6 +1,10 @@
 {
   "name": "bunbun-clothing-root",
   "private": true,
+  "scripts": {
+    "postinstall": "npm install --prefix FrontEnd",
+    "build": "npm run build --prefix FrontEnd"
+  },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "body-parser": "^2.2.0",
