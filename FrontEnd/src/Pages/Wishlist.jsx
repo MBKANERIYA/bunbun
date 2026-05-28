@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import ProductCard from '../Component/ProductCard';
 import { useWishlist } from '../Component/WishlistContext';
 import { getAuthUserId } from '../utils/auth';
+import { apiUrl } from '../utils/apiConfig';
 
 const EmptyWishlist = () => (
     <div className="empty-wishlist">
@@ -47,7 +48,7 @@ const Wishlist = () => {
 
             setLoading(true);
             try {
-                const response = await axios.get(`http://localhost:4000/v1/wishlist/getWishlist/${userId}`);
+                const response = await axios.get(apiUrl(`/v1/wishlist/getWishlist/${userId}`));
                 setWishlistItems(response.data?.wishlist?.product || []);
                 setError(null);
             } catch (err) {

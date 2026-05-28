@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, useCallback, useEffect } from 'react';
 import axios from 'axios';
 import { getAuthUserId } from '../utils/auth';
+import { apiUrl } from '../utils/apiConfig';
 
 // Create the context
 const WishlistContext = createContext();
@@ -23,7 +24,7 @@ export const WishlistProvider = ({ children }) => {
 
         setLoading(true);
         try {
-            const response = await axios.get(`http://localhost:4000/v1/wishlist/getWishlist/${userId}`);
+            const response = await axios.get(apiUrl(`/v1/wishlist/getWishlist/${userId}`));
             const ids = response.data?.wishlist?.product
                 ?.map(item => item.productId?._id)
                 .filter(Boolean) || [];
@@ -59,7 +60,7 @@ export const WishlistProvider = ({ children }) => {
         }
 
         try {
-            await axios.post("http://localhost:4000/v1/wishlist/createWishlist", { userId, productId });
+            await axios.post(apiUrl("/v1/wishlist/createWishlist"), { userId, productId });
             return true;
         } catch (err) {
             console.error("Error adding to wishlist:", err);
@@ -72,7 +73,7 @@ export const WishlistProvider = ({ children }) => {
         if (!userId) return false;
 
         try {
-            await axios.delete(`http://localhost:4000/v1/wishlist/removeWishlist/${userId}/${productId}`);
+            await axios.delete(apiUrl(`/v1/wishlist/removeWishlist/${userId}/${productId}`));
             return true;
         } catch (err) {
             console.error("Error removing from wishlist:", err);

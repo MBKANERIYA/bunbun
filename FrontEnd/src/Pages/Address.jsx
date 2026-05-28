@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaPlus, FaTimes, FaHome } from "react-icons/fa";
 import DetailedSummary from "./OrderSummery";
+import { apiUrl } from "../utils/apiConfig";
 
 const AddAddress = () => {
   const userId = "6892e8456c2cbf8ecb95c1ea";
@@ -22,7 +23,7 @@ const AddAddress = () => {
   // Fetch last 5 addresses
   const fetchAddresses = async () => {
     try {
-      const res = await axios.get(`http://localhost:4000/v1/address/getAdd/${userId}`);
+      const res = await axios.get(apiUrl(`/v1/address/getAdd/${userId}`));
       const all = res.data.addresses || [];
       const lastFive = all.slice(-3).reverse();
       setAddresses(lastFive);
@@ -53,7 +54,7 @@ const AddAddress = () => {
     e.preventDefault();
     try {
       const payload = { userId, address };
-      await axios.post("http://localhost:4000/v1/address/add", payload, {
+      await axios.post(apiUrl("/v1/address/add"), payload, {
         headers: { "Content-Type": "application/json" },
       });
       alert("✅ Address added successfully!");

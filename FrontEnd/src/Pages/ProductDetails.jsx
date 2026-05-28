@@ -4,6 +4,7 @@ import axios from "axios";
 import { useCart } from "../Component/CartContext";
 import { useWishlist } from "../Component/WishlistContext";
 import { getAuthUser } from "../utils/auth";
+import { apiUrl } from "../utils/apiConfig";
 import {
     FaShoppingCart,
     FaCreditCard,
@@ -75,7 +76,7 @@ const ProductDetails = () => {
         const fetchProduct = async () => {
             try {
                 const { data } = await axios.get(
-                    `http://localhost:4000/v1/product/singleProduct/${id}`
+                    apiUrl(`/v1/product/singleProduct/${id}`)
                 );
 
                 if (data.singleProduct) {
@@ -91,7 +92,7 @@ const ProductDetails = () => {
 
     const fetchRatings = async () => {
         try {
-            const { data } = await axios.get(`http://localhost:4000/v1/rating/getRating/${id}`);
+            const { data } = await axios.get(apiUrl(`/v1/rating/getRating/${id}`));
             setRatings(data || emptyRatings);
         } catch (error) {
             if (error.response?.status === 404) {
@@ -155,7 +156,7 @@ const ProductDetails = () => {
             if (image) formData.append("productImage", image);
 
             const { data } = await axios.post(
-                "http://localhost:4000/v1/rating/addRating",
+                apiUrl("/v1/rating/addRating"),
                 formData,
                 { headers: { "Content-Type": "multipart/form-data" } }
             );

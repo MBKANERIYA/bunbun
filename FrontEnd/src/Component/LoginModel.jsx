@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 import { FaSpinner } from 'react-icons/fa'; 
 import { notifyAuthChanged } from '../utils/auth';
+import { apiUrl } from '../utils/apiConfig';
 
 const LoginModal = ({ isOpen, onClose }) => {
     // State for user input
@@ -22,7 +23,7 @@ const LoginModal = ({ isOpen, onClose }) => {
         setError(null);
 
         try {
-            const response = await axios.post('http://localhost:4000/v1/User/login', {
+            const response = await axios.post(apiUrl('/v1/User/login'), {
                 email,
                 password,
             });

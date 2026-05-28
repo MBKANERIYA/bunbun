@@ -9,6 +9,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { useNavigate } from "react-router-dom";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
+import { apiUrl } from "../utils/apiConfig";
 
 
 
@@ -64,7 +65,7 @@ const HomePage = () => {
     const loopMedia = [...medias, ...medias]
 
     const fetchProducts = async () => {
-        let products = await axios.get("http://localhost:4000/v1/product/getProduct")
+        let products = await axios.get(apiUrl("/v1/product/getProduct"))
         console.log(products.data.product);
         const allProduct = products?.data?.product
         setProduct(allProduct)
@@ -73,7 +74,7 @@ const HomePage = () => {
 
 
     const fetchBanners = async () => {
-        let banner = await axios.get("http://localhost:4000/v1/banner/getBanner")
+        let banner = await axios.get(apiUrl("/v1/banner/getBanner"))
         console.log(banner?.data?.banner.banners);
         const allCategoryImage = banner?.data?.banner?.categoryImages
         const allBanner = banner?.data?.banner?.banners

@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, useEffect, useCallback } from "react";
 import axios from "axios";
 import { getAuthUserId } from "../utils/auth";
+import { apiUrl } from "../utils/apiConfig";
 
 const CartContext = createContext();
 
@@ -13,7 +14,7 @@ export const CartProvider = ({ children }) => {
     const [error, setError] = useState(null);
     const [userId, setUserId] = useState(getAuthUserId());
 
-    const API_BASE = "http://localhost:4000/v1/cart";
+    const API_BASE = apiUrl("/v1/cart");
 
     const fetchCart = useCallback(async () => {
         if (!userId) {

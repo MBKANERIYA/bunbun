@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import Slider from 'react-slick'
 import ProductCard from '../Component/ProductCard'
+import { apiUrl } from '../utils/apiConfig'
 
 let category = [
     "https://sudathi.com/cdn/shop/files/7-compressed_29cbce78-d541-409d-803a-7d0d1863599e.jpg?v=1736233279&width=750",
@@ -14,7 +15,7 @@ const NadhaagaGold = () => {
     const [product, setProduct] = useState([])
 
     const fetchProducts = async () => {
-        let products = await axios.get("http://localhost:4000/v1/product/getProduct")
+        let products = await axios.get(apiUrl("/v1/product/getProduct"))
         console.log(products.data.product);
         const allProduct = products?.data?.product
         setProduct(allProduct)

@@ -5,6 +5,7 @@ import { Accordion, Form, Offcanvas, Button } from "react-bootstrap";
 import { BsFilterLeft, BsFillGrid3X3GapFill, BsFillGridFill, BsGrid1X2Fill } from 'react-icons/bs';
 
 import ProductCard from "../Component/ProductCard";
+import { apiUrl } from "../utils/apiConfig";
 
 const CollectionPage = () => {
     // Data states
@@ -33,7 +34,7 @@ const CollectionPage = () => {
             try {
                 setLoading(true);
                 const payload = category ? { category } : {};
-                const { data } = await axios.post("http://localhost:4000/v1/product/filterProduct", payload);
+                const { data } = await axios.post(apiUrl("/v1/product/filterProduct"), payload);
                 
                 const productsData = data.filterProduct || [];
                 setProducts(productsData);

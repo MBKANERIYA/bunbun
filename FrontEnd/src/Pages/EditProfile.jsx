@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { apiUrl } from "../utils/apiConfig";
 
 const EditProfile = () => {
   const [userId, setUserId] = useState(null);
@@ -26,7 +27,7 @@ const EditProfile = () => {
     const fetchUser = async () => {
       if (!userId) return;
       try {
-        const res = await axios.get(`http://localhost:4000/v1/User/userProfile/${userId}`);
+        const res = await axios.get(apiUrl(`/v1/User/userProfile/${userId}`));
         console.log("rrrrrrr",res);
         setFormData({
           fullName: res.data.user.fullName || "",
@@ -61,7 +62,7 @@ fetchUser();
 
     try {
       const res = await axios.post(
-        `http://localhost:4000/v1/User/updateUser/${userId}`,
+        apiUrl(`/v1/User/updateUser/${userId}`),
         formData
       );
       setMessage("✅ Profile updated successfully!");
