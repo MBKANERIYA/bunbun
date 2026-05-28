@@ -1,8 +1,16 @@
 {
-  "installCommand": "cd FrontEnd && npm install",
+  "installCommand": "npm install --prefix FrontEnd && npm install --prefix BackEnd",
   "buildCommand": "cd FrontEnd && npm run build",
   "outputDirectory": "FrontEnd/dist",
   "rewrites": [
+    {
+      "source": "/v1/(.*)",
+      "destination": "/api/v1/$1"
+    },
+    {
+      "source": "/images/(.*)",
+      "destination": "/api/images/$1"
+    },
     {
       "source": "/(.*)",
       "destination": "/index.html"

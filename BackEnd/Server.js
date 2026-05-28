@@ -1,18 +1,6 @@
-require("dotenv").config()
-let express = require("express")
-let bodyParser = require("body-parser")
-let http = require("http")
-let cors = require("cors")
 const dbConnect = require("./Config/DbConnect")
-const router = require("./Routes")
-
-let app = express()
+const app = require("./App")
 let startupTimeoutMS = 15000
-
-app.use(cors())
-app.use(bodyParser.json())
-app.use("/images", express.static("public/images"))
-app.use("/v1", router)
 
 let withTimeout = (promise, timeoutMS) => {
     return Promise.race([
@@ -29,8 +17,9 @@ let startServer = async () => {
     try {
         await withTimeout(dbConnect(), startupTimeoutMS)
 
-        http.createServer(app).listen(process.env.PORT, () => {
-            console.log(`Server successfully Started on ${process.env.PORT}`);
+        let port = process.env.PORT || 4000
+        app.listen(port, () => {
+            console.log(`Server successfully Started on ${port}`);
         })
     } catch (error) {
         console.error("Failed to start server:", error.message)
