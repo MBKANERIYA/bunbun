@@ -1,0 +1,10 @@
+# Changelog
+
+## 2026-05-28 — Fix Vercel Serverless Deployment
+**What**: Configured Vercel deployment correctly to serve backend API and added root package.json
+**Why**: The data was not fetching on the live Vercel website because serverless functions were failing to build and environment variables were missing.
+**Files Changed**: `vercel.json`, `api/v1/[...path].js`, `api/images/[...path].js`, `package.json`
+- Reverted to Vercel's zero-config deployment by simplifying `vercel.json`
+- Created a root `package.json` with the necessary backend dependencies so Vercel can compile the `api/` serverless functions.
+- Updated `req.url` manipulation inside serverless functions to ensure Express routing resolves `/v1/...` and `/images/...` paths correctly.
+- Created `knowledge-base` folder according to standard procedure.
