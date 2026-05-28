@@ -9,3 +9,4 @@
 - Added `build` and `postinstall` scripts to the root `package.json` so Vercel natively builds the frontend.
 - Updated `req.url` manipulation inside serverless functions to ensure Express routing resolves `/v1/...` and `/images/...` paths correctly.
 - Created `knowledge-base` folder according to standard procedure.
+- Updated \ercel.json\ SPA fallback rewrite to explicitly exclude \/api/\, \/v1/\, and \/images/\ routes using regex \((?!api/|v1/|images/).*)\, preventing the React index.html from shadowing the backend serverless functions.
