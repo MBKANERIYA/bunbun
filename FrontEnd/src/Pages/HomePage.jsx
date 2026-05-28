@@ -4,8 +4,6 @@ import ProductCard from "../Component/ProductCard"
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import { useNavigate } from "react-router-dom";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
@@ -65,25 +63,33 @@ const HomePage = () => {
     const loopMedia = [...medias, ...medias]
 
     const fetchProducts = async () => {
-        let products = await axios.get(apiUrl("/v1/product/getProduct"))
-        console.log(products.data.product);
-        const allProduct = products?.data?.product
-        setProduct(allProduct)
+        try {
+            let products = await axios.get(apiUrl("/v1/product/getProduct"))
+            console.log(products?.data?.product);
+            const allProduct = products?.data?.product || []
+            setProduct(allProduct)
+        } catch (error) {
+            console.error("Failed to fetch products:", error);
+            setProduct([]);
+        }
     }
     console.log("ppp", product);
 
 
     const fetchBanners = async () => {
-        let banner = await axios.get(apiUrl("/v1/banner/getBanner"))
-        console.log(banner?.data?.banner.banners);
-        const allCategoryImage = banner?.data?.banner?.categoryImages
-        const allBanner = banner?.data?.banner?.banners
-        setCategoryImage(allCategoryImage)
-        setTopBanner(allBanner?.topBanner)
-        setTrendingBanner(allBanner?.trendingBanner)
-        setBestSellerBanner(allBanner?.bestSellerBanner)
-        setExclusiveCollectionBanner(allBanner?.exclusiveCollectionBanner)
-
+        try {
+            let banner = await axios.get(apiUrl("/v1/banner/getBanner"))
+            console.log(banner?.data?.banner?.banners);
+            const allCategoryImage = banner?.data?.banner?.categoryImages || []
+            const allBanner = banner?.data?.banner?.banners || {}
+            setCategoryImage(allCategoryImage)
+            setTopBanner(allBanner?.topBanner)
+            setTrendingBanner(allBanner?.trendingBanner)
+            setBestSellerBanner(allBanner?.bestSellerBanner)
+            setExclusiveCollectionBanner(allBanner?.exclusiveCollectionBanner)
+        } catch (error) {
+            console.error("Failed to fetch banners:", error);
+        }
     }
     console.log(categoryImage);
 
@@ -167,7 +173,7 @@ const HomePage = () => {
 
                 <div className="tredingProduct mt-4">
                     <Slider {...settings}>
-                        {product
+                        {(product || [])
                             .filter((p) => p.subcategory === "Silk Saree")
                             .map((product, index) => (
                                 <div key={index} className="px-3 d-flex justify-content-center">
@@ -185,7 +191,7 @@ const HomePage = () => {
                     </div>
                     <div className="tredingProduct mt-4">
                         <Slider {...settings}>
-                            {product
+                            {(product || [])
                                 .filter((p) => p.subcategory === "Georgette Saree")
                                 .map((product, index) => (
                                     <div key={index} className="px-2 d-flex justify-content-center">
@@ -240,7 +246,7 @@ const HomePage = () => {
                     </div>
                     <div className="tredingProduct mt-4">
                         <Slider {...settings}>
-                            {product
+                            {(product || [])
                                 .filter((p) => p.subcategory === "Printed Saree")
                                 .map((product, index) => (
                                     <div key={index} className="px-2 d-flex justify-content-center">
