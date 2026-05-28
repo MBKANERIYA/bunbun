@@ -1,35 +1,17 @@
 {
-  "builds": [
+  "outputDirectory": "FrontEnd/dist",
+  "rewrites": [
     {
-      "src": "api/**/*.js",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": ["BackEnd/**"]
-      }
+      "source": "/v1/(.*)",
+      "destination": "/api/v1/$1"
     },
     {
-      "src": "FrontEnd/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/v1/(.*)",
-      "dest": "/api/v1/$1"
+      "source": "/images/(.*)",
+      "destination": "/api/images/$1"
     },
     {
-      "src": "/images/(.*)",
-      "dest": "/api/images/$1"
-    },
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/FrontEnd/$1"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
