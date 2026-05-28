@@ -2,6 +2,11 @@
   "installCommand": "npm install --prefix FrontEnd && npm install --prefix BackEnd",
   "buildCommand": "cd FrontEnd && npm run build",
   "outputDirectory": "FrontEnd/dist",
+  "functions": {
+    "api/**/*.js": {
+      "includeFiles": "BackEnd/**"
+    }
+  },
   "rewrites": [
     {
       "source": "/v1/(.*)",
