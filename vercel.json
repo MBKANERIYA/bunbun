@@ -10,7 +10,7 @@
       "destination": "/api/images/$1"
     },
     {
-      "source": "/(.*)",
+      "source": "/((?!api/|v1/|images/).*)",
       "destination": "/index.html"
     }
   ]
