@@ -1,0 +1,21 @@
+let express = require("express")
+let userRouter = require("./User.Routes.js")
+let bannerRouter = require("./Banner.Routes.js")
+let productRouter = require("./Product.Routes.js")
+let cartRouter = require("./Cart.Route.js")
+let wishlistRouter = require("./Wishlist.Routes.js")
+let ratingRouter = require("./Rating.Routes.js")
+let addressRouter = require("./Address.Route.js")
+let orderRouter = require("./Order.Route.js")
+let router = express.Router()
+
+router.use("/User", userRouter)
+router.use("/banner", bannerRouter)
+router.use("/product", productRouter)
+router.use("/cart", cartRouter)
+router.use("/wishlist", wishlistRouter)
+router.use("/rating", ratingRouter)
+router.use("/address", addressRouter)
+router.use("/order", orderRouter)
+
+module.exports = router

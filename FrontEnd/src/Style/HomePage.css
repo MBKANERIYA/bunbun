@@ -1,0 +1,122 @@
+.topBanner img {
+    width: 100%;
+    height: auto;
+    /* maintains aspect ratio */
+    display: block;
+}
+
+.categoryImage img {
+    width: 100%;
+    /* Make image fill its column */
+    height: auto;
+    /* Keep aspect ratio */
+    object-fit: cover;
+    /* Optional: if you want cropping */
+}
+
+.trendingBanner img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.bestSellerBanner img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.exclusiveBanner img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.sareeStoreImages .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+}
+
+.gold,
+.readyToWear {
+    width: 30%;
+    height: 100%;
+}
+
+.middle {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.bestSellet {
+    height: 50%;
+    margin-bottom: 10px;
+}
+
+
+.essentials {
+    height: 50%;
+}
+
+.gold img,
+.readyToWear img,
+.bestSellet img,
+.essentials img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    display: block;
+}
+
+.middle {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    /* Adjust the gap between bestSellet and essentials */
+}
+
+.slick-slide {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.slider {
+  overflow: hidden;
+  position: relative;
+  /* width: 100%; */
+  height: 100px;
+}
+
+.slide-track {
+  display: flex;
+  width: calc(250px * 14); /* 7 icons * 2 (duplicated) */
+  animation: scroll 25s linear infinite;
+}
+
+.slide {
+  width: 150px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.slide img {
+  width: 200px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Animation for continuous movement */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}

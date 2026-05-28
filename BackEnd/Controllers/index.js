@@ -1,0 +1,8 @@
+module.exports.UserController = require("./User.Controller")
+module.exports.bannerControler = require("./Banner.Controller")
+module.exports.productController = require("./Product.Controller")
+module.exports.cartController = require("./Cart.Controller")
+module.exports.wishlistController = require("./Wishlist.Controller")
+module.exports.ratingController = require("./Rating.controller")
+module.exports.addressController = require("./Address.Controller")
+module.exports.orderController = require("./Order.Controller")

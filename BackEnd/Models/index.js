@@ -1,0 +1,8 @@
+module.exports.userSchema = require("./User.Model")
+module.exports.bannerSchema = require("./Banner.Model")
+module.exports.productSchema = require("./Product.Model")
+module.exports.cartSchema = require("./Cart.Model")
+module.exports.wishlistSchema = require("./Wishlist.Model")
+module.exports.ratingSchema = require("./Rating.Model")
+module.exports.addressModel = require("./Address.Model")
+module.exports.orderSchema = require("./Order.Model")

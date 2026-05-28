@@ -1,0 +1,117 @@
+/* Container */
+.contact-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 80px auto;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+  color: #1c1c1c;
+}
+
+/* Title */
+.contact-title {
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* Subtitle */
+.contact-subtitle {
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 40px;
+}
+
+/* Cards Wrapper */
+.contact-card-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Each Card */
+.contact-card {
+  border: 1.8px solid #cfd8f6;
+  border-radius: 16px;
+  padding: 18px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.contact-card:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border-color: #0056d2;
+  transform: translateY(-3px);
+}
+
+/* Left content */
+.contact-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Icon Styles */
+.contact-icon {
+  background-color: #f0f4ff;
+  padding: 10px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.call-icon svg {
+  color: #0066cc;
+}
+
+.whatsapp-icon {
+  background-color: #e6f9ed;
+}
+
+.whatsapp-icon svg {
+  color: #25d366;
+}
+
+/* Text inside card */
+.contact-heading {
+  font-size: 17px;
+  font-weight: 500;
+  color: #222;
+  margin: 0;
+}
+
+.contact-timing {
+  font-size: 14px;
+  color: #666;
+  margin-top: 2px;
+}
+
+/* Arrow icon */
+.arrow-icon {
+  color: #0056d2;
+  transition: transform 0.3s ease;
+}
+
+.contact-card:hover .arrow-icon {
+  transform: translateX(4px);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .contact-container {
+    padding: 0 16px;
+  }
+
+  .contact-card {
+    padding: 16px 18px;
+  }
+
+  .contact-title {
+    font-size: 26px;
+  }
+}

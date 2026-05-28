@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1067" viewBox="0 0 800 1067">
+  <defs><linearGradient id="fabric" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="white" stop-opacity="0.82"/><stop offset="0.66" stop-color="white"/><stop offset="1" stop-color="#111" stop-opacity="0.28"/></linearGradient><filter id="soft"><feDropShadow dx="0" dy="16" stdDeviation="18" flood-opacity="0.16"/></filter></defs>
+  <rect width="800" height="1067" fill="#f7f4ef"/>
+  <circle cx="400" cy="430" r="302" fill="#fff" opacity="0.66"/>
+  <g filter="url(#soft)">
+    <path d="M260 308 C307 262 493 262 540 308 L656 424 C625 483 585 526 538 551 L522 720 C455 756 345 756 278 720 L262 551 C215 526 175 483 144 424 Z" fill="url(#fabric)"/>
+    <path d="M318 300 C348 377 452 377 482 300 C446 286 354 286 318 300Z" fill="#f7f4ef" opacity="0.98"/>
+    <path d="M263 548 C333 592 467 592 537 548" fill="none" stroke="#fff" stroke-width="7" opacity="0.22"/>
+    <path d="M285 580 H515" stroke="#7f5539" stroke-width="8" opacity="0.5"/>
+    <path d="M278 720 C345 756 455 756 522 720" fill="none" stroke="#7f5539" stroke-width="10" opacity="0.5"/>
+  </g>
+</svg>

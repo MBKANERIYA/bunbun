@@ -1,0 +1,166 @@
+/* --- Global Theme Variables (for consistency) --- */
+:root {
+    --primary-color: #2c3e50;
+    --discount-color: #fd1e00; /* Updated to match your theme */
+    --success-color: #28a745;
+    --text-primary: #212529;
+    --text-secondary: #6c757d;
+    --background-white: #ffffff;
+    --border-color: #e9ecef;
+    --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* --- Main container for the detailed summary card --- */
+.detailed-summary-card {
+
+    background: var(--background-white);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 25px;
+    box-sizing: border-box;
+    font-family: 'Inter', 'system-ui', sans-serif; /* Updated font */
+    color: var(--text-primary);
+    box-shadow: var(--box-shadow); /* Added subtle shadow */
+}
+
+.detailed-summary-card h3 {
+    margin-bottom: 20px;
+    text-align: left;
+    font-size: 1.50rem;
+    font-weight: 600;
+    padding-top: 12px;
+}
+
+/* --- List of items --- */
+.summary-items-list-detailed {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.summary-item-detailed {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.item-image-container-detailed {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.item-image-detailed {
+    /* width: 65px; */
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.item-quantity-badge-detailed {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: var(--text-secondary); /* Updated color */
+    color: var(--background-white);
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 2px solid var(--background-white);
+}
+
+.item-info-detailed {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.item-name-detailed {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.4;
+}
+
+.item-price-details {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.selling-price {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.mrp {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-decoration: line-through;
+}
+
+.discount-badgee {
+    background-color: var(--discount-color); /* Updated to theme's discount color */
+    color: var(--background-white);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 3px 7px;
+    border-radius: 6px;
+}
+
+.summary-divider {
+    border: none;
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 20px 0;
+}
+
+/* --- Totals section --- */
+.summary-totals-detailed {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.total-row-detailed {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+}
+
+.total-row-detailed span:first-child {
+    color: var(--text-secondary);
+}
+
+.total-row-detailed span:last-child {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.shipping-free {
+    color: var(--success-color) !important; /* Updated to use success color variable */
+    font-weight: 600;
+}
+
+.grand-total-detailed {
+    margin-top: 5px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.grand-total-detailed strong {
+    font-weight: 700; /* Bolder total */
+}

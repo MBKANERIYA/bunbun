@@ -1,0 +1,456 @@
+/* --- Import Elegant Fonts --- */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Manrope:wght@400;500;600;700&display=swap');
+
+/* --- Global Styles & Color Variables --- */
+:root {
+    --primary-color: #2c3e50;
+    --primary-hover: #34495e;
+    --discount-color: #fd1e00;
+    --text-primary: #212529;
+    --text-secondary: #6c757d;
+    --background-light: #f8f9fa;
+    --background-white: #ffffff;
+    --border-color: #e9ecef;
+    --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Manrope', sans-serif;
+}
+
+/* --- Base Styles --- */
+.product-page-container {
+    background-color: var(--background-light);
+    font-family: var(--font-body);
+    color: var(--text-primary);
+    padding: 2rem 1rem;
+    min-height: 100vh;
+}
+
+.product-grid-unique {
+    display: grid;
+    grid-template-columns: 1fr;
+    max-width: 100%;
+    margin: auto;
+    gap: 2rem;
+}
+
+@media (min-width: 768px) {
+    .product-grid-unique {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 4rem;
+    }
+}
+
+/* --- NEW Side-by-Side Image Grid Styles --- */
+.product-image-grid {
+    height: 340px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* Creates two equal columns */
+    gap: 1.5rem;
+    /* Space between images */
+}
+
+.image-container {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+}
+
+.image-container img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.image-container:hover img {
+    transform: scale(1.05);
+}
+
+
+/* --- Product Info Section --- */
+.product-info-unique {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-title-unique {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    margin: 0 0 1rem 0;
+    line-height: 1.2;
+    color: var(--text-primary);
+}
+
+.price-container-unique {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.current-price {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.original-price-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.original-price {
+    font-size: 1.1rem;
+    text-decoration: line-through;
+    color: var(--text-secondary);
+}
+
+.discount-badge {
+    background-color: var(--discount-color);
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.taxes-info-unique {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+/* --- Action Buttons --- */
+.actions-container-unique {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.wishlist-action {
+    grid-column: 1 / -1;
+}
+
+.btn-unique {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-unique:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.btn-primaryy {
+    background-color: var(--primary-color);
+    color: var(--background-white);
+}
+
+.btn-primaryy:hover:not(:disabled) {
+    background-color: var(--primary-hover);
+    box-shadow: 0 4px 15px rgba(44, 62, 80, 0.2);
+    transform: translateY(-2px);
+}
+
+.btn-secondaryy {
+    background-color: var(--background-white);
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-secondaryy:hover:not(:disabled) {
+    background-color: var(--primary-color);
+    color: var(--background-white);
+    transform: translateY(-2px);
+}
+
+/* --- Spinner Animation --- */
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* --- Details Section --- */
+.details-accordion {
+    border-top: 1px solid var(--border-color);
+    margin-top: 1rem;
+}
+
+.detail-item {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.detail-item h3 {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    color: var(--text-primary);
+}
+
+.detail-item p,
+.detail-item ul {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin: 0;
+    padding-left: 1.2rem;
+}
+
+.detail-item ul {
+    list-style: disc;
+}
+
+.delivery-info-unique {
+    margin-top: 2rem;
+    text-align: center;
+    padding: 1rem;
+    background-color: #eef2f5;
+    border-radius: 8px;
+    font-weight: 500;
+    color: var(--primary-hover);
+}
+
+.discount-badgee {
+    padding: 8px;
+    padding-top: 10px;
+    font-size: 12px;
+    background: var(--primary-color);
+    color: #fff;
+}
+
+/* Add these new styles to your existing ProductPage.css file */
+
+.product__rating .star-rating {
+    color: #f5b92d;
+    display: flex;
+    gap: 2px;
+}
+
+.tab__wrapper {
+    border-bottom: 1px solid #ddd;
+}
+
+.active__tab {
+    font-weight: 600;
+    color: #333;
+    border-bottom: 2px solid #333;
+    cursor: pointer;
+}
+
+.tab__wrapper h6 {
+    cursor: pointer;
+    color: #888;
+}
+
+.review__list {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 15px;
+}
+
+.review__item {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.review__item h6 {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.review__item .star-rating {
+    color: #f5b92d;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.review__item p {
+    color: #555;
+    line-height: 1.6;
+}
+
+.review__form {
+    border: 1px solid #ddd;
+    padding: 30px;
+    border-radius: 5px;
+}
+
+.review__form h4 {
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.form__group {
+    margin-bottom: 20px;
+}
+
+.form__group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.form__group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: inherit;
+}
+
+.star__rating-input {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    font-size: 2rem;
+    color: #ddd;
+    cursor: pointer;
+}
+
+.star__rating-input span {
+    transition: color 0.2s;
+}
+
+.star__rating-input span:hover,
+.star__rating-input span:hover~span,
+.star__rating-input span.active,
+.star__rating-input span.active~span {
+    color: #f5b92d;
+}
+
+.buy__btn[disabled] {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Styling for Recently Viewed Section */
+.recently-viewed-section {
+    width: 100%;
+    max-width: 1200px;
+    margin: 4rem auto 2rem;
+    /* Adds space above and below */
+    padding: 0 1rem;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+/* Re-using a grid layout for the product cards */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+/* General page container if you don't have one */
+.product-page-container {
+    padding-bottom: 2rem;
+    /* Ensures space at the very bottom */
+}
+
+/* Styling for the review slider */
+.existing-ratings {
+    max-width: 600px; /* Or the width you prefer */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Wrapper for each slide to add padding */
+.review-slide-wrapper {
+    padding: 0 15px;
+}
+
+/* Your existing review card, with some enhancements */
+.review-card {
+    background-color: #f8f9fa;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 250px; /* Ensures consistent height */
+    justify-content: center;
+}
+
+.review-user {
+    font-size: 1.1rem;
+    margin-top: 10px;
+    margin-bottom: 8px;
+}
+
+.review-text {
+    font-style: italic;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.review-image {
+    max-width: 150px;
+    border-radius: 8px;
+    margin-top: 5px;
+}
+
+.rating-section {
+    background: var(--background-white);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: var(--box-shadow);
+    padding: 1.25rem;
+}
+
+.review-star-input {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.star-button {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0.15rem;
+}
+
+.review-message,
+.review-summary {
+    color: var(--text-secondary);
+}
+
+/* Customizing the slider arrows */
+.slick-prev:before,
+.slick-next:before {
+    color: #333; /* Dark color for arrows */
+    font-size: 24px;
+}

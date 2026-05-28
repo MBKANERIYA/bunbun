@@ -1,0 +1,36 @@
+.footer {
+  background-color: var(--primary-color);
+}
+
+.footer h6 {
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+
+.footer ul a {
+  display: flex;
+  color: white;
+  text-decoration: none;
+  margin-bottom: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.footer ul a:hover {
+  text-decoration: underline;
+}
+
+.footer p,
+.footer small {
+  font-size: 14px;
+}
+
+.footer input[type="email"] {
+  border-radius: 0;
+  border-right: 0;
+}
+
+.footer .btn-light {
+  border-radius: 0;
+}

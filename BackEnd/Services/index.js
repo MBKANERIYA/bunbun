@@ -1,0 +1,5 @@
+module.exports.UserService = require("./User.Services")
+module.exports.bannerService = require("./Banner.Services")
+module.exports.productService = require("./Product.Services")
+module.exports.cartService = require("./Cart.Services")
+module.exports.wishlistService = require("./Wishlist.Services")
