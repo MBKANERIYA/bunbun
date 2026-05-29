@@ -13,3 +13,4 @@
 - Replaced `bcrypt` with `bcryptjs` because the native `bcrypt` module often fails to compile on Vercel's Amazon Linux environment during serverless function deployment.
 - Fixed `vercel.json` rewrites to correctly point to the Vercel-mapped endpoint `/api` instead of `/api/index.js`.
 - Cleaned up test files and old Next.js style `[...path].js` API routes since they aren't supported in plain Node.js deployments on Vercel.
+- **Update:** As per explicit request, completely removed the `api/` folder, root `package.json`, and `vercel.json`. The Vercel serverless integration is now removed, and the root directory strictly contains only the `FrontEnd`, `BackEnd`, and `knowledge-base` folders.
