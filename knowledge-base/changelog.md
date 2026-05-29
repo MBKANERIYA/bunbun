@@ -9,4 +9,7 @@
 - Added `build` and `postinstall` scripts to the root `package.json` so Vercel natively builds the frontend.
 - Updated `req.url` manipulation inside serverless functions to ensure Express routing resolves `/v1/...` and `/images/...` paths correctly.
 - Created `knowledge-base` folder according to standard procedure.
-- Updated \ercel.json\ SPA fallback rewrite to explicitly exclude \/api/\, \/v1/\, and \/images/\ routes using regex \((?!api/|v1/|images/).*)\, preventing the React index.html from shadowing the backend serverless functions.
+- Updated `vercel.json` SPA fallback rewrite to explicitly exclude `/api/`, `/v1/`, and `/images/` routes using regex `((?!api/|v1/|images/).*)`, preventing the React index.html from shadowing the backend serverless functions.
+- Replaced `bcrypt` with `bcryptjs` because the native `bcrypt` module often fails to compile on Vercel's Amazon Linux environment during serverless function deployment.
+- Fixed `vercel.json` rewrites to correctly point to the Vercel-mapped endpoint `/api` instead of `/api/index.js`.
+- Cleaned up test files and old Next.js style `[...path].js` API routes since they aren't supported in plain Node.js deployments on Vercel.
