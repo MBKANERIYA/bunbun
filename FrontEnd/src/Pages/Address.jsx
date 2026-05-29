@@ -8,7 +8,7 @@ const AddAddress = () => {
   const userId = "6892e8456c2cbf8ecb95c1ea";
   const [showForm, setShowForm] = useState(false);
   const [addresses, setAddresses] = useState([]);
-  const [selectedAddress, setSelectedAddress] = useState("");
+  const [selectedAddress, setSelectedAddress] = useState(null);
   const [address, setAddress] = useState({
     street: "",
     city: "",
@@ -30,7 +30,11 @@ const AddAddress = () => {
 
       // Auto-select default address if available
       const defaultAddr = lastFive.find((a) => a.isDefault);
-      if (defaultAddr) setSelectedAddress(defaultAddr.street);
+      if (defaultAddr) {
+        setSelectedAddress(defaultAddr);
+      } else if (lastFive.length > 0) {
+        setSelectedAddress(lastFive[0]);
+      }
     } catch (error) {
       console.error("❌ Error fetching addresses:", error);
       setAddresses([]);
@@ -109,8 +113,11 @@ const AddAddress = () => {
             <select
               id="selectAddress"
               className="form-select"
-              value={selectedAddress}
-              onChange={(e) => setSelectedAddress(e.target.value)}
+              value={selectedAddress ? selectedAddress.street : ""}
+              onChange={(e) => {
+                const addr = addresses.find(a => a.street === e.target.value);
+                setSelectedAddress(addr || null);
+              }}
             >
               <option value="">-- Choose Address --</option>
               {addresses.map((addr, i) => (
@@ -254,10 +261,10 @@ const AddAddress = () => {
                 {addresses.map((addr, i) => (
                   <div
                     className={`address-card d-flex align-items-start p-3 mb-3 rounded ${
-                      selectedAddress === addr.street ? "border border-dark" : "border border-light"
+                      selectedAddress && selectedAddress.street === addr.street ? "border border-dark" : "border border-light"
                     }`}
                     key={i}
-                    onClick={() => setSelectedAddress(addr.street)}
+                    onClick={() => setSelectedAddress(addr)}
                     style={{
                       cursor: "pointer",
                       backgroundColor: "#fff",

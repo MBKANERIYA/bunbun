@@ -7,6 +7,9 @@ let productSchema = new mongoose.Schema({
     image: {
         type: String
     },
+    images: [{
+        type: String
+    }],
     mrp: {
         type: String
     },
@@ -23,6 +26,42 @@ let productSchema = new mongoose.Schema({
         type: String
     },
     color: {
+        type: String
+    },
+    sku: {
+        type: String
+    },
+    productType: {
+        type: String
+    },
+    blouseType: {
+        type: String
+    },
+    blouseColor: {
+        type: String
+    },
+    blouseFabric: {
+        type: String
+    },
+    blouseWork: {
+        type: String
+    },
+    sleeveLength: {
+        type: String
+    },
+    bustSize: {
+        type: String
+    },
+    blouseLength: {
+        type: String
+    },
+    washAndCare: {
+        type: String
+    },
+    salesPackage: {
+        type: String
+    },
+    weight: {
         type: String
     }
 })

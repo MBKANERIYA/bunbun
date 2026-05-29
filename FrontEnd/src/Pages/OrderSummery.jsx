@@ -1,9 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useCart } from '../Component/CartContext'; // Adjust path if needed
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { apiUrl } from '../utils/apiConfig';
 
-const DetailedSummary = () => {
+const loadRazorpay = () => {
+    return new Promise((resolve) => {
+        const script = document.createElement("script");
+        script.src = "https://checkout.razorpay.com/v1/checkout.js";
+        script.onload = () => resolve(true);
+        script.onerror = () => resolve(false);
+        document.body.appendChild(script);
+    });
+};
+
+const DetailedSummary = ({ selectedAddress }) => {
     const { cart, loading } = useCart();
+    const [isProcessing, setIsProcessing] = useState(false);
 
     const navigate = useNavigate();
 
@@ -35,6 +48,107 @@ const DetailedSummary = () => {
         const productId = product._id;
         const productSlug = product.name.replace(/\s+/g, '-').toLowerCase();
         navigate(`/product/${productId}/${productSlug}`);
+    };
+
+    const subtotal = parsePrice(cart.cartTotal) || 0;
+    
+    // Calculate global cart discount based on subtotal tiers
+    const calculateOrderDiscount = (total) => {
+        if (total > 9999) return { percentage: 20, amount: Math.round(total * 0.20) };
+        if (total > 4999) return { percentage: 15, amount: Math.round(total * 0.15) };
+        if (total > 2999) return { percentage: 10, amount: Math.round(total * 0.10) };
+        return { percentage: 0, amount: 0 };
+    };
+
+    const discountInfo = calculateOrderDiscount(subtotal);
+    const finalTotal = subtotal - discountInfo.amount;
+
+    const handlePayment = async () => {
+        if (!selectedAddress) {
+            alert("Please select or add a delivery address first.");
+            return;
+        }
+
+        const res = await loadRazorpay();
+        if (!res) {
+            alert("Razorpay SDK failed to load. Are you online?");
+            return;
+        }
+
+        setIsProcessing(true);
+
+        try {
+            // 1. Create order on server (Razorpay order)
+            const orderRes = await axios.post(apiUrl('/v1/payment/create-order'), {
+                amount: finalTotal
+            });
+
+            const { id: order_id, currency, amount } = orderRes.data;
+
+            // 2. Open Razorpay Checkout
+            const options = {
+                key: "rzp_test_Sp9X2smiuL6n0F", // Hardcoded per user request, typically from env
+                amount: amount,
+                currency: currency,
+                name: "Navdhaaga",
+                description: "Order Payment",
+                order_id: order_id,
+                handler: async function (response) {
+                    try {
+                        // 3. Verify Payment
+                        const verifyRes = await axios.post(apiUrl('/v1/payment/verify-payment'), {
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature,
+                        });
+
+                        if (verifyRes.status === 200) {
+                            // 4. Create Order in DB
+                            const orderPayload = {
+                                userId: "6892e8456c2cbf8ecb95c1ea", // Default user as in Address.jsx
+                                items: cart.product,
+                                amount: {
+                                    subtotal: subtotal,
+                                    total: finalTotal
+                                },
+                                shippingAddress: selectedAddress,
+                                billingAddress: selectedAddress,
+                                paymentDetails: {
+                                    paymentMethod: "Razorpay",
+                                    transactionId: response.razorpay_payment_id
+                                }
+                            };
+
+                            await axios.post(apiUrl('/v1/order/createOrder'), orderPayload);
+                            
+                            alert("Payment successful! Your order has been placed.");
+                            // Normally you'd clear cart and navigate to a success page here
+                            navigate("/"); 
+                        }
+                    } catch (err) {
+                        console.error(err);
+                        alert("Payment verification failed");
+                    }
+                },
+                prefill: {
+                    name: "User",
+                    email: "user@example.com",
+                    contact: "9999999999"
+                },
+                theme: {
+                    color: "#3399cc"
+                }
+            };
+
+            const paymentObject = new window.Razorpay(options);
+            paymentObject.open();
+
+        } catch (err) {
+            console.error(err);
+            alert("Could not initiate payment. Please try again.");
+        } finally {
+            setIsProcessing(false);
+        }
     };
 
     return (
@@ -84,19 +198,30 @@ const DetailedSummary = () => {
             <div className="summary-totals-detailed">
                 <div className="total-row-detailed">
                     <span>Subtotal</span>
-                    <span>₹{(parsePrice(cart.cartTotal)).toLocaleString()}</span>
+                    <span>₹{subtotal.toLocaleString()}</span>
                 </div>
+                {discountInfo.amount > 0 && (
+                    <div className="total-row-detailed text-success" style={{ display: 'flex', justifyContent: 'space-between', color: '#198754' }}>
+                        <span>Extra {discountInfo.percentage}% OFF</span>
+                        <span>-₹{discountInfo.amount.toLocaleString()}</span>
+                    </div>
+                )}
                 <div className="total-row-detailed">
                     <span>Shipping</span>
-                    <span className="shipping-free">FREE</span>
+                    <span className="shipping-free" style={{ color: '#198754', fontWeight: 'bold' }}>FREE</span>
                 </div>
                 <div className="total-row-detailed grand-total-detailed">
                     <strong>Total</strong>
-                    <strong>₹{(parsePrice(cart.cartTotal)).toLocaleString()}</strong>
+                    <strong>₹{finalTotal.toLocaleString()}</strong>
                 </div>
-                <Link className="btn btn-primary-filled checkout-btn">
-                    Proceed to Payment
-                </Link>
+                <button 
+                    className="btn btn-primary-filled checkout-btn" 
+                    onClick={handlePayment} 
+                    disabled={isProcessing}
+                    style={{ width: '100%', marginTop: '15px' }}
+                >
+                    {isProcessing ? "Processing..." : "Proceed to Payment"}
+                </button>
             </div>
         </div>
     );

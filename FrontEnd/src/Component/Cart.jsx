@@ -92,6 +92,19 @@ const Cart = () => {
         return <EmptyCart />;
     }
 
+    const subtotal = cart.cartTotal || 0;
+    
+    // Calculate global cart discount based on subtotal tiers
+    const calculateOrderDiscount = (total) => {
+        if (total > 9999) return { percentage: 20, amount: Math.round(total * 0.20) };
+        if (total > 4999) return { percentage: 15, amount: Math.round(total * 0.15) };
+        if (total > 2999) return { percentage: 10, amount: Math.round(total * 0.10) };
+        return { percentage: 0, amount: 0 };
+    };
+
+    const discountInfo = calculateOrderDiscount(subtotal);
+    const finalTotal = subtotal - discountInfo.amount;
+
     return (
         <div className="cart-page-container">
             {showModal && (
@@ -193,16 +206,22 @@ const Cart = () => {
                         <h3>Order Summary</h3>
                         <div className="summary-row">
                             <span>Subtotal ({cart.product.length} items)</span>
-                            <span>₹{cart.cartTotal.toLocaleString()}</span>
+                            <span>₹{subtotal.toLocaleString()}</span>
                         </div>
-                        <div className="summary-row">
+                        {discountInfo.amount > 0 && (
+                            <div className="summary-row discount-row text-success" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+                                <span>Extra {discountInfo.percentage}% OFF</span>
+                                <span>-₹{discountInfo.amount.toLocaleString()}</span>
+                            </div>
+                        )}
+                        <div className="summary-row" style={{ marginTop: '10px' }}>
                             <span>Shipping</span>
                             <span className="text-success">FREE</span>
                         </div>
                         <hr />
                         <div className="summary-row total-row">
                             <strong>Total</strong>
-                            <strong>₹{cart.cartTotal.toLocaleString()}</strong>
+                            <strong>₹{finalTotal.toLocaleString()}</strong>
                         </div>
                         <Link to="/address" className="btn btn-primary-filled checkout-btn">
                             Proceed to Checkout
@@ -211,7 +230,6 @@ const Cart = () => {
                 </div>
             </div>
         </div>
-
     );
 };
 

@@ -14,3 +14,34 @@
 - Fixed `vercel.json` rewrites to correctly point to the Vercel-mapped endpoint `/api` instead of `/api/index.js`.
 - Cleaned up test files and old Next.js style `[...path].js` API routes since they aren't supported in plain Node.js deployments on Vercel.
 - **Update:** As per explicit request, completely removed the `api/` folder, root `package.json`, and `vercel.json`. The Vercel serverless integration is now removed, and the root directory strictly contains only the `FrontEnd`, `BackEnd`, and `knowledge-base` folders.
+- Implemented dynamic global cart discount calculation in `Cart.jsx` and `OrderSummery.jsx` according to promotional tiers (10% off > ₹2999, 15% off > ₹4999, 20% off > ₹9999).
+- **Payment Gateway:** Added Razorpay integration. Created backend routes (`/create-order` and `/verify-payment`) and integrated the Razorpay checkout overlay in `OrderSummery.jsx` when proceeding to payment.
+
+## 2026-05-29 — Admin Panel & User Registration
+**What**: Built a full admin panel at `/admin` and added user registration to the login modal
+**Why**: Store owner needs to manage products from a dashboard; new customers need to create accounts
+**Files Changed**: `AdminPanel.jsx`, `Admin.css`, `App.jsx`, `Product.Model.js`, `LoginModel.jsx`, `LoginModel.css`
+- Created `AdminPanel.jsx` with hardcoded admin credentials (admin/admin123), session-based auth via sessionStorage
+- Admin dashboard shows a product listing table with image thumbnails, SKU, type, pricing, and category
+- "Add Product" form includes all fields: title, description, images, SKU, type, blouse details (type, color, fabric, work, sleeve length, bust size, length), wash & care, sales package, weight
+- Extended `Product.Model.js` with 13 new fields (sku, productType, blouseType, blouseColor, blouseFabric, blouseWork, sleeveLength, bustSize, blouseLength, washAndCare, salesPackage, weight, images array)
+- Implemented actual Image File Upload for products. Modified Admin form to send `multipart/form-data`, attached `multer` middleware to `/addProduct`, and utilized existing `cloudinary` configuration to dynamically upload product thumbnails and gallery images to the cloud.
+- Added live image preview generation for both the main image and multiple additional images.
+- Upgraded the "Additional Images" logic to allow *incremental* multi-file uploading (adding more images sequentially without replacing the previous ones) and added remove (✕) buttons for each individual thumbnail.
+- Implemented full "Edit Product" functionality. Added a PUT route (`/updateProduct/:id`) on the backend to handle targeted updates while preserving untouched images. The Admin dashboard now has an "Edit" action button that repopulates the product form, previews existing images, and safely tracks additions/removals of image galleries.
+- Updated the "Category" input in the product form to use a predefined `<select>` dropdown (Saree, Blouse, Suit, Lehenga, Kurti, Accessories) instead of manual text entry to prevent typos and ensure data consistency.
+- Fixed a bug on the Collection Page where products weren't fetching correctly. Changed backend `/filterProduct` logic to use case-insensitive matching for categories, and added validation in the frontend to correctly compute maximum price filters even if some products have invalid or missing pricing.
+- Fixed critical price filter bug: `priceRange` initialized at `0` which filtered out ALL products before `maxPrice` was calculated. Now only applies the filter when the user explicitly sets a range below `maxPrice`.
+- Fixed broken `getSingleProduct` controller: was calling `productSchema.findById()` with no argument and had inverted conditional logic (returned 404 when product WAS found).
+- Fixed a critical form submission bug in `AdminPanel.jsx` where newly added products were being created as completely empty records in the database. Two root causes:
+  1. **Multer v2 null-prototype body:** `multer` v2 creates `req.body` with a null prototype (`Object.create(null)`), which Mongoose's `create()` silently ignores. Fixed by adding `Object.assign({}, req.body)` middleware in `Product.Routes.js`.
+  2. **Axios header override:** Removed the hardcoded `Content-Type: multipart/form-data` header in the Axios request, which was overwriting the automatically generated boundary string required by `multer` to parse `FormData` fields.
+  3. **Stale server process:** The old backend process was still running on port 4000, preventing the fixed code from taking effect. Killed the old process (PID 8360) and restarted.
+- Restructured `App.jsx` with `AppLayout` wrapper to hide store Header/Footer/CartSidebar on `/admin` route
+- Added user registration form to `LoginModel.jsx` with toggle between login/register modes
+- Registration form captures firstName, lastName, email, password, mobileNumber, and optional gender — matches existing `/v1/User/Register` backend endpoint
+- Added CSS for register form (`.form-row-inline`, `.auth-switch-text`, `.success-message`) in `LoginModel.css`
+- **Product Deletion Feature:**
+  - Backend: Added `deleteProduct` in `Product.Services.js`, `deleteProduct` controller in `Product.Controller.js`, and `DELETE /v1/product/deleteProduct/:id` route in `Product.Routes.js`.
+  - Frontend: Added a "Delete" button next to "Edit" in `AdminPanel.jsx`'s product table with a native browser confirmation prompt (`window.confirm`).
+  - Styled `.admin-delete-btn` and `.admin-action-btns` in `Admin.css`.

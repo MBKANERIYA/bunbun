@@ -15,3 +15,11 @@ module.exports.getProduct = async () => {
 module.exports.singleProduct = (id) => {
     return productSchema.findById(id)
 }
+
+module.exports.updateProduct = (id, body) => {
+    return productSchema.findByIdAndUpdate(id, body, { new: true });
+}
+
+module.exports.deleteProduct = (id) => {
+    return productSchema.findByIdAndDelete(id);
+}

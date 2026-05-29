@@ -43,7 +43,8 @@ const CollectionPage = () => {
                 setSubcategories(uniqueSubs);
                 const uniqueColors = [...new Set(productsData.map(p => p.color))];
                 setColors(uniqueColors);
-                const maxPriceValue = Math.max(0, ...productsData.map(p => Number(p.selling_price)));
+                const validPrices = productsData.map(p => Number(p.selling_price)).filter(n => !isNaN(n));
+                const maxPriceValue = validPrices.length > 0 ? Math.max(...validPrices) : 10000;
                 setMaxPrice(maxPriceValue);
             } catch (err) {
                 console.error("Error fetching products:", err);
@@ -89,7 +90,10 @@ const CollectionPage = () => {
         // Filtering logic remains the same
         if (selectedSubcategories.length > 0) tempProducts = tempProducts.filter(p => selectedSubcategories.includes(p.subcategory));
         if (selectedColor) tempProducts = tempProducts.filter(p => p.color === selectedColor);
-        tempProducts = tempProducts.filter(p => Number(p.selling_price) <= priceRange);
+        // Only filter by price if the user has actually set a price range below max
+        if (priceRange > 0 && priceRange < maxPrice) {
+            tempProducts = tempProducts.filter(p => Number(p.selling_price) <= priceRange);
+        }
 
         // Sorting logic remains the same
         switch (sortBy) {

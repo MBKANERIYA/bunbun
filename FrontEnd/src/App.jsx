@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Header from "./Component/Header";
 import HomePage from "./Pages/HomePage";
 import Footer from './Component/Footer';
@@ -19,33 +19,46 @@ import Blog from './Pages/Blog';
 import TermAndCondition from './Pages/TermAndCondition';
 import NadhaagaGold from './Pages/NadhaagaGold';
 import EditProfile from './Pages/EditProfile';
+import AdminPanel from './Pages/AdminPanel';
+
+// Layout wrapper that hides Header/Footer on /admin
+const AppLayout = () => {
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith('/admin');
+
+  return (
+    <>
+      {!isAdmin && <CartSidebar />}
+      {!isAdmin && <Header />}
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/collection" element={<CollectionPage />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/product/:id/:name" element={<ProductDetails />} />
+        <Route path="/address" element={<AddressForm />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
+        <Route path="/ReturnPolicy" element={<ReturnPolicy />} />
+        <Route path="/ShippingPolicy" element={<ShippingPolicy />} />
+        <Route path="/termAndCondtion" element={<TermAndCondition />} />
+        <Route path="/navdhaagaGold" element={<NadhaagaGold />} />
+        <Route path="/editProfile" element={<EditProfile />} />
+        <Route path="/admin" element={<AdminPanel />} />
+      </Routes>
+      {!isAdmin && <Footer />}
+    </>
+  );
+};
 
 function App() {
   return (
     <CartProvider>
       <WishlistProvider>
         <Router>
-          <CartSidebar />
-          <Header />
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/collection" element={<CollectionPage />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/wishlist" element={<Wishlist />} />
-            <Route path="/product/:id/:name" element={<ProductDetails />} />
-            <Route path="/address" element={<AddressForm />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
-            <Route path="/ReturnPolicy" element={<ReturnPolicy />} />
-            <Route path="/ShippingPolicy" element={<ShippingPolicy />} />
-            <Route path="/termAndCondtion" element={<TermAndCondition />} />
-            <Route path="/navdhaagaGold" element={<NadhaagaGold />} />
-            <Route path="/editProfile" element={<EditProfile />} />
-          </Routes>
-          <Footer />
-
+          <AppLayout />
         </Router>
       </WishlistProvider>
     </CartProvider>
