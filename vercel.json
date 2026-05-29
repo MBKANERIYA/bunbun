@@ -2,10 +2,6 @@
   "outputDirectory": "FrontEnd/dist",
   "rewrites": [
     {
-      "source": "/test-route/(.*)",
-      "destination": "/api/hello.js"
-    },
-    {
       "source": "/v1/(.*)",
       "destination": "/api/index.js"
     },
