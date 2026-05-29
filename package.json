@@ -2,7 +2,7 @@
   "name": "bunbun-clothing-root",
   "private": true,
   "scripts": {
-    "postinstall": "npm install --prefix FrontEnd",
+    "postinstall": "npm install --prefix FrontEnd --no-audit --no-fund",
     "build": "npm run build --prefix FrontEnd"
   },
   "dependencies": {

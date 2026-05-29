@@ -45,3 +45,6 @@
   - Backend: Added `deleteProduct` in `Product.Services.js`, `deleteProduct` controller in `Product.Controller.js`, and `DELETE /v1/product/deleteProduct/:id` route in `Product.Routes.js`.
   - Frontend: Added a "Delete" button next to "Edit" in `AdminPanel.jsx`'s product table with a native browser confirmation prompt (`window.confirm`).
   - Styled `.admin-delete-btn` and `.admin-action-btns` in `Admin.css`.
+- **Deployment Fixes:**
+  - Resolved Vercel Out of Memory (OOM) error during `npm install` by removing an unused circular dependency (`"bunbun-clothing-root": "file:.."`) from the `FrontEnd/package.json` file.
+  - Optimized the root `package.json` postinstall script to use `--no-audit --no-fund` to further reduce memory usage during Vercel builds.
