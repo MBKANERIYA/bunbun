@@ -147,6 +147,9 @@ const Cart = () => {
                                                     <span className="item-discount-badge">{discount}% OFF</span>
                                                 )}
                                             </div>
+                                            {item.size && (
+                                                <span style={{ fontSize: '0.85rem', color: '#6c757d', marginTop: '4px', display: 'block' }}>Size: {item.size}</span>
+                                            )}
                                         </div>
                                     </div>
                                     <div className="item-quantity-controls">

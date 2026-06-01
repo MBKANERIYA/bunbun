@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-06-01 — Add Size Selection to Product Page
+**What**: Added L/XL/XXL/XXXL size selector above the Add to Cart button on the Product Details page.
+**Why**: Users need to choose a size before adding products to cart.
+**Files Changed**: `ProductDetails.jsx`, `CartContext.jsx`, `Cart.jsx`, `Cart.Controller.js`, `Cart.Model.js`
+- Added size selector buttons (L, XL, XXL, XXXL) with active state styling.
+- Validation prevents Add to Cart / Buy Now without selecting a size first.
+- `addToCart` in CartContext now passes the selected size to the backend.
+- Cart Controller matches both productId and size when checking for duplicate items.
+- Cart Model updated `size` field type from Number to String.
+- Cart UI now displays the selected size next to each item.
+
 ## 2026-06-01 — Move Product Description Layout
 **What**: Repositioned the product description to sit above the "Product Details" accordion.
 **Why**: To improve visual hierarchy, placing the main product description immediately visible before the collapsible specific details.

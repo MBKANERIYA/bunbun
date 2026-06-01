@@ -22,7 +22,7 @@ module.exports.createCart = async (req, res) => {
 
         if (cart) {
             let existingProduct = cart.product.find(
-                (item) => item.productId.toString() === productId.toString()
+                (item) => item.productId.toString() === productId.toString() && item.size === size
             );
             if (existingProduct) {
                 existingProduct.quantity += quantity

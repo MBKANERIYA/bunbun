@@ -48,6 +48,9 @@ const ProductDetails = () => {
     const [message, setMessage] = useState("");
     const [recentlyViewed, setRecentlyViewed] = useState([]);
     const [openAccordion, setOpenAccordion] = useState("product_details");
+    const [selectedSize, setSelectedSize] = useState("");
+
+    const sizes = ["L", "XL", "XXL", "XXXL"];
 
     const toggleAccordion = (section) => {
         setOpenAccordion(openAccordion === section ? null : section);
@@ -115,14 +118,24 @@ const ProductDetails = () => {
     }, [id]);
 
     const handleAddToCart = async () => {
+        if (!selectedSize) {
+            setMessage("Please select a size before adding to cart.");
+            return;
+        }
+        setMessage("");
         setIsAddingToCart(true);
-        await addToCart(product._id);
+        await addToCart(product._id, selectedSize);
         setIsAddingToCart(false);
     };
 
     const handleBuyNow = async () => {
+        if (!selectedSize) {
+            setMessage("Please select a size before buying.");
+            return;
+        }
+        setMessage("");
         setIsBuyingNow(true);
-        const added = await addToCart(product._id);
+        const added = await addToCart(product._id, selectedSize);
         setIsBuyingNow(false);
         if (added) navigate("/cart");
     };
@@ -277,6 +290,37 @@ const ProductDetails = () => {
                         </div>
                     </div>
                     <p className="taxes-info-unique">Inclusive of all taxes</p>
+
+                    <div className="size-selector-unique mb-4">
+                        <h4 className="mb-2" style={{ fontSize: '1.1rem', fontWeight: 600 }}>Select Size</h4>
+                        <div className="d-flex gap-2" style={{ display: 'flex', gap: '10px' }}>
+                            {sizes.map((size) => (
+                                <button
+                                    key={size}
+                                    className={`size-btn ${selectedSize === size ? 'active' : ''}`}
+                                    onClick={() => {
+                                        setSelectedSize(size);
+                                        if (message.includes("size")) setMessage("");
+                                    }}
+                                    style={{
+                                        border: '1px solid var(--border-color)',
+                                        background: selectedSize === size ? 'var(--primary-color)' : 'var(--background-white)',
+                                        color: selectedSize === size ? 'white' : 'var(--text-primary)',
+                                        padding: '0.6rem 1.2rem',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer',
+                                        transition: 'all 0.2s',
+                                        fontWeight: 500
+                                    }}
+                                >
+                                    {size}
+                                </button>
+                            ))}
+                        </div>
+                        {message && message.includes("size") && (
+                            <p className="text-danger mt-2" style={{ color: 'red', fontSize: '0.9rem' }}>{message}</p>
+                        )}
+                    </div>
 
                     <div className="actions-container-unique">
                         <button

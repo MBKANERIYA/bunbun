@@ -56,14 +56,14 @@ export const CartProvider = ({ children }) => {
     const openCart = () => setIsCartOpen(true);
     const closeCart = () => setIsCartOpen(false);
 
-    const addToCart = async (productId) => {
+    const addToCart = async (productId, size = null) => {
         if (!userId) {
             alert("Please login to add products to cart.");
             return false;
         }
 
         try {
-            await axios.post(`${API_BASE}/createCart`, { userId, productId });
+            await axios.post(`${API_BASE}/createCart`, { userId, productId, size });
             await fetchCart();
             openCart();
             return true;
