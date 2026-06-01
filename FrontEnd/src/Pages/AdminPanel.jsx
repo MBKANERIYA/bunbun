@@ -13,51 +13,65 @@ const AdminPanel = () => {
     const [loginError, setLoginError] = useState('');
 
     // Dashboard state
-    const [activeTab, setActiveTab] = useState('dashboard');
+    const [activeTab, setActiveTab] = useState(() => {
+        return sessionStorage.getItem('adminActiveTab') || 'dashboard';
+    });
     const [products, setProducts] = useState([]);
     const [loadingProducts, setLoadingProducts] = useState(false);
 
     // Add Product form state
-    const [formData, setFormData] = useState({
-        name: '',
-        description: '',
-        mrp: '',
-        selling_price: '',
-        category: '',
-        subcategory: '',
-        color: '',
-        sku: '',
-        productType: '',
-        blouseType: '',
-        blouseColor: '',
-        blouseFabric: '',
-        blouseWork: '',
-        sleeveLength: '',
-        bustSize: '',
-        blouseLength: '',
-        washAndCare: '',
-        salesPackage: '',
-        weight: '',
-        // Shapewear specific
-        bottomColor: '',
-        bottomFabric: '',
-        bottomLength: '',
-        bottomWork: '',
-        waistType: '',
-        bottomHip: '',
-        bottomWaist: '',
-        sizeDetails: [
-            { size: 'L', bust: '', waist: '', shoulder: '', length: '' },
-            { size: 'XL', bust: '', waist: '', shoulder: '', length: '' },
-            { size: 'XXL', bust: '', waist: '', shoulder: '', length: '' },
-            { size: 'XXXL', bust: '', waist: '', shoulder: '', length: '' }
-        ],
+    const [formData, setFormData] = useState(() => {
+        const savedData = sessionStorage.getItem('adminProductFormData');
+        if (savedData) {
+            try {
+                return JSON.parse(savedData);
+            } catch (e) {
+                console.error("Error parsing saved form data:", e);
+            }
+        }
+        return {
+            name: '',
+            description: '',
+            mrp: '',
+            selling_price: '',
+            category: '',
+            subcategory: '',
+            color: '',
+            sku: '',
+            productType: '',
+            blouseType: '',
+            blouseColor: '',
+            blouseFabric: '',
+            blouseWork: '',
+            sleeveLength: '',
+            bustSize: '',
+            blouseLength: '',
+            washAndCare: '',
+            salesPackage: '',
+            weight: '',
+            // Shapewear specific
+            bottomColor: '',
+            bottomFabric: '',
+            bottomLength: '',
+            bottomWork: '',
+            waistType: '',
+            bottomHip: '',
+            bottomWaist: '',
+            sizeDetails: [
+                { size: 'L', bust: '', waist: '', shoulder: '', length: '' },
+                { size: 'XL', bust: '', waist: '', shoulder: '', length: '' },
+                { size: 'XXL', bust: '', waist: '', shoulder: '', length: '' },
+                { size: 'XXXL', bust: '', waist: '', shoulder: '', length: '' }
+            ],
+        };
     });
     const [mainImage, setMainImage] = useState(null);
     const [additionalImages, setAdditionalImages] = useState(null);
     const [mainImagePreview, setMainImagePreview] = useState('');
     const [additionalImagesPreviews, setAdditionalImagesPreviews] = useState([]);
-    const [editProductId, setEditProductId] = useState(null);
+    const [editProductId, setEditProductId] = useState(() => {
+        return sessionStorage.getItem('adminEditProductId') || null;
+    });
     const [existingImages, setExistingImages] = useState([]);
     const [submitting, setSubmitting] = useState(false);
     const [submitMsg, setSubmitMsg] = useState({ type: '', text: '' });
@@ -67,6 +81,23 @@ const AdminPanel = () => {
         const session = sessionStorage.getItem('adminLoggedIn');
         if (session === 'true') setIsLoggedIn(true);
     }, []);
+
+    // Persist form state
+    useEffect(() => {
+        sessionStorage.setItem('adminActiveTab', activeTab);
+    }, [activeTab]);
+
+    useEffect(() => {
+        sessionStorage.setItem('adminProductFormData', JSON.stringify(formData));
+    }, [formData]);
+
+    useEffect(() => {
+        if (editProductId) {
+            sessionStorage.setItem('adminEditProductId', editProductId);
+        } else {
+            sessionStorage.removeItem('adminEditProductId');
+        }
+    }, [editProductId]);
 
     // Fetch products when dashboard tab is active
     useEffect(() => {

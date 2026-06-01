@@ -165,3 +165,10 @@
 **Files Changed**: `App.jsx`, `Footer.jsx`, `Header.jsx`, `LoginModel.jsx`, `About.jsx`, `AdminPanel.jsx`, `BunbunClothingGold.jsx` (renamed from `NadhaagaGold.jsx`), `OrderSummery.jsx`, `PrivacyPolicy.jsx`, `ProductDetails.jsx`, `TermAndCondition.jsx`, `package.json`, etc.
 - Executed global find-and-replace for `Navdhaaga`, `navdhaaga`, and `NAVDHAAGA`.
 - Renamed the frontend React component file `NadhaagaGold.jsx` to `BunbunClothingGold.jsx`.
+
+## 2026-06-01 — Persist Add Product Form State
+**What**: Modified the Admin Panel to save the active tab, product form data, and edit state across page refreshes.
+**Why**: Prevent accidental data loss if the admin refreshes the page midway through adding or editing a complex product (with many size details, etc.).
+**Files Changed**: `AdminPanel.jsx`
+- Initialized `activeTab`, `formData`, and `editProductId` states from `sessionStorage` (if present).
+- Added `useEffect` hooks to synchronize state changes back into `sessionStorage`.
