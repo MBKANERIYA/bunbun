@@ -440,8 +440,8 @@ const AdminPanel = () => {
                                                 <input type="text" name="name" value={formData.name} onChange={handleInputChange} required placeholder="e.g. Printed Saree - PaleTurquoise Edition" />
                                             </div>
                                             <div className="form-group full-width">
-                                                <label>Product Description</label>
-                                                <textarea name="description" value={formData.description} onChange={handleInputChange} rows="3" placeholder="Detailed product description..." />
+                                                <label>Product Description *</label>
+                                                <textarea name="description" value={formData.description} onChange={handleInputChange} rows="3" placeholder="Detailed product description..." required />
                                             </div>
                                         </div>
                                     </div>
@@ -499,20 +499,20 @@ const AdminPanel = () => {
                                         <h3 className="form-section-title">Common Details</h3>
                                         <div className="form-grid">
                                             <div className="form-group">
-                                                <label>SKU</label>
-                                                <input type="text" name="sku" value={formData.sku} onChange={handleInputChange} placeholder={formData.category === 'Shapewear' ? '754SWTK310-XXL' : '73B1229-L'} />
+                                                <label>SKU *</label>
+                                                <input type="text" name="sku" value={formData.sku} onChange={handleInputChange} required placeholder={formData.category === 'Shapewear' ? '754SWTK310-XXL' : '73B1229-L'} />
                                             </div>
                                             <div className="form-group">
-                                                <label>Type</label>
-                                                <input type="text" name="productType" value={formData.productType} onChange={handleInputChange} placeholder={formData.category === 'Shapewear' ? 'Shapewear' : 'Self Woven'} />
+                                                <label>Type *</label>
+                                                <input type="text" name="productType" value={formData.productType} onChange={handleInputChange} required placeholder={formData.category === 'Shapewear' ? 'Shapewear' : 'Self Woven'} />
                                             </div>
                                             <div className="form-group">
-                                                <label>Wash And Care</label>
-                                                <input type="text" name="washAndCare" value={formData.washAndCare} onChange={handleInputChange} placeholder={formData.category === 'Shapewear' ? 'Machine Wash' : 'Hand Wash only'} />
+                                                <label>Wash And Care *</label>
+                                                <input type="text" name="washAndCare" value={formData.washAndCare} onChange={handleInputChange} required placeholder={formData.category === 'Shapewear' ? 'Machine Wash' : 'Hand Wash only'} />
                                             </div>
                                             <div className="form-group">
-                                                <label>Weight</label>
-                                                <input type="text" name="weight" value={formData.weight} onChange={handleInputChange} placeholder={formData.category === 'Shapewear' ? '0.17 Kg' : '0.12 Kg'} />
+                                                <label>Weight *</label>
+                                                <input type="text" name="weight" value={formData.weight} onChange={handleInputChange} required placeholder={formData.category === 'Shapewear' ? '0.17 Kg' : '0.12 Kg'} />
                                             </div>
                                         </div>
                                     </div>
@@ -523,36 +523,36 @@ const AdminPanel = () => {
                                             <h3 className="form-section-title">Blouse Specific Details</h3>
                                             <div className="form-grid">
                                                 <div className="form-group">
-                                                    <label>Blouse Type</label>
-                                                    <input type="text" name="blouseType" value={formData.blouseType} onChange={handleInputChange} placeholder="Stitched" />
+                                                    <label>Blouse Type *</label>
+                                                    <input type="text" name="blouseType" value={formData.blouseType} onChange={handleInputChange} required placeholder="Stitched" />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Blouse Color</label>
-                                                    <input type="text" name="blouseColor" value={formData.blouseColor} onChange={handleInputChange} placeholder="Black" />
+                                                    <label>Blouse Color *</label>
+                                                    <input type="text" name="blouseColor" value={formData.blouseColor} onChange={handleInputChange} required placeholder="Black" />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Blouse Fabric</label>
-                                                    <input type="text" name="blouseFabric" value={formData.blouseFabric} onChange={handleInputChange} placeholder="Cotton Lycra" />
+                                                    <label>Blouse Fabric *</label>
+                                                    <input type="text" name="blouseFabric" value={formData.blouseFabric} onChange={handleInputChange} required placeholder="Cotton Lycra" />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Blouse Work</label>
-                                                    <input type="text" name="blouseWork" value={formData.blouseWork} onChange={handleInputChange} placeholder="Dyed, Self Woven" />
+                                                    <label>Blouse Work *</label>
+                                                    <input type="text" name="blouseWork" value={formData.blouseWork} onChange={handleInputChange} required placeholder="Dyed, Self Woven" />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Sleeve Length</label>
-                                                    <input type="text" name="sleeveLength" value={formData.sleeveLength} onChange={handleInputChange} placeholder="9.5 Inch" />
+                                                    <label>Sleeve Length *</label>
+                                                    <input type="text" name="sleeveLength" value={formData.sleeveLength} onChange={handleInputChange} required placeholder="9.5 Inch" />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Bust Size</label>
-                                                    <input type="text" name="bustSize" value={formData.bustSize} onChange={handleInputChange} placeholder="38 Inch" />
+                                                    <label>Bust Size *</label>
+                                                    <input type="text" name="bustSize" value={formData.bustSize} onChange={handleInputChange} required placeholder="38 Inch" />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Blouse Length</label>
-                                                    <input type="text" name="blouseLength" value={formData.blouseLength} onChange={handleInputChange} placeholder="14.5 Inch" />
+                                                    <label>Blouse Length *</label>
+                                                    <input type="text" name="blouseLength" value={formData.blouseLength} onChange={handleInputChange} required placeholder="14.5 Inch" />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Sales Package</label>
-                                                    <input type="text" name="salesPackage" value={formData.salesPackage} onChange={handleInputChange} placeholder="Package Contains 1 Blouse With Attached Sleeves" />
+                                                    <label>Sales Package *</label>
+                                                    <input type="text" name="salesPackage" value={formData.salesPackage} onChange={handleInputChange} required placeholder="Package Contains 1 Blouse With Attached Sleeves" />
                                                 </div>
                                             </div>
                                         </div>
@@ -563,32 +563,32 @@ const AdminPanel = () => {
                                             <h3 className="form-section-title">Shapewear Specific Details</h3>
                                             <div className="form-grid">
                                                 <div className="form-group">
-                                                    <label>Bottom Color</label>
-                                                    <input type="text" name="bottomColor" value={formData.bottomColor} onChange={handleInputChange} placeholder="Black" />
+                                                    <label>Bottom Color *</label>
+                                                    <input type="text" name="bottomColor" value={formData.bottomColor} onChange={handleInputChange} required placeholder="Black" />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Bottom Fabric</label>
-                                                    <input type="text" name="bottomFabric" value={formData.bottomFabric} onChange={handleInputChange} placeholder="Lycra Blend" />
+                                                    <label>Bottom Fabric *</label>
+                                                    <input type="text" name="bottomFabric" value={formData.bottomFabric} onChange={handleInputChange} required placeholder="Lycra Blend" />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Bottom Length</label>
-                                                    <input type="text" name="bottomLength" value={formData.bottomLength} onChange={handleInputChange} placeholder="38 Inch" />
+                                                    <label>Bottom Length *</label>
+                                                    <input type="text" name="bottomLength" value={formData.bottomLength} onChange={handleInputChange} required placeholder="38 Inch" />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Bottom Work</label>
-                                                    <input type="text" name="bottomWork" value={formData.bottomWork} onChange={handleInputChange} placeholder="Plain" />
+                                                    <label>Bottom Work *</label>
+                                                    <input type="text" name="bottomWork" value={formData.bottomWork} onChange={handleInputChange} required placeholder="Plain" />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Waist Type</label>
-                                                    <input type="text" name="waistType" value={formData.waistType} onChange={handleInputChange} placeholder="Elastic" />
+                                                    <label>Waist Type *</label>
+                                                    <input type="text" name="waistType" value={formData.waistType} onChange={handleInputChange} required placeholder="Elastic" />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Bottom Hip</label>
-                                                    <input type="text" name="bottomHip" value={formData.bottomHip} onChange={handleInputChange} placeholder="36 Inch" />
+                                                    <label>Bottom Hip *</label>
+                                                    <input type="text" name="bottomHip" value={formData.bottomHip} onChange={handleInputChange} required placeholder="36 Inch" />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Bottom Waist</label>
-                                                    <input type="text" name="bottomWaist" value={formData.bottomWaist} onChange={handleInputChange} placeholder="28 Inch" />
+                                                    <label>Bottom Waist *</label>
+                                                    <input type="text" name="bottomWaist" value={formData.bottomWaist} onChange={handleInputChange} required placeholder="28 Inch" />
                                                 </div>
                                             </div>
                                         </div>
