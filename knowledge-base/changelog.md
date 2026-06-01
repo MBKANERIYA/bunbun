@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-06-01 — Add Sticky Product Info on Scroll
+**What**: Made the product details column sticky on desktop to support scrolling through large image grids.
+**Why**: When viewing multiple images in the 2x2 grid, users need the Add to Cart button and product info to remain visible as they scroll down the images.
+**Files Changed**: `ProductPage.css`
+- Added `align-items: start;` to `.product-grid-unique`.
+- Added `position: sticky; top: 80px;` to `.product-info-unique`.
+
 ## 2026-06-01 — Show All Product Images with Gallery
 **What**: Replaced the 2-column image grid on the Product Details page with a main image viewer + scrollable thumbnail strip.
 **Why**: Products can have multiple images; users should see all of them with the main image displayed prominently first.
