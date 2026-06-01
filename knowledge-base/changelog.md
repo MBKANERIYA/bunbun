@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-06-01 — Set Global Font Family to Poppins
+**What**: Enforced the `Poppins` font family across the entire website.
+**Why**: To standardize the typography and ensure a consistent, modern look on all pages.
+**Files Changed**: `FrontEnd/src/index.css`
+- Imported the `Poppins` font from Google Fonts.
+- Applied it globally to all elements using the `*` selector with `!important` to override any page-specific fonts.
+
 ## 2026-06-01 — Fix Multer Uploads for Serverless/Vercel
 **What**: Changed `multer` upload destination from local `../public/images` folder to the OS temporary directory (`os.tmpdir()`).
 **Why**: Vercel and other serverless environments have a read-only filesystem (EROFS), meaning attempting to save images to `../public` crashes the API. Writing to `/tmp` allows the image to be temporarily stored so Cloudinary can process it.
