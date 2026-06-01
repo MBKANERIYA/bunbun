@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-06-01 — Move Product Description Layout
+**What**: Repositioned the product description to sit above the "Product Details" accordion.
+**Why**: To improve visual hierarchy, placing the main product description immediately visible before the collapsible specific details.
+**Files Changed**: `ProductDetails.jsx`
+- Extracted the product description from inside the "PRODUCT DETAILS" accordion.
+- Rendered the description above the accordion block.
+
 ## 2026-06-01 — Add Product Details Accordion
 **What**: Updated the "Product Details" page to use an accordion-style layout for product information.
 **Why**: To improve readability and match the requested design for displaying specific product attributes cleanly.

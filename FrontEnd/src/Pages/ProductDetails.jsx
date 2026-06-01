@@ -319,6 +319,12 @@ const ProductDetails = () => {
                         />
                     </div>
 
+                    {product.description && (
+                        <div className="product-description mt-4" style={{ fontSize: '0.95rem', lineHeight: '1.7', color: 'var(--text-secondary)' }}>
+                            <p className="m-0">{product.description}</p>
+                        </div>
+                    )}
+
                     <div className="details-accordion mt-4">
                         {/* PRODUCT DETAILS */}
                         <div className="detail-item">
@@ -356,12 +362,6 @@ const ProductDetails = () => {
                                         {product.washAndCare && <li><strong>Wash And Care :</strong> {product.washAndCare}</li>}
                                         {product.weight && <li><strong>Weight :</strong> {product.weight}</li>}
                                     </ul>
-                                    {product.description && (
-                                        <div className="mt-3">
-                                            <strong>Description :</strong>
-                                            <p>{product.description}</p>
-                                        </div>
-                                    )}
                                 </div>
                             )}
                         </div>
