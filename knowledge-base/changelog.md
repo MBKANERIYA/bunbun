@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-06-01 — Fix Multer Uploads for Serverless/Vercel
+**What**: Changed `multer` upload destination from local `../public/images` folder to the OS temporary directory (`os.tmpdir()`).
+**Why**: Vercel and other serverless environments have a read-only filesystem (EROFS), meaning attempting to save images to `../public` crashes the API. Writing to `/tmp` allows the image to be temporarily stored so Cloudinary can process it.
+**Files Changed**: `Middleware/multer.js`
+- Replaced `fs.mkdirSync` logic with `require('os').tmpdir()`.
+
 ## 2026-06-01 — Fix Category Import for Vercel Deployment
 **What**: Fixed an import bug causing product addition to fail in production on Vercel.
 **Why**: Vercel/Serverless environments had an issue resolving the `Category.Model` via a direct nested require statement, causing the backend API to throw an error when trying to add a product to a category. 
