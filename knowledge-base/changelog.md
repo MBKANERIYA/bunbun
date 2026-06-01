@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-06-01 — Show All Product Images with Gallery
+**What**: Replaced the 2-column image grid on the Product Details page with a main image viewer + scrollable thumbnail strip.
+**Why**: Products can have multiple images; users should see all of them with the main image displayed prominently first.
+**Files Changed**: `ProductDetails.jsx`, `ProductPage.css`
+- Built `allImages` array from `product.image` (first) + `product.images` array.
+- Added `selectedImage` state — clicking a thumbnail updates the main image.
+- Active thumbnail gets a border highlight; inactive ones are slightly dimmed.
+- CSS uses flexbox for horizontal scrollable thumbnails.
+
 ## 2026-06-01 — Add Size Selection to Product Page
 **What**: Added L/XL/XXL/XXXL size selector above the Add to Cart button on the Product Details page.
 **Why**: Users need to choose a size before adding products to cart.
