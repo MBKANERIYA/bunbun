@@ -2,16 +2,16 @@
   "outputDirectory": "FrontEnd/dist",
   "rewrites": [
     {
-      "source": "/v1/(.*)",
-      "destination": "/api"
+      "source": "/(v1/.*)",
+      "destination": "/api/index.js"
     },
     {
-      "source": "/images/(.*)",
-      "destination": "/api"
+      "source": "/(images/.*)",
+      "destination": "/api/index.js"
     },
     {
-      "source": "/health",
-      "destination": "/api"
+      "source": "/(health)",
+      "destination": "/api/index.js"
     },
     {
       "source": "/((?!api/).*)",
