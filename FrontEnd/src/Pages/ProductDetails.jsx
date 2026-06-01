@@ -11,7 +11,9 @@ import {
     FaSpinner,
     FaStar,
     FaHeart,
-    FaRegHeart
+    FaRegHeart,
+    FaChevronDown,
+    FaChevronUp
 } from "react-icons/fa";
 import ProductCard from "../Component/ProductCard";
 import Slider from "react-slick";
@@ -45,6 +47,11 @@ const ProductDetails = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [message, setMessage] = useState("");
     const [recentlyViewed, setRecentlyViewed] = useState([]);
+    const [openAccordion, setOpenAccordion] = useState("product_details");
+
+    const toggleAccordion = (section) => {
+        setOpenAccordion(openAccordion === section ? null : section);
+    };
 
     const userId = authUser?._id || null;
     const isProductWishlisted = product?._id ? isWishlisted(product._id) : false;
@@ -313,17 +320,102 @@ const ProductDetails = () => {
                     </div>
 
                     <div className="details-accordion mt-4">
+                        {/* PRODUCT DETAILS */}
                         <div className="detail-item">
-                            <h3>Description</h3>
-                            <p>{product.description}</p>
+                            <div className="detail-item-header" onClick={() => toggleAccordion('product_details')}>
+                                <h3>PRODUCT DETAILS</h3>
+                                {openAccordion === 'product_details' ? <FaChevronUp /> : <FaChevronDown />}
+                            </div>
+                            {openAccordion === 'product_details' && (
+                                <div className="detail-item-content">
+                                    <p className="mb-3">Pictures used are only for references</p>
+                                    <ul>
+                                        {product.sku && <li><strong>SKU :</strong> {product.sku}</li>}
+                                        {product.productType && <li><strong>Type :</strong> {product.productType}</li>}
+                                        
+                                        {/* Blouse Fields */}
+                                        {product.blouseType && <li><strong>Blouse Type :</strong> {product.blouseType}</li>}
+                                        {product.blouseColor && <li><strong>Blouse Color :</strong> {product.blouseColor}</li>}
+                                        {product.blouseFabric && <li><strong>Blouse Fabric :</strong> {product.blouseFabric}</li>}
+                                        {product.blouseWork && <li><strong>Blouse Work :</strong> {product.blouseWork}</li>}
+                                        {product.sleeveLength && <li><strong>Sleeve Length :</strong> {product.sleeveLength}</li>}
+                                        {product.bustSize && <li><strong>Bust Size :</strong> {product.bustSize}</li>}
+                                        {product.blouseLength && <li><strong>Blouse Length :</strong> {product.blouseLength}</li>}
+                                        {product.salesPackage && <li><strong>Sales Package :</strong> {product.salesPackage}</li>}
+                                        
+                                        {/* Shapewear Fields */}
+                                        {product.bottomColor && <li><strong>Bottom Color :</strong> {product.bottomColor}</li>}
+                                        {product.bottomFabric && <li><strong>Bottom Fabric :</strong> {product.bottomFabric}</li>}
+                                        {product.bottomLength && <li><strong>Bottom Length :</strong> {product.bottomLength}</li>}
+                                        {product.bottomWork && <li><strong>Bottom Work :</strong> {product.bottomWork}</li>}
+                                        {product.waistType && <li><strong>Waist Type :</strong> {product.waistType}</li>}
+                                        {product.bottomHip && <li><strong>Bottom Hip :</strong> {product.bottomHip}</li>}
+                                        {product.bottomWaist && <li><strong>Bottom Waist :</strong> {product.bottomWaist}</li>}
+                                        
+                                        {/* Common Fields */}
+                                        {product.washAndCare && <li><strong>Wash And Care :</strong> {product.washAndCare}</li>}
+                                        {product.weight && <li><strong>Weight :</strong> {product.weight}</li>}
+                                    </ul>
+                                    {product.description && (
+                                        <div className="mt-3">
+                                            <strong>Description :</strong>
+                                            <p>{product.description}</p>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
+
+                        {/* RETURN AND EXCHANGE */}
                         <div className="detail-item">
-                            <h3>Product Details</h3>
-                            <ul>
-                                <li><strong>Category:</strong> {product.category}</li>
-                                <li><strong>Color:</strong> {product.color}</li>
-                                <li><strong>Fabric:</strong> Georgette</li>
-                            </ul>
+                            <div className="detail-item-header" onClick={() => toggleAccordion('return')}>
+                                <h3>RETURN AND EXCHANGE</h3>
+                                {openAccordion === 'return' ? <FaChevronUp /> : <FaChevronDown />}
+                            </div>
+                            {openAccordion === 'return' && (
+                                <div className="detail-item-content">
+                                    <p>Easy 7-day return and exchange policy. Please ensure the product is unused with original tags attached.</p>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* SHIPPING INFORMATION */}
+                        <div className="detail-item">
+                            <div className="detail-item-header" onClick={() => toggleAccordion('shipping')}>
+                                <h3>SHIPPING INFORMATION</h3>
+                                {openAccordion === 'shipping' ? <FaChevronUp /> : <FaChevronDown />}
+                            </div>
+                            {openAccordion === 'shipping' && (
+                                <div className="detail-item-content">
+                                    <p>Standard delivery takes 5-7 business days. Free shipping on orders above ₹999.</p>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* SELLER INFORMATION */}
+                        <div className="detail-item">
+                            <div className="detail-item-header" onClick={() => toggleAccordion('seller')}>
+                                <h3>SELLER INFORMATION</h3>
+                                {openAccordion === 'seller' ? <FaChevronUp /> : <FaChevronDown />}
+                            </div>
+                            {openAccordion === 'seller' && (
+                                <div className="detail-item-content">
+                                    <p>Sold by Navdhaaga Store. Authentic products guaranteed.</p>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* NEED HELP? */}
+                        <div className="detail-item">
+                            <div className="detail-item-header" onClick={() => toggleAccordion('help')}>
+                                <h3>NEED HELP?</h3>
+                                {openAccordion === 'help' ? <FaChevronUp /> : <FaChevronDown />}
+                            </div>
+                            {openAccordion === 'help' && (
+                                <div className="detail-item-content">
+                                    <p>Contact our support team at support@navdhaaga.com or call +91-XXXXXXXXXX.</p>
+                                </div>
+                            )}
                         </div>
                     </div>
 

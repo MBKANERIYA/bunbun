@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-06-01 — Add Product Details Accordion
+**What**: Updated the "Product Details" page to use an accordion-style layout for product information.
+**Why**: To improve readability and match the requested design for displaying specific product attributes cleanly.
+**Files Changed**: `ProductDetails.jsx`, `ProductPage.css`
+- Added state in `ProductDetails.jsx` to toggle active accordion sections.
+- Created dynamic accordion sections (Product Details, Return & Exchange, Shipping, Seller Info, Help).
+- Updated `ProductPage.css` to add styling for accordion headers, content, chevrons, and removed bullets for a cleaner list.
+
 ## 2026-06-01 — Make All Product Fields Mandatory
 **What**: Updated the "Add Product" form in the Admin Dashboard to enforce required validation on all fields.
 **Why**: Prevent incomplete product entries from being saved to the database.

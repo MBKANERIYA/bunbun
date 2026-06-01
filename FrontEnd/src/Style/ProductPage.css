@@ -201,29 +201,58 @@
 }
 
 .detail-item {
-    padding: 1.5rem 0;
     border-bottom: 1px solid var(--border-color);
 }
 
-.detail-item h3 {
-    font-family: var(--font-body);
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin: 0 0 0.5rem 0;
-    color: var(--text-primary);
+.detail-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 0;
+    cursor: pointer;
 }
 
-.detail-item p,
-.detail-item ul {
+.detail-item-header h3 {
+    font-family: var(--font-body);
     font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.detail-item-header svg {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.detail-item-content {
+    padding-bottom: 1.5rem;
+}
+
+.detail-item-content p {
+    font-size: 0.9rem;
     line-height: 1.7;
     color: var(--text-secondary);
     margin: 0;
-    padding-left: 1.2rem;
 }
 
-.detail-item ul {
-    list-style: disc;
+.detail-item-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.detail-item-content ul li {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.4rem;
+}
+
+.detail-item-content ul li strong {
+    color: var(--text-primary);
+    font-weight: 600;
 }
 
 .delivery-info-unique {
