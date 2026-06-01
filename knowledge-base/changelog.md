@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-06-01 — Add Shapewear Fields to Admin Dashboard
+**What**: Updated Admin Dashboard "Add Product" form to be driven by category (Blouse vs Shapewear) and added Shapewear-specific fields.
+**Why**: The admin needs a streamlined way to add Shapewear products with their specific attributes (waist, hip, etc.) distinct from Blouses.
+**Files Changed**: `Product.Model.js`, `AdminPanel.jsx`
+- Added 7 new fields to `Product.Model.js` (`bottomColor`, `bottomFabric`, `bottomLength`, `bottomWork`, `waistType`, `bottomHip`, `bottomWaist`).
+- Restructured `AdminPanel.jsx` to force the user to select the "Category" first.
+- The form conditionally renders specific sections and dynamic placeholders based on whether "Blouse" or "Shapewear" is selected.
+- Moved common fields (`SKU`, `Type`, `Wash And Care`, `Weight`) into a "Common Details" section.
+
 ## 2026-06-01 — Fix Vercel Runtime Crash
 **What**: Added `razorpay` to root package.json and fixed `api/index.js` url parsing.
 **Why**: The live Vercel API was returning 500 FUNCTION_INVOCATION_FAILED because `razorpay` was missing from the root dependencies causing a module load crash, and the Vercel rewrite configuration lost the original path.

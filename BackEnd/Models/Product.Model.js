@@ -63,6 +63,27 @@ let productSchema = new mongoose.Schema({
     },
     weight: {
         type: String
+    },
+    bottomColor: {
+        type: String
+    },
+    bottomFabric: {
+        type: String
+    },
+    bottomLength: {
+        type: String
+    },
+    bottomWork: {
+        type: String
+    },
+    waistType: {
+        type: String
+    },
+    bottomHip: {
+        type: String
+    },
+    bottomWaist: {
+        type: String
     }
 })
 

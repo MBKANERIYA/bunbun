@@ -38,6 +38,14 @@ const AdminPanel = () => {
         washAndCare: '',
         salesPackage: '',
         weight: '',
+        // Shapewear specific
+        bottomColor: '',
+        bottomFabric: '',
+        bottomLength: '',
+        bottomWork: '',
+        waistType: '',
+        bottomHip: '',
+        bottomWaist: '',
     });
     const [mainImage, setMainImage] = useState(null);
     const [additionalImages, setAdditionalImages] = useState(null);
@@ -177,6 +185,8 @@ const AdminPanel = () => {
                 blouseColor: '', blouseFabric: '', blouseWork: '',
                 sleeveLength: '', bustSize: '', blouseLength: '',
                 washAndCare: '', salesPackage: '', weight: '',
+                bottomColor: '', bottomFabric: '', bottomLength: '',
+                bottomWork: '', waistType: '', bottomHip: '', bottomWaist: '',
             });
             setMainImage(null);
             setAdditionalImages(null);
@@ -208,6 +218,10 @@ const AdminPanel = () => {
             bustSize: product.bustSize || '', blouseLength: product.blouseLength || '',
             washAndCare: product.washAndCare || '', salesPackage: product.salesPackage || '',
             weight: product.weight || '',
+            bottomColor: product.bottomColor || '', bottomFabric: product.bottomFabric || '',
+            bottomLength: product.bottomLength || '', bottomWork: product.bottomWork || '',
+            waistType: product.waistType || '', bottomHip: product.bottomHip || '',
+            bottomWaist: product.bottomWaist || '',
         });
         setMainImagePreview(product.image || '');
         setAdditionalImagesPreviews(product.images || []);
@@ -238,7 +252,8 @@ const AdminPanel = () => {
                     name: '', description: '', mrp: '', selling_price: '', category: '', subcategory: '',
                     color: '', sku: '', productType: '', blouseType: '', blouseColor: '', blouseFabric: '',
                     blouseWork: '', sleeveLength: '', bustSize: '', blouseLength: '', washAndCare: '',
-                    salesPackage: '', weight: '',
+                    salesPackage: '', weight: '', bottomColor: '', bottomFabric: '',
+                    bottomLength: '', bottomWork: '', waistType: '', bottomHip: '', bottomWaist: '',
                 });
                 setMainImagePreview('');
                 setAdditionalImagesPreviews([]);
@@ -400,164 +415,192 @@ const AdminPanel = () => {
                         )}
                         <form className="admin-product-form" onSubmit={handleAddProduct}>
 
-                            {/* Section: Basic Info */}
+                            {/* Section: Category Selection First */}
                             <div className="form-section">
-                                <h3 className="form-section-title">Basic Information</h3>
+                                <h3 className="form-section-title">Select Category</h3>
                                 <div className="form-grid">
                                     <div className="form-group full-width">
-                                        <label>Product Title *</label>
-                                        <input type="text" name="name" value={formData.name} onChange={handleInputChange} required placeholder="e.g. Printed Saree - PaleTurquoise Edition" />
-                                    </div>
-                                    <div className="form-group full-width">
-                                        <label>Product Description</label>
-                                        <textarea name="description" value={formData.description} onChange={handleInputChange} rows="3" placeholder="Detailed product description..." />
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Section: Images */}
-                            <div className="form-section">
-                                <h3 className="form-section-title">Images</h3>
-                                <div className="form-grid">
-                                    <div className="form-group full-width">
-                                        <label>Main Image *</label>
-                                        <input type="file" name="image" accept="image/*" onChange={handleMainImageChange} required={!editProductId} />
-                                        {mainImagePreview && (
-                                            <div className="image-previews-wrapper">
-                                                <div className="image-preview-item">
-                                                    <img src={mainImagePreview} alt="Main preview" />
-                                                    <button type="button" className="remove-preview-btn" onClick={() => { setMainImage(null); setMainImagePreview(''); document.querySelector('input[name="image"]').value = ''; }}>✕</button>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="form-group full-width">
-                                        <label>Additional Images (Multiple)</label>
-                                        <input type="file" name="images" accept="image/*" multiple onChange={handleAdditionalImagesChange} />
-                                        {additionalImagesPreviews.length > 0 && (
-                                            <div className="image-previews-wrapper">
-                                                {additionalImagesPreviews.map((src, index) => (
-                                                    <div className="image-preview-item" key={index}>
-                                                        <img src={src} alt={`Additional preview ${index + 1}`} />
-                                                        <button type="button" className="remove-preview-btn" onClick={() => removeAdditionalImage(index)}>✕</button>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Section: Pricing & Category */}
-                            <div className="form-section">
-                                <h3 className="form-section-title">Pricing & Category</h3>
-                                <div className="form-grid">
-                                    <div className="form-group">
-                                        <label>MRP (₹) *</label>
-                                        <input type="text" name="mrp" value={formData.mrp} onChange={handleInputChange} required placeholder="4240" />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Selling Price (₹) *</label>
-                                        <input type="text" name="selling_price" value={formData.selling_price} onChange={handleInputChange} required placeholder="3115" />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Category</label>
-                                        <select name="category" value={formData.category} onChange={handleInputChange}>
-                                            <option value="">Select Category</option>
-                                            <option value="Saree">Saree</option>
+                                        <select name="category" value={formData.category} onChange={handleInputChange} required style={{ padding: '12px', fontSize: '16px', fontWeight: 'bold' }}>
+                                            <option value="">-- Choose Category to Add Product --</option>
                                             <option value="Blouse">Blouse</option>
-                                            <option value="Suit">Suit</option>
-                                            <option value="Lehenga">Lehenga</option>
-                                            <option value="Kurti">Kurti</option>
                                             <option value="Shapewear">Shapewear</option>
-                                            <option value="Accessories">Accessories</option>
                                         </select>
                                     </div>
-                                    <div className="form-group">
-                                        <label>Subcategory</label>
-                                        <input type="text" name="subcategory" value={formData.subcategory} onChange={handleInputChange} placeholder="Printed Saree" />
-                                    </div>
                                 </div>
                             </div>
 
-                            {/* Section: Product Details */}
-                            <div className="form-section">
-                                <h3 className="form-section-title">Product Details</h3>
-                                <div className="form-grid">
-                                    <div className="form-group">
-                                        <label>SKU</label>
-                                        <input type="text" name="sku" value={formData.sku} onChange={handleInputChange} placeholder="ND-SR-001" />
+                            {formData.category && (
+                                <>
+                                    {/* Section: Basic Info */}
+                                    <div className="form-section">
+                                        <h3 className="form-section-title">Basic Information</h3>
+                                        <div className="form-grid">
+                                            <div className="form-group full-width">
+                                                <label>Product Title *</label>
+                                                <input type="text" name="name" value={formData.name} onChange={handleInputChange} required placeholder="e.g. Printed Saree - PaleTurquoise Edition" />
+                                            </div>
+                                            <div className="form-group full-width">
+                                                <label>Product Description</label>
+                                                <textarea name="description" value={formData.description} onChange={handleInputChange} rows="3" placeholder="Detailed product description..." />
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="form-group">
-                                        <label>Type</label>
-                                        <input type="text" name="productType" value={formData.productType} onChange={handleInputChange} placeholder="Saree" />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Color</label>
-                                        <input type="text" name="color" value={formData.color} onChange={handleInputChange} placeholder="PaleTurquoise" />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Weight</label>
-                                        <input type="text" name="weight" value={formData.weight} onChange={handleInputChange} placeholder="500g" />
-                                    </div>
-                                </div>
-                            </div>
 
-                            {/* Section: Blouse Details */}
-                            <div className="form-section">
-                                <h3 className="form-section-title">Blouse Details</h3>
-                                <div className="form-grid">
-                                    <div className="form-group">
-                                        <label>Blouse Type</label>
-                                        <input type="text" name="blouseType" value={formData.blouseType} onChange={handleInputChange} placeholder="Unstitched" />
+                                    {/* Section: Images */}
+                                    <div className="form-section">
+                                        <h3 className="form-section-title">Images</h3>
+                                        <div className="form-grid">
+                                            <div className="form-group full-width">
+                                                <label>Main Image *</label>
+                                                <input type="file" name="image" accept="image/*" onChange={handleMainImageChange} required={!editProductId} />
+                                                {mainImagePreview && (
+                                                    <div className="image-previews-wrapper">
+                                                        <div className="image-preview-item">
+                                                            <img src={mainImagePreview} alt="Main preview" />
+                                                            <button type="button" className="remove-preview-btn" onClick={() => { setMainImage(null); setMainImagePreview(''); document.querySelector('input[name="image"]').value = ''; }}>✕</button>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="form-group full-width">
+                                                <label>Additional Images (Multiple)</label>
+                                                <input type="file" name="images" accept="image/*" multiple onChange={handleAdditionalImagesChange} />
+                                                {additionalImagesPreviews.length > 0 && (
+                                                    <div className="image-previews-wrapper">
+                                                        {additionalImagesPreviews.map((src, index) => (
+                                                            <div className="image-preview-item" key={index}>
+                                                                <img src={src} alt={`Additional preview ${index + 1}`} />
+                                                                <button type="button" className="remove-preview-btn" onClick={() => removeAdditionalImage(index)}>✕</button>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="form-group">
-                                        <label>Blouse Color</label>
-                                        <input type="text" name="blouseColor" value={formData.blouseColor} onChange={handleInputChange} placeholder="Matching" />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Blouse Fabric</label>
-                                        <input type="text" name="blouseFabric" value={formData.blouseFabric} onChange={handleInputChange} placeholder="Silk" />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Blouse Work</label>
-                                        <input type="text" name="blouseWork" value={formData.blouseWork} onChange={handleInputChange} placeholder="Printed" />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Sleeve Length</label>
-                                        <input type="text" name="sleeveLength" value={formData.sleeveLength} onChange={handleInputChange} placeholder="Short Sleeve" />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Bust Size</label>
-                                        <input type="text" name="bustSize" value={formData.bustSize} onChange={handleInputChange} placeholder="Up to 42" />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Blouse Length</label>
-                                        <input type="text" name="blouseLength" value={formData.blouseLength} onChange={handleInputChange} placeholder="15 inches" />
-                                    </div>
-                                </div>
-                            </div>
 
-                            {/* Section: Additional Info */}
-                            <div className="form-section">
-                                <h3 className="form-section-title">Additional Information</h3>
-                                <div className="form-grid">
-                                    <div className="form-group">
-                                        <label>Wash And Care</label>
-                                        <input type="text" name="washAndCare" value={formData.washAndCare} onChange={handleInputChange} placeholder="Dry Clean Only" />
+                                    {/* Section: Pricing */}
+                                    <div className="form-section">
+                                        <h3 className="form-section-title">Pricing</h3>
+                                        <div className="form-grid">
+                                            <div className="form-group">
+                                                <label>MRP (₹) *</label>
+                                                <input type="text" name="mrp" value={formData.mrp} onChange={handleInputChange} required placeholder="4240" />
+                                            </div>
+                                            <div className="form-group">
+                                                <label>Selling Price (₹) *</label>
+                                                <input type="text" name="selling_price" value={formData.selling_price} onChange={handleInputChange} required placeholder="3115" />
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="form-group">
-                                        <label>Sales Package</label>
-                                        <input type="text" name="salesPackage" value={formData.salesPackage} onChange={handleInputChange} placeholder="1 Saree with Blouse Piece" />
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div className="form-actions">
-                                <button type="submit" className="admin-submit-btn" disabled={submitting}>
-                                    {submitting ? 'Saving Product...' : (editProductId ? 'Save Changes' : '+ Add Product')}
-                                </button>
-                            </div>
+                                    {/* Section: Details */}
+                                    <div className="form-section">
+                                        <h3 className="form-section-title">Common Details</h3>
+                                        <div className="form-grid">
+                                            <div className="form-group">
+                                                <label>SKU</label>
+                                                <input type="text" name="sku" value={formData.sku} onChange={handleInputChange} placeholder={formData.category === 'Shapewear' ? '754SWTK310-XXL' : '73B1229-L'} />
+                                            </div>
+                                            <div className="form-group">
+                                                <label>Type</label>
+                                                <input type="text" name="productType" value={formData.productType} onChange={handleInputChange} placeholder={formData.category === 'Shapewear' ? 'Shapewear' : 'Self Woven'} />
+                                            </div>
+                                            <div className="form-group">
+                                                <label>Wash And Care</label>
+                                                <input type="text" name="washAndCare" value={formData.washAndCare} onChange={handleInputChange} placeholder={formData.category === 'Shapewear' ? 'Machine Wash' : 'Hand Wash only'} />
+                                            </div>
+                                            <div className="form-group">
+                                                <label>Weight</label>
+                                                <input type="text" name="weight" value={formData.weight} onChange={handleInputChange} placeholder={formData.category === 'Shapewear' ? '0.17 Kg' : '0.12 Kg'} />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Specific Category Fields */}
+                                    {formData.category === 'Blouse' && (
+                                        <div className="form-section">
+                                            <h3 className="form-section-title">Blouse Specific Details</h3>
+                                            <div className="form-grid">
+                                                <div className="form-group">
+                                                    <label>Blouse Type</label>
+                                                    <input type="text" name="blouseType" value={formData.blouseType} onChange={handleInputChange} placeholder="Stitched" />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label>Blouse Color</label>
+                                                    <input type="text" name="blouseColor" value={formData.blouseColor} onChange={handleInputChange} placeholder="Black" />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label>Blouse Fabric</label>
+                                                    <input type="text" name="blouseFabric" value={formData.blouseFabric} onChange={handleInputChange} placeholder="Cotton Lycra" />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label>Blouse Work</label>
+                                                    <input type="text" name="blouseWork" value={formData.blouseWork} onChange={handleInputChange} placeholder="Dyed, Self Woven" />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label>Sleeve Length</label>
+                                                    <input type="text" name="sleeveLength" value={formData.sleeveLength} onChange={handleInputChange} placeholder="9.5 Inch" />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label>Bust Size</label>
+                                                    <input type="text" name="bustSize" value={formData.bustSize} onChange={handleInputChange} placeholder="38 Inch" />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label>Blouse Length</label>
+                                                    <input type="text" name="blouseLength" value={formData.blouseLength} onChange={handleInputChange} placeholder="14.5 Inch" />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label>Sales Package</label>
+                                                    <input type="text" name="salesPackage" value={formData.salesPackage} onChange={handleInputChange} placeholder="Package Contains 1 Blouse With Attached Sleeves" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {formData.category === 'Shapewear' && (
+                                        <div className="form-section">
+                                            <h3 className="form-section-title">Shapewear Specific Details</h3>
+                                            <div className="form-grid">
+                                                <div className="form-group">
+                                                    <label>Bottom Color</label>
+                                                    <input type="text" name="bottomColor" value={formData.bottomColor} onChange={handleInputChange} placeholder="Black" />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label>Bottom Fabric</label>
+                                                    <input type="text" name="bottomFabric" value={formData.bottomFabric} onChange={handleInputChange} placeholder="Lycra Blend" />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label>Bottom Length</label>
+                                                    <input type="text" name="bottomLength" value={formData.bottomLength} onChange={handleInputChange} placeholder="38 Inch" />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label>Bottom Work</label>
+                                                    <input type="text" name="bottomWork" value={formData.bottomWork} onChange={handleInputChange} placeholder="Plain" />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label>Waist Type</label>
+                                                    <input type="text" name="waistType" value={formData.waistType} onChange={handleInputChange} placeholder="Elastic" />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label>Bottom Hip</label>
+                                                    <input type="text" name="bottomHip" value={formData.bottomHip} onChange={handleInputChange} placeholder="36 Inch" />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label>Bottom Waist</label>
+                                                    <input type="text" name="bottomWaist" value={formData.bottomWaist} onChange={handleInputChange} placeholder="28 Inch" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <div className="form-actions">
+                                        <button type="submit" className="admin-submit-btn" disabled={submitting}>
+                                            {submitting ? 'Saving Product...' : (editProductId ? 'Save Changes' : '+ Add Product')}
+                                        </button>
+                                    </div>
+                                </>
+                            )}
                         </form>
                     </div>
                 )}
