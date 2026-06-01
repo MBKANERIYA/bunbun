@@ -84,7 +84,14 @@ let productSchema = new mongoose.Schema({
     },
     bottomWaist: {
         type: String
-    }
+    },
+    sizeDetails: [{
+        size: String,
+        bust: String,
+        waist: String,
+        shoulder: String,
+        length: String
+    }]
 })
 
 let product = mongoose.model("productSchema", productSchema)

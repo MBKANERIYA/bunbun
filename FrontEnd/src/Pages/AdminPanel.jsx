@@ -46,6 +46,12 @@ const AdminPanel = () => {
         waistType: '',
         bottomHip: '',
         bottomWaist: '',
+        sizeDetails: [
+            { size: 'L', bust: '', waist: '', shoulder: '', length: '' },
+            { size: 'XL', bust: '', waist: '', shoulder: '', length: '' },
+            { size: 'XXL', bust: '', waist: '', shoulder: '', length: '' },
+            { size: 'XXXL', bust: '', waist: '', shoulder: '', length: '' }
+        ],
     });
     const [mainImage, setMainImage] = useState(null);
     const [additionalImages, setAdditionalImages] = useState(null);
@@ -106,6 +112,14 @@ const AdminPanel = () => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
+    const handleSizeDetailChange = (index, field, value) => {
+        setFormData(prev => {
+            const newSizeDetails = [...prev.sizeDetails];
+            newSizeDetails[index] = { ...newSizeDetails[index], [field]: value };
+            return { ...prev, sizeDetails: newSizeDetails };
+        });
+    };
+
     const handleMainImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -150,7 +164,13 @@ const AdminPanel = () => {
             
             // Append textual form data
             Object.keys(formData).forEach(key => {
-                if (formData[key]) data.append(key, formData[key]);
+                if (key === 'sizeDetails') {
+                    if (formData.category === 'Blouse') {
+                        data.append(key, JSON.stringify(formData[key]));
+                    }
+                } else if (formData[key]) {
+                    data.append(key, formData[key]);
+                }
             });
 
             // Append main image file
@@ -179,14 +199,17 @@ const AdminPanel = () => {
             }
             
             setFormData({
-                name: '', description: '',
-                mrp: '', selling_price: '', category: '', subcategory: '',
-                color: '', sku: '', productType: '', blouseType: '',
-                blouseColor: '', blouseFabric: '', blouseWork: '',
-                sleeveLength: '', bustSize: '', blouseLength: '',
-                washAndCare: '', salesPackage: '', weight: '',
-                bottomColor: '', bottomFabric: '', bottomLength: '',
+                name: '', description: '', mrp: '', selling_price: '', category: '', subcategory: '',
+                color: '', sku: '', productType: '', blouseType: '', blouseColor: '', blouseFabric: '',
+                blouseWork: '', sleeveLength: '', bustSize: '', blouseLength: '', washAndCare: '',
+                salesPackage: '', weight: '', bottomColor: '', bottomFabric: '', bottomLength: '',
                 bottomWork: '', waistType: '', bottomHip: '', bottomWaist: '',
+                sizeDetails: [
+                    { size: 'L', bust: '', waist: '', shoulder: '', length: '' },
+                    { size: 'XL', bust: '', waist: '', shoulder: '', length: '' },
+                    { size: 'XXL', bust: '', waist: '', shoulder: '', length: '' },
+                    { size: 'XXXL', bust: '', waist: '', shoulder: '', length: '' }
+                ],
             });
             setMainImage(null);
             setAdditionalImages(null);
@@ -207,6 +230,13 @@ const AdminPanel = () => {
 
     const handleEditProduct = (product) => {
         setEditProductId(product._id);
+        const defaultSizeDetails = [
+            { size: 'L', bust: '', waist: '', shoulder: '', length: '' },
+            { size: 'XL', bust: '', waist: '', shoulder: '', length: '' },
+            { size: 'XXL', bust: '', waist: '', shoulder: '', length: '' },
+            { size: 'XXXL', bust: '', waist: '', shoulder: '', length: '' }
+        ];
+        
         setFormData({
             name: product.name || '', description: product.description || '',
             mrp: product.mrp || '', selling_price: product.selling_price || '',
@@ -222,6 +252,7 @@ const AdminPanel = () => {
             bottomLength: product.bottomLength || '', bottomWork: product.bottomWork || '',
             waistType: product.waistType || '', bottomHip: product.bottomHip || '',
             bottomWaist: product.bottomWaist || '',
+            sizeDetails: (product.sizeDetails && product.sizeDetails.length > 0) ? product.sizeDetails : defaultSizeDetails,
         });
         setMainImagePreview(product.image || '');
         setAdditionalImagesPreviews(product.images || []);
@@ -254,6 +285,12 @@ const AdminPanel = () => {
                     blouseWork: '', sleeveLength: '', bustSize: '', blouseLength: '', washAndCare: '',
                     salesPackage: '', weight: '', bottomColor: '', bottomFabric: '',
                     bottomLength: '', bottomWork: '', waistType: '', bottomHip: '', bottomWaist: '',
+                    sizeDetails: [
+                        { size: 'L', bust: '', waist: '', shoulder: '', length: '' },
+                        { size: 'XL', bust: '', waist: '', shoulder: '', length: '' },
+                        { size: 'XXL', bust: '', waist: '', shoulder: '', length: '' },
+                        { size: 'XXXL', bust: '', waist: '', shoulder: '', length: '' }
+                    ],
                 });
                 setMainImagePreview('');
                 setAdditionalImagesPreviews([]);
@@ -519,6 +556,7 @@ const AdminPanel = () => {
 
                                     {/* Specific Category Fields */}
                                     {formData.category === 'Blouse' && (
+                                        <>
                                         <div className="form-section">
                                             <h3 className="form-section-title">Blouse Specific Details</h3>
                                             <div className="form-grid">
@@ -535,12 +573,12 @@ const AdminPanel = () => {
                                                     <input type="text" name="blouseFabric" value={formData.blouseFabric} onChange={handleInputChange} required placeholder="Cotton Lycra" />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Blouse Work *</label>
-                                                    <input type="text" name="blouseWork" value={formData.blouseWork} onChange={handleInputChange} required placeholder="Dyed, Self Woven" />
+                                                    <label>Blouse Work</label>
+                                                    <input type="text" name="blouseWork" value={formData.blouseWork} onChange={handleInputChange} placeholder="Dyed, Self Woven (Optional)" />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Sleeve Length *</label>
-                                                    <input type="text" name="sleeveLength" value={formData.sleeveLength} onChange={handleInputChange} required placeholder="9.5 Inch" />
+                                                    <label>Sleeve Length</label>
+                                                    <input type="text" name="sleeveLength" value={formData.sleeveLength} onChange={handleInputChange} placeholder="9.5 Inch (Optional)" />
                                                 </div>
                                                 <div className="form-group">
                                                     <label>Bust Size *</label>
@@ -556,6 +594,34 @@ const AdminPanel = () => {
                                                 </div>
                                             </div>
                                         </div>
+                                        <div className="form-section">
+                                            <h3 className="form-section-title">Size Chart Details (Blouse)</h3>
+                                            <div className="admin-table-wrapper" style={{ overflowX: 'auto', marginBottom: '1rem' }}>
+                                                <table className="admin-table" style={{ width: '100%', minWidth: '600px', borderCollapse: 'collapse' }}>
+                                                    <thead>
+                                                        <tr>
+                                                            <th style={{border: '1px solid #ddd', padding: '8px'}}>Size</th>
+                                                            <th style={{border: '1px solid #ddd', padding: '8px'}}>Bust (inch)</th>
+                                                            <th style={{border: '1px solid #ddd', padding: '8px'}}>Waist (inch)</th>
+                                                            <th style={{border: '1px solid #ddd', padding: '8px'}}>Shoulder (inch)</th>
+                                                            <th style={{border: '1px solid #ddd', padding: '8px'}}>Length (inch)</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {formData.sizeDetails.map((detail, index) => (
+                                                            <tr key={index}>
+                                                                <td style={{fontWeight: 'bold', textAlign: 'center', border: '1px solid #ddd', padding: '8px'}}>{detail.size}</td>
+                                                                <td style={{border: '1px solid #ddd', padding: '8px'}}><input type="text" value={detail.bust} onChange={(e) => handleSizeDetailChange(index, 'bust', e.target.value)} placeholder="e.g. 25-29" style={{width: '100%', padding: '5px', border: '1px solid #ccc', borderRadius: '4px'}}/></td>
+                                                                <td style={{border: '1px solid #ddd', padding: '8px'}}><input type="text" value={detail.waist} onChange={(e) => handleSizeDetailChange(index, 'waist', e.target.value)} placeholder="e.g. 22-28" style={{width: '100%', padding: '5px', border: '1px solid #ccc', borderRadius: '4px'}}/></td>
+                                                                <td style={{border: '1px solid #ddd', padding: '8px'}}><input type="text" value={detail.shoulder} onChange={(e) => handleSizeDetailChange(index, 'shoulder', e.target.value)} placeholder="e.g. 12" style={{width: '100%', padding: '5px', border: '1px solid #ccc', borderRadius: '4px'}}/></td>
+                                                                <td style={{border: '1px solid #ddd', padding: '8px'}}><input type="text" value={detail.length} onChange={(e) => handleSizeDetailChange(index, 'length', e.target.value)} placeholder="e.g. 14" style={{width: '100%', padding: '5px', border: '1px solid #ccc', borderRadius: '4px'}}/></td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        </>
                                     )}
 
                                     {formData.category === 'Shapewear' && (

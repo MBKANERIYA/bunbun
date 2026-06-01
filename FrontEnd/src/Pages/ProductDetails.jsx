@@ -387,8 +387,22 @@ const ProductDetails = () => {
                                         {product.blouseFabric && <li><strong>Blouse Fabric :</strong> {product.blouseFabric}</li>}
                                         {product.blouseWork && <li><strong>Blouse Work :</strong> {product.blouseWork}</li>}
                                         {product.sleeveLength && <li><strong>Sleeve Length :</strong> {product.sleeveLength}</li>}
-                                        {product.bustSize && <li><strong>Bust Size :</strong> {product.bustSize}</li>}
-                                        {product.blouseLength && <li><strong>Blouse Length :</strong> {product.blouseLength}</li>}
+                                        {(!product.sizeDetails || product.sizeDetails.length === 0) && product.bustSize && <li><strong>Bust Size :</strong> {product.bustSize}</li>}
+                                        {(!product.sizeDetails || product.sizeDetails.length === 0) && product.blouseLength && <li><strong>Blouse Length :</strong> {product.blouseLength}</li>}
+                                        {product.sizeDetails && product.sizeDetails.some(d => d.bust || d.waist || d.shoulder || d.length) && !selectedSize && <li><strong style={{color:'var(--primary-color)'}}>Select a size to view precise measurements (Bust, Waist, Shoulder, Length)</strong></li>}
+                                        {product.sizeDetails && product.sizeDetails.map(detail => {
+                                            if (selectedSize && detail.size === selectedSize) {
+                                                return (
+                                                    <React.Fragment key={detail.size}>
+                                                        {detail.bust && <li><strong>Bust :</strong> {detail.bust} inch</li>}
+                                                        {detail.waist && <li><strong>Waist :</strong> {detail.waist} inch</li>}
+                                                        {detail.shoulder && <li><strong>Shoulder :</strong> {detail.shoulder} inch</li>}
+                                                        {detail.length && <li><strong>Length :</strong> {detail.length} inch</li>}
+                                                    </React.Fragment>
+                                                )
+                                            }
+                                            return null;
+                                        })}
                                         {product.salesPackage && <li><strong>Sales Package :</strong> {product.salesPackage}</li>}
                                         
                                         {/* Shapewear Fields */}

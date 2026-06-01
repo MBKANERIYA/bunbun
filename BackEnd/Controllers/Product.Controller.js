@@ -6,6 +6,14 @@ module.exports.addProduct = async (req, res) => {
     try {
         const body = { ...req.body };
 
+        if (body.sizeDetails) {
+            try {
+                body.sizeDetails = JSON.parse(body.sizeDetails);
+            } catch (e) {
+                console.error("Error parsing sizeDetails:", e);
+            }
+        }
+
         // Process main image
         if (req.files && req.files['image'] && req.files['image'][0]) {
             const { path, originalname } = req.files['image'][0];
@@ -50,6 +58,14 @@ module.exports.updateProduct = async (req, res) => {
     try {
         const { id } = req.params;
         const body = { ...req.body };
+
+        if (body.sizeDetails) {
+            try {
+                body.sizeDetails = JSON.parse(body.sizeDetails);
+            } catch (e) {
+                console.error("Error parsing sizeDetails:", e);
+            }
+        }
 
         // Process main image
         if (req.files && req.files['image'] && req.files['image'][0]) {

@@ -147,3 +147,14 @@
 - **Deployment Fixes:**
   - Resolved Vercel Out of Memory (OOM) error during `npm install` by removing an unused circular dependency (`"bunbun-clothing-root": "file:.."`) from the `FrontEnd/package.json` file.
   - Optimized the root `package.json` postinstall script to use `--no-audit --no-fund` to further reduce memory usage during Vercel builds.
+
+## 2026-06-01 — Add Blouse Size Details Table
+**What**: Added a dynamic size details table for the Blouse category in the admin panel and fetched/displayed these specific size measurements on the Product Details page. Made Sleeve Length and Blouse Work optional fields.
+**Why**: To provide precise sizing information (Bust, Waist, Shoulder, Length) for different blouse sizes and show it contextually on the product page when a size is selected.
+**Files Changed**: `Product.Model.js`, `Product.Controller.js`, `AdminPanel.jsx`, `ProductDetails.jsx`
+- Added `sizeDetails` array of objects to `Product.Model.js`.
+- Updated `Product.Controller.js` to parse `sizeDetails` JSON from `req.body`.
+- Added a 4-row input table in `AdminPanel.jsx` to collect precise size measurements for L, XL, XXL, XXXL.
+- Made Sleeve Length and Blouse Work optional in the form.
+- Updated `ProductDetails.jsx` to dynamically render specific Bust, Waist, Shoulder, and Length measurements based on the user's selected size.
+- Fixed a JSX element syntax error in `AdminPanel.jsx` by wrapping adjacent conditional elements in a React Fragment (`<>...</>`).
