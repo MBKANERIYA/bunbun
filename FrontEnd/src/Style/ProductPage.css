@@ -3,8 +3,8 @@
 
 /* --- Global Styles & Color Variables --- */
 :root {
-    --primary-color: #5345B9;
-    --primary-hover: #FE9A60;
+    --primary-color: #333333;
+    --primary-hover: #444444;
     --discount-color: #fd1e00;
     --text-primary: #212529;
     --text-secondary: #6c757d;

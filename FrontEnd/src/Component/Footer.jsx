@@ -64,7 +64,7 @@ const Footer = () => {
             <h6 className="fw-bold">SUBSCRIBE OUR NEWSLETTER</h6>
             <div className="input-group mt-2" style={{ borderRadius: "0", padding: "0", border: "none" }}>
               <input type="email" placeholder="Enter email here" className="form-controll" style={{ padding: "13px" }} />
-              <button className="btn btn-light" style={{ background: "#5345B9", color: "white" }}>→</button>
+              <button className="btn btn-light" style={{ background: "#333333", color: "white" }}>→</button>
             </div>
             <small className="text-white-50">Get Updates About Latest Offers</small>
           </div>

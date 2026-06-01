@@ -1,8 +1,8 @@
 /* Using a modern font stack is recommended */
 :root {
-    --primary-color: #5345B9;
-    --secondary-color: #FE9A60;
-    --accent-color: #FE9A60;
+    --primary-color: #333333;
+    --secondary-color: #7f8c8d;
+    --accent-color: #e74c3c;
     --background-color: #ffffff;
     --border-color: #ecf0f1;
 }

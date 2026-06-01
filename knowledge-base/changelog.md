@@ -1,15 +1,11 @@
 # Changelog
 
-## 2026-06-01 — Set Global Brand Colors Across Entire Website
-**What**: Updated the primary color to `#5345B9` and secondary/hover color to `#FE9A60` across all CSS files and JSX components.
-**Why**: To establish a consistent brand identity throughout the website.
-**Files Changed**: `index.css`, `ProductPage.css`, `ProductCard.css`, `Cart.css`, `CartSidebar.css`, `Collection.css`, `LoginModel.css`, `AddressForm.css`, `Summary.css`, `UserProfileModel.css`, `Header.css`, `Footer.jsx`, `ProductCard.jsx`
-- Centralized CSS variables (`--primary-color`, `--primary-hover`, `--secondary-color`, `--accent-color`) in `index.css`.
-- Replaced all hardcoded `#2c3e50`, `#34495e`, `#343a40` → `#5345B9`.
-- Replaced all hardcoded `#e74c3c`, `#c0392b`, `#7f8c8d` → `#FE9A60`.
-- Replaced `#8E44AD` in Header.css → `#5345B9`.
-- Updated inline styles in `Footer.jsx` and `ProductCard.jsx`.
-
+## 2026-06-01 — Update Primary Theme Color
+**What**: Replaced the various blue (`#2c3e50`) and purple (`#5345B9`) primary colors with a consistent dark charcoal (`#333333`) across the entire site.
+**Why**: To ensure visual consistency and match the clean, premium aesthetic set by the main navigation header.
+**Files Changed**: `ProductCard.css`, `ProductPage.css`, `Cart.css`, `CartSidebar.css`, `Collection.css`, `Summary.css`, `AddressForm.css`, `LoginModel.css`, `Footer.jsx`
+- Updated CSS variables (`--primary-color`, `--primary-hover`) from blue/purple hex values to charcoal/dark-gray hex values.
+- Updated hardcoded inline styles and background colors to match the new dark charcoal theme.
 ## 2026-06-01 — Set Global Font Family to Poppins
 **What**: Enforced the `Poppins` font family across the entire website.
 **Why**: To standardize the typography and ensure a consistent, modern look on all pages.

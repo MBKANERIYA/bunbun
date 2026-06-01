@@ -1,6 +1,6 @@
 /* --- Global Theme Variables (for consistency) --- */
 :root {
-    --primary-color: #5345B9;
+    --primary-color: #333333;
     --discount-color: #fd1e00; /* Updated to match your theme */
     --success-color: #28a745;
     --text-primary: #212529;

@@ -1,7 +1,7 @@
 /* --- Global Styles & Variables --- */
 :root {
-    --primary-color: #5345B9;
-    --primary-hover: #5345B9;
+    --primary-color: #333333;
+    --primary-hover: #444444;
     --accent-color: #FE9A60;
     --accent-hover: #e8874e;
     --discount-color: #fd1e00;

@@ -140,7 +140,7 @@
 .continue-btn {
     width: 100%;
     padding: 0.8rem;
-    background-color: #5345B9;
+    background-color: #333333;
     /* Primary button color */
     color: #fff;
     border: none;
@@ -152,7 +152,7 @@
 }
 
 .continue-btn:hover {
-    background-color: #5345B9;
+    background-color: #333333;
 }
 
 /* Add these styles to your LoginModal.css */
@@ -181,7 +181,7 @@
 }
 
 .input-field:focus {
-    border-color: #5345B9;
+    border-color: #333333;
     /* Primary Color */
     box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
 }
@@ -242,7 +242,7 @@
 }
 
 .auth-switch-link {
-    color: #5345B9;
+    color: #333333;
     font-weight: 600;
     cursor: pointer;
     text-decoration: underline;
