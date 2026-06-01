@@ -10,7 +10,7 @@ let category = [
     "https://sudathi.com/cdn/shop/files/8-compressed_795ef07d-948a-4aee-bc0f-182ba82405aa.jpg?v=1736233279&width=750",
     "https://sudathi.com/cdn/shop/files/10-compressed_3dbc61e0-395b-4b40-a4fc-c01c33ddaaf0.jpg?v=1736233279&width=750"
 ]
-const NadhaagaGold = () => {
+const BunbunClothingGold = () => {
 
     const [product, setProduct] = useState([])
 
@@ -118,4 +118,4 @@ const NadhaagaGold = () => {
     )
 }
 
-export default NadhaagaGold
+export default BunbunClothingGold

@@ -50,7 +50,7 @@ const Footer = () => {
           {/* Get In Touch */}
           <div className="col-md-4 col-sm-6 mb-4">
             <h6 className="fw-bold mb-3">GET IN TOUCH</h6>
-            <p className="mb-1 fw-bold">NAVDHAAGA</p>
+            <p className="mb-1 fw-bold">BUNBUN CLOTHING</p>
             <p className="mb-1">Working Hours: <br />10:30 AM - 7:00 PM (Monday–Saturday)</p>
             <p className="mb-1 fw-bold">Whatsapp Us: </p>
             <p className="fw-bold">Call Us: </p>

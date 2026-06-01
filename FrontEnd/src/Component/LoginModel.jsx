@@ -114,7 +114,7 @@ const LoginModal = ({ isOpen, onClose }) => {
                 
                 {/* Left Panel */}
                 <div className="modal-left-panel">
-                    <h2>Navdhaaga</h2>
+                    <h2>Bunbun Clothing</h2>
                     <h3>{mode === 'login' 
                         ? 'Welcome! Login to get best deals!' 
                         : 'Join us today for exclusive offers!'}
@@ -168,7 +168,7 @@ const LoginModal = ({ isOpen, onClose }) => {
                             </button>
 
                             <p className="auth-switch-text">
-                                New to Navdhaaga?{' '}
+                                New to Bunbun Clothing?{' '}
                                 <span className="auth-switch-link" onClick={() => switchMode('register')}>
                                     Create an account
                                 </span>

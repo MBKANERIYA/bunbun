@@ -17,7 +17,7 @@ import ReturnPolicy from './Pages/ReturnPolicy';
 import ShippingPolicy from './Pages/ShippingPolicy';
 import Blog from './Pages/Blog';
 import TermAndCondition from './Pages/TermAndCondition';
-import NadhaagaGold from './Pages/NadhaagaGold';
+import BunbunClothingGold from './Pages/BunbunClothingGold';
 import EditProfile from './Pages/EditProfile';
 import AdminPanel from './Pages/AdminPanel';
 
@@ -44,7 +44,7 @@ const AppLayout = () => {
         <Route path="/ReturnPolicy" element={<ReturnPolicy />} />
         <Route path="/ShippingPolicy" element={<ShippingPolicy />} />
         <Route path="/termAndCondtion" element={<TermAndCondition />} />
-        <Route path="/navdhaagaGold" element={<NadhaagaGold />} />
+        <Route path="/bunbunclothingGold" element={<BunbunClothingGold />} />
         <Route path="/editProfile" element={<EditProfile />} />
         <Route path="/admin" element={<AdminPanel />} />
       </Routes>

@@ -90,7 +90,7 @@ const DetailedSummary = ({ selectedAddress }) => {
                 key: "rzp_test_Sp9X2smiuL6n0F", // Hardcoded per user request, typically from env
                 amount: amount,
                 currency: currency,
-                name: "Navdhaaga",
+                name: "Bunbun Clothing",
                 description: "Order Payment",
                 order_id: order_id,
                 handler: async function (response) {

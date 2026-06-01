@@ -307,7 +307,7 @@ const AdminPanel = () => {
                     <div className="admin-login-header">
                         <div className="admin-logo-icon">🔒</div>
                         <h1>Admin Panel</h1>
-                        <p>Navdhaaga Store Management</p>
+                        <p>Bunbun Clothing Store Management</p>
                     </div>
                     {loginError && <div className="admin-error">{loginError}</div>}
                     <form onSubmit={handleLogin}>
@@ -344,7 +344,7 @@ const AdminPanel = () => {
             {/* Sidebar */}
             <aside className="admin-sidebar">
                 <div className="admin-sidebar-brand">
-                    <h2>Navdhaaga</h2>
+                    <h2>Bunbun Clothing</h2>
                     <span>Admin Panel</span>
                 </div>
                 <nav className="admin-nav">

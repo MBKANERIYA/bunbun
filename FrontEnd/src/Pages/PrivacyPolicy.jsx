@@ -10,7 +10,7 @@ const PrivacyPolicy = () => {
         <section className="mb-6">
           <h2 className="text-xl font-semibold mb-2">1. Introduction</h2>
           <p>
-            At <strong>Navdhaaga</strong>, we value your privacy and are committed to
+            At <strong>Bunbun Clothing</strong>, we value your privacy and are committed to
             protecting your personal information. This Privacy Policy explains how
             we collect, use, and protect your data when you visit our website or use
             our services.
@@ -98,8 +98,8 @@ const PrivacyPolicy = () => {
           <p>
             For questions or concerns about this Privacy Policy, please contact us
             at:
-            <a href="mailto:privacy@navdhaaga.com" className="text-blue-600 underline ml-1">
-              privacy@navdhaaga.com
+            <a href="mailto:privacy@bunbunclothing.com" className="text-blue-600 underline ml-1">
+              privacy@bunbunclothing.com
             </a>
           </p>
         </section>

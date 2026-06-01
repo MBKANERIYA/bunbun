@@ -158,3 +158,10 @@
 - Made all Blouse Specific Details fields (Blouse Type, Color, Fabric, Work, Sleeve Length, Bust Size, Blouse Length, Sales Package) optional in the form.
 - Updated `ProductDetails.jsx` to dynamically render specific Bust, Waist, Shoulder, and Length measurements based on the user's selected size.
 - Fixed a JSX element syntax error in `AdminPanel.jsx` by wrapping adjacent conditional elements in a React Fragment (`<>...</>`).
+
+## 2026-06-01 — Rebrand to Bunbun Clothing
+**What**: Renamed all instances of "Navdhaaga" to "Bunbun Clothing" across the codebase.
+**Why**: User requested to update the website's branding to "Bunbun Clothing".
+**Files Changed**: `App.jsx`, `Footer.jsx`, `Header.jsx`, `LoginModel.jsx`, `About.jsx`, `AdminPanel.jsx`, `BunbunClothingGold.jsx` (renamed from `NadhaagaGold.jsx`), `OrderSummery.jsx`, `PrivacyPolicy.jsx`, `ProductDetails.jsx`, `TermAndCondition.jsx`, `package.json`, etc.
+- Executed global find-and-replace for `Navdhaaga`, `navdhaaga`, and `NAVDHAAGA`.
+- Renamed the frontend React component file `NadhaagaGold.jsx` to `BunbunClothingGold.jsx`.

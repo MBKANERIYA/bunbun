@@ -75,7 +75,7 @@ const Header = () => {
                             <Link className="navbar-brand" to="/">
                                 <img
                                     src="/bunbun_logo.png"
-                                    alt="Navdhaaga Logo"
+                                    alt="Bunbun Clothing Logo"
                                     className="logo-img"
                                 />
                             </Link>
@@ -109,7 +109,7 @@ const Header = () => {
                                                     <a className="dropdown-item" onClick={() => handleCategoryClick("Saree")} style={{ cursor: "pointer" }}>All Sarees</a>
                                                     <Link className="dropdown-item" to="/shop/ready-to-wear">Ready to Wear Sarees</Link>
                                                     <Link className="dropdown-item" to="/shop/essentials">Essentials</Link>
-                                                    <Link className="dropdown-item" to="/navdhaagaGold">Navdhaaga Gold</Link>
+                                                    <Link className="dropdown-item" to="/bunbunclothingGold">Bunbun Clothing Gold</Link>
                                                     <a className="dropdown-item" onClick={() => handleCategoryClick("Blouse")} style={{ cursor: "pointer" }}>Blouses</a>
                                                 </div>
                                                 {/* Column 2: Shop by Collection */}
@@ -125,7 +125,7 @@ const Header = () => {
                                         </div>
                                     </li>
                                     <li className="nav-item" ><Link className="nav-link">Ready to Wear Sarees</Link></li>
-                                    <li className="nav-item" ><Link className="nav-link" to="/navdhaagaGold" style={{ color: "#d4af37" }}>Navdhaaga Gold</Link></li>
+                                    <li className="nav-item" ><Link className="nav-link" to="/bunbunclothingGold" style={{ color: "#d4af37" }}>Bunbun Clothing Gold</Link></li>
                                     <li className="nav-item">
                                         <Link className="nav-link" to="/about">About Us</Link>
                                     </li>

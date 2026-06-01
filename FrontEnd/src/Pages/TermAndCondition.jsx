@@ -58,7 +58,7 @@ const TermsAndConditions = () => {
           <h2 className="text-xl font-semibold mb-2">6. Intellectual Property</h2>
           <p>
             All content on the site — text, images, logos, graphics, and software —
-            is owned or licensed by <strong>Navdhaaga</strong>. You may not copy,
+            is owned or licensed by <strong>Bunbun Clothing</strong>. You may not copy,
             reproduce, modify, or distribute any part of the site without our prior
             written consent.
           </p>
@@ -77,7 +77,7 @@ const TermsAndConditions = () => {
         <section className="mb-6">
           <h2 className="text-xl font-semibold mb-2">8. Limitation of Liability</h2>
           <p>
-            Except where prohibited by law, Navdhaaga and its affiliates, suppliers,
+            Except where prohibited by law, Bunbun Clothing and its affiliates, suppliers,
             and licensors shall not be liable for any indirect, incidental, special,
             consequential or punitive damages, or any loss of profits or revenues,
             whether incurred directly or indirectly.
@@ -97,7 +97,7 @@ const TermsAndConditions = () => {
           <h2 className="text-xl font-semibold mb-2">10. Third-Party Links & Services</h2>
           <p>
             We may provide links to third-party websites and services for your
-            convenience. Navdhaaga does not endorse and is not responsible for those
+            convenience. Bunbun Clothing does not endorse and is not responsible for those
             third parties' content or practices.
           </p>
         </section>
@@ -123,8 +123,8 @@ const TermsAndConditions = () => {
           <h2 className="text-xl font-semibold mb-2">13. Contact Us</h2>
           <p>
             If you have any questions about these Terms, please contact us at:
-            <a href="mailto:legal@navdhaaga.com" className="text-blue-600 underline ml-1">
-              legal@navdhaaga.com
+            <a href="mailto:legal@bunbunclothing.com" className="text-blue-600 underline ml-1">
+              legal@bunbunclothing.com
             </a>
           </p>
         </section>

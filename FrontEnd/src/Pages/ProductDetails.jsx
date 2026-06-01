@@ -456,7 +456,7 @@ const ProductDetails = () => {
                             </div>
                             {openAccordion === 'seller' && (
                                 <div className="detail-item-content">
-                                    <p>Sold by Navdhaaga Store. Authentic products guaranteed.</p>
+                                    <p>Sold by Bunbun Clothing Store. Authentic products guaranteed.</p>
                                 </div>
                             )}
                         </div>
@@ -469,7 +469,7 @@ const ProductDetails = () => {
                             </div>
                             {openAccordion === 'help' && (
                                 <div className="detail-item-content">
-                                    <p>Contact our support team at support@navdhaaga.com or call +91-XXXXXXXXXX.</p>
+                                    <p>Contact our support team at support@bunbunclothing.com or call +91-XXXXXXXXXX.</p>
                                 </div>
                             )}
                         </div>
