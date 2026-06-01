@@ -1,4 +1,4 @@
-const { productSchema } = require("../Models");
+const { productSchema, categorySchema } = require("../Models");
 const { productService } = require("../Services");
 const uploadImage = require("../Middleware/upload");
 
@@ -27,9 +27,8 @@ module.exports.addProduct = async (req, res) => {
 
         // Push product to category document if it exists
         if (body.category) {
-            const Category = require("../Models/Category.Model.js");
             // Find category by title or slug (case-insensitive)
-            const cat = await Category.findOne({ title: { $regex: new RegExp(`^${body.category}$`, 'i') } });
+            const cat = await categorySchema.findOne({ title: { $regex: new RegExp(`^${body.category}$`, 'i') } });
             if (cat) {
                 // If products is an array or single product
                 const productIds = Array.isArray(products) ? products.map(p => p._id) : [products._id];
@@ -160,8 +159,7 @@ module.exports.deleteProduct = async (req, res) => {
         
         // Remove from Category
         if (deletedProduct.category) {
-            const Category = require("../Models/Category.Model.js");
-            const cat = await Category.findOne({ title: { $regex: new RegExp(`^${deletedProduct.category}$`, 'i') } });
+            const cat = await categorySchema.findOne({ title: { $regex: new RegExp(`^${deletedProduct.category}$`, 'i') } });
             if (cat) {
                 cat.products = cat.products.filter(pId => pId.toString() !== id);
                 await cat.save();

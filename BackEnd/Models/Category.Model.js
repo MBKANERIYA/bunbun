@@ -7,6 +7,6 @@ const categorySchema = new mongoose.Schema({
     products: [{ type: mongoose.Schema.Types.ObjectId, ref: "productSchema" }]
 }, { timestamps: true });
 
-let Category = mongoose.model("Category", categorySchema);
+let Category = mongoose.models.Category || mongoose.model("Category", categorySchema);
 
 module.exports = Category;

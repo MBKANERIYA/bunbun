@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-06-01 — Fix Category Import for Vercel Deployment
+**What**: Fixed an import bug causing product addition to fail in production on Vercel.
+**Why**: Vercel/Serverless environments had an issue resolving the `Category.Model` via a direct nested require statement, causing the backend API to throw an error when trying to add a product to a category. 
+**Files Changed**: `Product.Controller.js`, `Category.Model.js`
+- Imported `categorySchema` directly from the `../Models` index inside `Product.Controller.js` instead of directly requiring the file.
+- Used `mongoose.models.Category || mongoose.model(...)` in `Category.Model.js` to prevent `OverwriteModelError` during Vercel's hot-reloading/serverless instantiations.
+
 ## 2026-06-01 — Add Category Model for Database Grouping
 **What**: Created a `Category` collection in the database to group products by category matching the requested `categories` -> `products` array structure.
 **Why**: To properly categorize and index products logically in the database instead of relying solely on loose strings inside the product schema.
