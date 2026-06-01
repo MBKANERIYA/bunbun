@@ -219,30 +219,13 @@ const ProductDetails = () => {
         <div className="product-page-container">
             <div className="product-grid-unique">
                 <div>
-                    {(() => {
-                        const allImages = [product.image, ...(product.images || [])].filter(Boolean);
-                        const activeImage = selectedImage || allImages[0];
-                        return (
-                            <div className="product-gallery">
-                                <div className="product-main-image">
-                                    <img src={activeImage} alt={product.name} />
-                                </div>
-                                {allImages.length > 1 && (
-                                    <div className="product-thumbnails">
-                                        {allImages.map((img, idx) => (
-                                            <div
-                                                key={idx}
-                                                className={`thumbnail-item ${activeImage === img ? 'active' : ''}`}
-                                                onClick={() => setSelectedImage(img)}
-                                            >
-                                                <img src={img} alt={`${product.name} - view ${idx + 1}`} />
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
+                    <div className="product-image-grid-2x2">
+                        {[product.image, ...(product.images || [])].filter(Boolean).map((img, idx) => (
+                            <div key={idx} className="grid-image-item">
+                                <img src={img} alt={`${product.name} - view ${idx + 1}`} />
                             </div>
-                        );
-                    })()}
+                        ))}
+                    </div>
 
                     <div className="rating-section mt-4">
                         <h3>Rate & Review this product</h3>
