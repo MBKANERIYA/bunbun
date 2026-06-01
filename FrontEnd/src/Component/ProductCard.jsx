@@ -67,7 +67,7 @@ const ProductCard = ({ product, showWishlistIcon = true }) => {
                         {isTogglingWishlist ? (
                             <FaSpinner className="animate-spin" />
                         ) : isProductWishlisted ? (
-                            <FaHeart color="#e74c3c" />
+                            <FaHeart color="#FE9A60" />
                         ) : (
                             <FaRegHeart />
                         )}

@@ -10,7 +10,7 @@ html {
 }
 
 .logo-img {
-    width: 72px;
+    width: 130px;
     height: 72px;
     object-fit: contain;
     aspect-ratio: 1 / 1;
@@ -39,7 +39,7 @@ html {
     left: 0;
     width: 100%;
     height: 2px;
-    background-color: #8E44AD;
+    background-color: #5345B9;
     /* Your brand's primary color */
     transform: scaleX(0);
     transform-origin: bottom right;
@@ -48,7 +48,7 @@ html {
 
 .navbar-nav .nav-link:hover,
 .navbar-nav .nav-link.active {
-    color: #8E44AD;
+    color: #5345B9;
 }
 
 .navbar-nav .nav-link:hover::after {
@@ -110,7 +110,7 @@ a.icon-btn:hover {
 }
 
 .mega-menu .dropdown-item:hover {
-    color: #8E44AD;
+    color: #5345B9;
     background-color: transparent;
     padding-left: 5px;
 }

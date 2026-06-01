@@ -61,7 +61,7 @@
 .logout-btn {
     width: 100%;
     padding: 0.8rem;
-    background-color: #e74c3c;
+    background-color: #FE9A60;
     color: #fff;
     border: none;
     border-radius: 8px;
@@ -72,7 +72,7 @@
 }
 
 .logout-btn:hover {
-    background-color: #c0392b;
+    background-color: #e8874e;
 }
 
 @keyframes scaleUp {
