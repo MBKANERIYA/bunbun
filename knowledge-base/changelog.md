@@ -155,6 +155,6 @@
 - Added `sizeDetails` array of objects to `Product.Model.js`.
 - Updated `Product.Controller.js` to parse `sizeDetails` JSON from `req.body`.
 - Added a 4-row input table in `AdminPanel.jsx` to collect precise size measurements for L, XL, XXL, XXXL.
-- Made Sleeve Length and Blouse Work optional in the form.
+- Made all Blouse Specific Details fields (Blouse Type, Color, Fabric, Work, Sleeve Length, Bust Size, Blouse Length, Sales Package) optional in the form.
 - Updated `ProductDetails.jsx` to dynamically render specific Bust, Waist, Shoulder, and Length measurements based on the user's selected size.
 - Fixed a JSX element syntax error in `AdminPanel.jsx` by wrapping adjacent conditional elements in a React Fragment (`<>...</>`).

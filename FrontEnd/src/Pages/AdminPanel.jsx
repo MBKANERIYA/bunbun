@@ -561,16 +561,16 @@ const AdminPanel = () => {
                                             <h3 className="form-section-title">Blouse Specific Details</h3>
                                             <div className="form-grid">
                                                 <div className="form-group">
-                                                    <label>Blouse Type *</label>
-                                                    <input type="text" name="blouseType" value={formData.blouseType} onChange={handleInputChange} required placeholder="Stitched" />
+                                                    <label>Blouse Type</label>
+                                                    <input type="text" name="blouseType" value={formData.blouseType} onChange={handleInputChange} placeholder="Stitched (Optional)" />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Blouse Color *</label>
-                                                    <input type="text" name="blouseColor" value={formData.blouseColor} onChange={handleInputChange} required placeholder="Black" />
+                                                    <label>Blouse Color</label>
+                                                    <input type="text" name="blouseColor" value={formData.blouseColor} onChange={handleInputChange} placeholder="Black (Optional)" />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Blouse Fabric *</label>
-                                                    <input type="text" name="blouseFabric" value={formData.blouseFabric} onChange={handleInputChange} required placeholder="Cotton Lycra" />
+                                                    <label>Blouse Fabric</label>
+                                                    <input type="text" name="blouseFabric" value={formData.blouseFabric} onChange={handleInputChange} placeholder="Cotton Lycra (Optional)" />
                                                 </div>
                                                 <div className="form-group">
                                                     <label>Blouse Work</label>
@@ -581,16 +581,16 @@ const AdminPanel = () => {
                                                     <input type="text" name="sleeveLength" value={formData.sleeveLength} onChange={handleInputChange} placeholder="9.5 Inch (Optional)" />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Bust Size *</label>
-                                                    <input type="text" name="bustSize" value={formData.bustSize} onChange={handleInputChange} required placeholder="38 Inch" />
+                                                    <label>Bust Size</label>
+                                                    <input type="text" name="bustSize" value={formData.bustSize} onChange={handleInputChange} placeholder="38 Inch (Optional)" />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Blouse Length *</label>
-                                                    <input type="text" name="blouseLength" value={formData.blouseLength} onChange={handleInputChange} required placeholder="14.5 Inch" />
+                                                    <label>Blouse Length</label>
+                                                    <input type="text" name="blouseLength" value={formData.blouseLength} onChange={handleInputChange} placeholder="14.5 Inch (Optional)" />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Sales Package *</label>
-                                                    <input type="text" name="salesPackage" value={formData.salesPackage} onChange={handleInputChange} required placeholder="Package Contains 1 Blouse With Attached Sleeves" />
+                                                    <label>Sales Package</label>
+                                                    <input type="text" name="salesPackage" value={formData.salesPackage} onChange={handleInputChange} placeholder="Package Contains 1 Blouse With Attached Sleeves (Optional)" />
                                                 </div>
                                             </div>
                                         </div>
