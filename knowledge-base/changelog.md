@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-06-01 — Fix Vercel Runtime Crash
+**What**: Added `razorpay` to root package.json and fixed `api/index.js` url parsing.
+**Why**: The live Vercel API was returning 500 FUNCTION_INVOCATION_FAILED because `razorpay` was missing from the root dependencies causing a module load crash, and the Vercel rewrite configuration lost the original path.
+**Files Changed**: `package.json`, `api/index.js`, `vercel.json`
+- Added `razorpay` to root `package.json` to fix runtime `MODULE_NOT_FOUND` error on Vercel
+- Modified `vercel.json` rewrites to use capture groups to forward URLs correctly to `/api/index.js` without losing the original path.
+- Updated `api/index.js` to restore original path from `x-invoke-path` header, gracefully handle init errors, and ensure `req.url` matches expected Express routes.
+
 ## 2026-05-28 — Fix Vercel Serverless Deployment
 **What**: Configured Vercel deployment correctly to serve backend API and added root package.json
 **Why**: The data was not fetching on the live Vercel website because serverless functions were failing to build and environment variables were missing.
