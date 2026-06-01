@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-06-01 — Add Category Model for Database Grouping
+**What**: Created a `Category` collection in the database to group products by category matching the requested `categories` -> `products` array structure.
+**Why**: To properly categorize and index products logically in the database instead of relying solely on loose strings inside the product schema.
+**Files Changed**: `Category.Model.js` (new), `index.js`, `Product.Controller.js`
+- Created `Category.Model.js` with slug, title, description, and an array of `products` (references to `productSchema`).
+- Seeded "Blouse" and "Shapewear" categories directly into MongoDB.
+- Updated `addProduct` and `deleteProduct` in `Product.Controller.js` to automatically push/pull the Product's Object ID into/from the corresponding Category document upon creation/deletion.
+
 ## 2026-06-01 — Add Sticky Product Info on Scroll
 **What**: Made the product details column sticky on desktop to support scrolling through large image grids.
 **Why**: When viewing multiple images in the 2x2 grid, users need the Add to Cart button and product info to remain visible as they scroll down the images.

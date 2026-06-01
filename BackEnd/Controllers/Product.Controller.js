@@ -25,6 +25,19 @@ module.exports.addProduct = async (req, res) => {
 
         const products = await productService.addProduct(body);
 
+        // Push product to category document if it exists
+        if (body.category) {
+            const Category = require("../Models/Category.Model.js");
+            // Find category by title or slug (case-insensitive)
+            const cat = await Category.findOne({ title: { $regex: new RegExp(`^${body.category}$`, 'i') } });
+            if (cat) {
+                // If products is an array or single product
+                const productIds = Array.isArray(products) ? products.map(p => p._id) : [products._id];
+                cat.products.push(...productIds);
+                await cat.save();
+            }
+        }
+
         res.status(201).json({
             message: "Product(s) added successfully",
             products
@@ -143,6 +156,16 @@ module.exports.deleteProduct = async (req, res) => {
         
         if (!deletedProduct) {
             return res.status(404).json({ message: "Product not found" });
+        }
+        
+        // Remove from Category
+        if (deletedProduct.category) {
+            const Category = require("../Models/Category.Model.js");
+            const cat = await Category.findOne({ title: { $regex: new RegExp(`^${deletedProduct.category}$`, 'i') } });
+            if (cat) {
+                cat.products = cat.products.filter(pId => pId.toString() !== id);
+                await cat.save();
+            }
         }
         
         res.status(200).json({
