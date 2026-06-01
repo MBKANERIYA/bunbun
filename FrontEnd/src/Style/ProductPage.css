@@ -40,35 +40,63 @@
     }
 }
 
-/* --- NEW Side-by-Side Image Grid Styles --- */
-.product-image-grid {
-    height: 340px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    /* Creates two equal columns */
-    gap: 1.5rem;
-    /* Space between images */
+/* --- Product Image Gallery --- */
+.product-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
-.image-container {
+.product-main-image {
     border-radius: 12px;
     overflow: hidden;
     box-shadow: var(--box-shadow);
+    background: var(--background-white);
 }
 
-.image-container img {
+.product-main-image img {
     width: 100%;
     height: auto;
     aspect-ratio: 4 / 5;
     object-fit: cover;
     display: block;
-    transition: transform 0.4s ease;
+    transition: opacity 0.3s ease;
 }
 
-.image-container:hover img {
-    transform: scale(1.05);
+.product-thumbnails {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding-bottom: 4px;
 }
 
+.thumbnail-item {
+    flex: 0 0 70px;
+    width: 70px;
+    height: 70px;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.2s ease, opacity 0.2s ease;
+    opacity: 0.6;
+}
+
+.thumbnail-item.active {
+    border-color: var(--primary-color);
+    opacity: 1;
+}
+
+.thumbnail-item:hover {
+    opacity: 1;
+}
+
+.thumbnail-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
 
 /* --- Product Info Section --- */
 .product-info-unique {

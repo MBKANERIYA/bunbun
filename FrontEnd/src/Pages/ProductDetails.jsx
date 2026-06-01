@@ -49,6 +49,7 @@ const ProductDetails = () => {
     const [recentlyViewed, setRecentlyViewed] = useState([]);
     const [openAccordion, setOpenAccordion] = useState("product_details");
     const [selectedSize, setSelectedSize] = useState("");
+    const [selectedImage, setSelectedImage] = useState(null);
 
     const sizes = ["L", "XL", "XXL", "XXXL"];
 
@@ -218,16 +219,30 @@ const ProductDetails = () => {
         <div className="product-page-container">
             <div className="product-grid-unique">
                 <div>
-                    <div className="product-image-grid">
-                        <div className="image-container">
-                            <img src={product.image} alt={`${product.name} - view 1`} />
-                        </div>
-                        {product.hoverImage && (
-                            <div className="image-container">
-                                <img src={product.hoverImage} alt={`${product.name} - view 2`} />
+                    {(() => {
+                        const allImages = [product.image, ...(product.images || [])].filter(Boolean);
+                        const activeImage = selectedImage || allImages[0];
+                        return (
+                            <div className="product-gallery">
+                                <div className="product-main-image">
+                                    <img src={activeImage} alt={product.name} />
+                                </div>
+                                {allImages.length > 1 && (
+                                    <div className="product-thumbnails">
+                                        {allImages.map((img, idx) => (
+                                            <div
+                                                key={idx}
+                                                className={`thumbnail-item ${activeImage === img ? 'active' : ''}`}
+                                                onClick={() => setSelectedImage(img)}
+                                            >
+                                                <img src={img} alt={`${product.name} - view ${idx + 1}`} />
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
-                        )}
-                    </div>
+                        );
+                    })()}
 
                     <div className="rating-section mt-4">
                         <h3>Rate & Review this product</h3>
