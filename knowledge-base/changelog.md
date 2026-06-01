@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-06-01 — Make All Product Fields Mandatory
+**What**: Updated the "Add Product" form in the Admin Dashboard to enforce required validation on all fields.
+**Why**: Prevent incomplete product entries from being saved to the database.
+**Files Changed**: `AdminPanel.jsx`
+- Added the `required` attribute to all input and textarea fields across the Basic Info, Pricing, Common Details, Blouse Details, and Shapewear Details sections.
+
 ## 2026-06-01 — Add Shapewear Fields to Admin Dashboard
 **What**: Updated Admin Dashboard "Add Product" form to be driven by category (Blouse vs Shapewear) and added Shapewear-specific fields.
 **Why**: The admin needs a streamlined way to add Shapewear products with their specific attributes (waist, hip, etc.) distinct from Blouses.
