@@ -33,6 +33,10 @@
     gap: 2rem;
 }
 
+.product-grid-unique > div {
+    min-width: 0;
+}
+
 @media (min-width: 768px) {
     .product-grid-unique {
         grid-template-columns: repeat(2, 1fr);
@@ -488,22 +492,23 @@
     width: 100%;
     display: block;
     position: relative;
-    overflow: hidden;
     border-radius: 8px;
+    /* Do not use overflow: hidden here, it might clip dots or arrows */
 }
 
 .product-image-slider-mobile .slick-slider {
     width: 100%;
 }
 
-.product-image-slider-mobile .slick-slide {
-    display: flex !important;
-    justify-content: center;
+.product-image-slider-mobile .slick-slide > div {
+    display: block; /* Ensure the wrapper created by react-slick is block */
+    padding: 0 4px; /* Optional spacing if needed */
 }
 
 .product-image-slider-mobile .grid-image-item {
-    width: 100%;
-    border-radius: 0; /* Let the container handle border radius if needed */
+    width: 100% !important;
+    height: auto;
+    display: block;
 }
 
 .product-image-slider-mobile .slick-dots {
