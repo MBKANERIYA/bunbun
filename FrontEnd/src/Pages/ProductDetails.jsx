@@ -55,6 +55,21 @@ const ProductDetails = () => {
     const [selectedImage, setSelectedImage] = useState(null);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
     const [showSizeChart, setShowSizeChart] = useState(false);
+    const [showReviewForm, setShowReviewForm] = useState(false);
+
+    const getRatingBreakdown = () => {
+        const counts = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+        if (ratings?.ratings) {
+            ratings.ratings.forEach(r => {
+                const rating = Number(r.userRating);
+                if (counts[rating] !== undefined) {
+                    counts[rating]++;
+                }
+            });
+        }
+        return counts;
+    };
+    const ratingBreakdown = getRatingBreakdown();
 
     const sizes = ["L", "XL", "XXL", "XXXL"];
 
@@ -260,52 +275,6 @@ const ProductDetails = () => {
                         </div>
                     )}
 
-                    <div className="rating-section mt-4">
-                        <h3>Rate & Review this product</h3>
-                        <form onSubmit={handleSubmitRating}>
-                            <div className="stars review-star-input">
-                                {[1, 2, 3, 4, 5].map((star) => (
-                                    <button
-                                        key={star}
-                                        type="button"
-                                        className="star-button"
-                                        onClick={() => setRating(star)}
-                                        aria-label={`${star} star rating`}
-                                    >
-                                        <FaStar
-                                            size={24}
-                                            color={star <= rating ? "#facc15" : "#d1d5db"}
-                                        />
-                                    </button>
-                                ))}
-                            </div>
-
-                            <textarea
-                                value={review}
-                                onChange={(e) => setReview(e.target.value)}
-                                placeholder="Write your review..."
-                                className="form-control my-2"
-                                rows="4"
-                            />
-
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => setImage(e.target.files[0])}
-                                className="form-control my-2"
-                            />
-
-                            <button
-                                type="submit"
-                                className="btn-unique btn-primaryy mt-2"
-                                disabled={isSubmitting}
-                            >
-                                {isSubmitting ? <FaSpinner className="spinner" /> : "Submit Review"}
-                            </button>
-                        </form>
-
-                        {message && <p className="review-message mt-2">{message}</p>}
-                    </div>
                 </div>
 
                 <div className="product-info-unique">
@@ -551,45 +520,135 @@ const ProductDetails = () => {
                 </div>
             </div>
 
-            <div className="existing-ratings mt-5">
-                <h3 className="text-center mb-2">Customer Reviews</h3>
-                <p className="text-center review-summary">
-                    {ratings.totalRatings > 0
-                        ? `${ratings.averageRating} out of 5 from ${ratings.totalRatings} review${ratings.totalRatings === 1 ? "" : "s"}`
-                        : "No reviews yet. Be the first to review!"}
-                </p>
-                {ratings.ratings.length > 0 && (
-                    <Slider {...reviewSliderSettings}>
-                        {ratings.ratings.map((r, index) => (
-                            <div key={r._id || index} className="review-slide-wrapper">
-                                <div className="review-card border p-3 rounded mb-2">
-                                    <div className="stars mb-1">
-                                        {[1, 2, 3, 4, 5].map((star) => (
-                                            <FaStar
-                                                key={star}
-                                                size={18}
-                                                color={star <= Number(r.userRating) ? "#facc15" : "#d1d5db"}
-                                            />
-                                        ))}
-                                    </div>
-                                    <p className="review-user">
-                                        <strong>
-                                            {r.userId?.fullName?.firstName || "Anonymous"}{" "}
-                                            {r.userId?.fullName?.lastName || ""}
-                                        </strong>
-                                    </p>
-                                    {r.userReview && <p className="review-text">{r.userReview}</p>}
-                                    {r.productImage && (
-                                        <img
-                                            src={r.productImage}
-                                            alt="Customer review"
-                                            className="review-image"
-                                        />
-                                    )}
+            <div className="review-summary-box-wrapper mt-5 px-3">
+                <div className="review-summary-box shadow-sm rounded bg-white p-4 mx-auto" style={{maxWidth: '900px'}}>
+                    <h3 className="text-center mb-4" style={{fontFamily: 'var(--font-body)', fontWeight: 600, color: '#1a202c'}}>Customer Reviews</h3>
+                    <div className="d-flex flex-wrap justify-content-between align-items-center" style={{gap: '2rem'}}>
+                        
+                        {/* Left Column: Average & Count */}
+                        <div className="text-center" style={{flex: '1', minWidth: '200px'}}>
+                            <div className="d-flex justify-content-center align-items-center gap-2 mb-1">
+                                <div className="stars d-flex">
+                                    {[1, 2, 3, 4, 5].map((star) => (
+                                        <FaStar key={star} size={18} color={star <= (ratings.averageRating || 0) ? "#0d3b66" : "#e2e8f0"} />
+                                    ))}
                                 </div>
+                                <span style={{fontSize: '0.95rem', color: '#4a5568'}}>{ratings.averageRating || 0} out of 5</span>
                             </div>
-                        ))}
-                    </Slider>
+                            <div style={{fontSize: '0.9rem', color: '#4a5568'}}>
+                                Based on {ratings.totalRatings || 0} review{ratings.totalRatings !== 1 ? 's' : ''} <span style={{color: '#38a169', fontWeight: 'bold', marginLeft: '4px'}}>☑</span>
+                            </div>
+                        </div>
+
+                        {/* Middle Column: Progress Bars */}
+                        <div style={{flex: '1.5', minWidth: '250px'}}>
+                            {[5, 4, 3, 2, 1].map((star) => {
+                                const count = ratingBreakdown[star];
+                                const percentage = ratings.totalRatings > 0 ? (count / ratings.totalRatings) * 100 : 0;
+                                return (
+                                    <div key={star} className="d-flex align-items-center gap-2 mb-1" style={{fontSize: '0.85rem'}}>
+                                        <div className="stars d-flex">
+                                            {[1, 2, 3, 4, 5].map(s => (
+                                                <FaStar key={s} size={12} color={s <= star ? "#0d3b66" : "#e2e8f0"} />
+                                            ))}
+                                        </div>
+                                        <div style={{flex: 1, height: '8px', backgroundColor: '#e2e8f0', borderRadius: '4px', overflow: 'hidden'}}>
+                                            <div style={{width: `${percentage}%`, height: '100%', backgroundColor: '#0d3b66', borderRadius: '4px'}}></div>
+                                        </div>
+                                        <div style={{width: '20px', textAlign: 'right', color: '#4a5568'}}>{count}</div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        {/* Right Column: Button */}
+                        <div className="text-center" style={{flex: '1', minWidth: '200px'}}>
+                            <button 
+                                onClick={() => setShowReviewForm(!showReviewForm)}
+                                style={{backgroundColor: '#0d3b66', color: 'white', border: 'none', padding: '0.6rem 1.5rem', borderRadius: '20px', fontWeight: 600, fontSize: '0.9rem'}}
+                            >
+                                Write a store review
+                            </button>
+                        </div>
+                    </div>
+                    
+                    {/* Review Form Expansion */}
+                    {showReviewForm && (
+                        <div className="mt-4 pt-4 border-top">
+                            <h4 className="text-center mb-3">Rate & Review this product</h4>
+                            <form onSubmit={handleSubmitRating} className="mx-auto" style={{maxWidth: '500px'}}>
+                                <div className="d-flex justify-content-center mb-3 review-star-input">
+                                    {[1, 2, 3, 4, 5].map((star) => (
+                                        <button
+                                            key={star}
+                                            type="button"
+                                            className="star-button px-1 bg-transparent border-0"
+                                            onClick={() => setRating(star)}
+                                        >
+                                            <FaStar size={24} color={star <= rating ? "#facc15" : "#d1d5db"} />
+                                        </button>
+                                    ))}
+                                </div>
+                                <textarea
+                                    value={review}
+                                    onChange={(e) => setReview(e.target.value)}
+                                    placeholder="Write your review..."
+                                    className="form-control mb-3"
+                                    rows="4"
+                                />
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={(e) => setImage(e.target.files[0])}
+                                    className="form-control mb-3"
+                                />
+                                <div className="text-center">
+                                    <button type="submit" className="btn-unique btn-primaryy mx-auto" disabled={isSubmitting}>
+                                        {isSubmitting ? <FaSpinner className="spinner" /> : "Submit Review"}
+                                    </button>
+                                </div>
+                                {message && <p className="text-center mt-2">{message}</p>}
+                            </form>
+                        </div>
+                    )}
+                </div>
+
+                {/* Existing individual reviews slider */}
+                {ratings.ratings.length > 0 && (
+                    <div className="mt-4 mx-auto" style={{maxWidth: '900px'}}>
+                        <Slider {...reviewSliderSettings}>
+                            {ratings.ratings.map((r, index) => (
+                                <div key={r._id || index} className="review-slide-wrapper">
+                                    <div className="review-card border p-3 rounded mb-2">
+                                        <div className="stars mb-1 d-flex justify-content-center">
+                                            {[1, 2, 3, 4, 5].map((star) => (
+                                                <FaStar
+                                                    key={star}
+                                                    size={18}
+                                                    color={star <= Number(r.userRating) ? "#facc15" : "#d1d5db"}
+                                                />
+                                            ))}
+                                        </div>
+                                        <p className="review-user text-center">
+                                            <strong>
+                                                {r.userId?.fullName?.firstName || "Anonymous"}{" "}
+                                                {r.userId?.fullName?.lastName || ""}
+                                            </strong>
+                                        </p>
+                                        {r.userReview && <p className="review-text text-center">{r.userReview}</p>}
+                                        {r.productImage && (
+                                            <img
+                                                src={r.productImage}
+                                                alt="Customer review"
+                                                className="review-image mx-auto mt-2"
+                                                style={{maxWidth: '150px', borderRadius: '8px'}}
+                                            />
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                        </Slider>
+                    </div>
                 )}
             </div>
 
