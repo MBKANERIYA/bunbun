@@ -89,6 +89,7 @@ let productSchema = new mongoose.Schema({
         size: String,
         bust: String,
         waist: String,
+        hip: String,
         shoulder: String,
         length: String
     }]

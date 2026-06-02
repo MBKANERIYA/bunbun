@@ -101,10 +101,10 @@ const AdminPanel = () => {
             bottomHip: '',
             bottomWaist: '',
             sizeDetails: [
-                { size: 'L', bust: '', waist: '', shoulder: '', length: '' },
-                { size: 'XL', bust: '', waist: '', shoulder: '', length: '' },
-                { size: 'XXL', bust: '', waist: '', shoulder: '', length: '' },
-                { size: 'XXXL', bust: '', waist: '', shoulder: '', length: '' }
+                { size: 'L', bust: '', waist: '', hip: '', shoulder: '', length: '' },
+                { size: 'XL', bust: '', waist: '', hip: '', shoulder: '', length: '' },
+                { size: 'XXL', bust: '', waist: '', hip: '', shoulder: '', length: '' },
+                { size: 'XXXL', bust: '', waist: '', hip: '', shoulder: '', length: '' }
             ],
         };
     });
@@ -249,7 +249,7 @@ const AdminPanel = () => {
             };
 
             const data = { ...formData };
-            if (formData.category !== 'Blouse') delete data.sizeDetails;
+            if (formData.category !== 'Blouse' && formData.category !== 'Shapewear') delete data.sizeDetails;
 
             if (mainImage) {
                 data.image = await uploadFile(mainImage);
@@ -276,10 +276,10 @@ const AdminPanel = () => {
                 salesPackage: '', weight: '', bottomColor: '', bottomFabric: '', bottomLength: '',
                 bottomWork: '', waistType: '', bottomHip: '', bottomWaist: '',
                 sizeDetails: [
-                    { size: 'L', bust: '', waist: '', shoulder: '', length: '' },
-                    { size: 'XL', bust: '', waist: '', shoulder: '', length: '' },
-                    { size: 'XXL', bust: '', waist: '', shoulder: '', length: '' },
-                    { size: 'XXXL', bust: '', waist: '', shoulder: '', length: '' }
+                    { size: 'L', bust: '', waist: '', hip: '', shoulder: '', length: '' },
+                    { size: 'XL', bust: '', waist: '', hip: '', shoulder: '', length: '' },
+                    { size: 'XXL', bust: '', waist: '', hip: '', shoulder: '', length: '' },
+                    { size: 'XXXL', bust: '', waist: '', hip: '', shoulder: '', length: '' }
                 ],
             });
             setMainImage(null);
@@ -318,10 +318,10 @@ const AdminPanel = () => {
     const handleEditProduct = (product) => {
         setEditProductId(product._id);
         const defaultSizeDetails = [
-            { size: 'L', bust: '', waist: '', shoulder: '', length: '' },
-            { size: 'XL', bust: '', waist: '', shoulder: '', length: '' },
-            { size: 'XXL', bust: '', waist: '', shoulder: '', length: '' },
-            { size: 'XXXL', bust: '', waist: '', shoulder: '', length: '' }
+            { size: 'L', bust: '', waist: '', hip: '', shoulder: '', length: '' },
+            { size: 'XL', bust: '', waist: '', hip: '', shoulder: '', length: '' },
+            { size: 'XXL', bust: '', waist: '', hip: '', shoulder: '', length: '' },
+            { size: 'XXXL', bust: '', waist: '', hip: '', shoulder: '', length: '' }
         ];
         
         setFormData({
@@ -373,10 +373,10 @@ const AdminPanel = () => {
                     salesPackage: '', weight: '', bottomColor: '', bottomFabric: '',
                     bottomLength: '', bottomWork: '', waistType: '', bottomHip: '', bottomWaist: '',
                     sizeDetails: [
-                        { size: 'L', bust: '', waist: '', shoulder: '', length: '' },
-                        { size: 'XL', bust: '', waist: '', shoulder: '', length: '' },
-                        { size: 'XXL', bust: '', waist: '', shoulder: '', length: '' },
-                        { size: 'XXXL', bust: '', waist: '', shoulder: '', length: '' }
+                        { size: 'L', bust: '', waist: '', hip: '', shoulder: '', length: '' },
+                        { size: 'XL', bust: '', waist: '', hip: '', shoulder: '', length: '' },
+                        { size: 'XXL', bust: '', waist: '', hip: '', shoulder: '', length: '' },
+                        { size: 'XXXL', bust: '', waist: '', hip: '', shoulder: '', length: '' }
                     ],
                 });
                 setMainImagePreview('');
@@ -713,39 +713,66 @@ const AdminPanel = () => {
                                     )}
 
                                     {formData.category === 'Shapewear' && (
+                                        <>
                                         <div className="form-section">
-                                            <h3 className="form-section-title">Shapewear Specific Details</h3>
+                                            <h3 className="form-section-title">Shapewear Specific Details (Optional)</h3>
                                             <div className="form-grid">
                                                 <div className="form-group">
-                                                    <label>Bottom Color *</label>
-                                                    <input type="text" name="bottomColor" value={formData.bottomColor} onChange={handleInputChange} required placeholder="Black" />
+                                                    <label>Bottom Color</label>
+                                                    <input type="text" name="bottomColor" value={formData.bottomColor} onChange={handleInputChange} placeholder="Black" />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Bottom Fabric *</label>
-                                                    <input type="text" name="bottomFabric" value={formData.bottomFabric} onChange={handleInputChange} required placeholder="Lycra Blend" />
+                                                    <label>Bottom Fabric</label>
+                                                    <input type="text" name="bottomFabric" value={formData.bottomFabric} onChange={handleInputChange} placeholder="Lycra Blend" />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Bottom Length *</label>
-                                                    <input type="text" name="bottomLength" value={formData.bottomLength} onChange={handleInputChange} required placeholder="38 Inch" />
+                                                    <label>Bottom Length</label>
+                                                    <input type="text" name="bottomLength" value={formData.bottomLength} onChange={handleInputChange} placeholder="38 Inch" />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Bottom Work *</label>
-                                                    <input type="text" name="bottomWork" value={formData.bottomWork} onChange={handleInputChange} required placeholder="Plain" />
+                                                    <label>Bottom Work</label>
+                                                    <input type="text" name="bottomWork" value={formData.bottomWork} onChange={handleInputChange} placeholder="Plain" />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Waist Type *</label>
-                                                    <input type="text" name="waistType" value={formData.waistType} onChange={handleInputChange} required placeholder="Elastic" />
+                                                    <label>Waist Type</label>
+                                                    <input type="text" name="waistType" value={formData.waistType} onChange={handleInputChange} placeholder="Elastic" />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Bottom Hip *</label>
-                                                    <input type="text" name="bottomHip" value={formData.bottomHip} onChange={handleInputChange} required placeholder="36 Inch" />
+                                                    <label>Bottom Hip</label>
+                                                    <input type="text" name="bottomHip" value={formData.bottomHip} onChange={handleInputChange} placeholder="36 Inch" />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Bottom Waist *</label>
-                                                    <input type="text" name="bottomWaist" value={formData.bottomWaist} onChange={handleInputChange} required placeholder="28 Inch" />
+                                                    <label>Bottom Waist</label>
+                                                    <input type="text" name="bottomWaist" value={formData.bottomWaist} onChange={handleInputChange} placeholder="28 Inch" />
                                                 </div>
                                             </div>
                                         </div>
+                                        <div className="form-section">
+                                            <h3 className="form-section-title">Size Chart Details (Shapewear)</h3>
+                                            <div className="admin-table-wrapper" style={{ overflowX: 'auto', marginBottom: '1rem' }}>
+                                                <table className="admin-table" style={{ width: '100%', minWidth: '400px', borderCollapse: 'collapse' }}>
+                                                    <thead>
+                                                        <tr>
+                                                            <th style={{border: '1px solid #ddd', padding: '8px'}}>Size</th>
+                                                            <th style={{border: '1px solid #ddd', padding: '8px'}}>Waist (inch)</th>
+                                                            <th style={{border: '1px solid #ddd', padding: '8px'}}>Hip (inch)</th>
+                                                            <th style={{border: '1px solid #ddd', padding: '8px'}}>Length (inch)</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {formData.sizeDetails.map((detail, index) => (
+                                                            <tr key={index}>
+                                                                <td style={{fontWeight: 'bold', textAlign: 'center', border: '1px solid #ddd', padding: '8px'}}>{detail.size}</td>
+                                                                <td style={{border: '1px solid #ddd', padding: '8px'}}><input type="text" value={detail.waist} onChange={(e) => handleSizeDetailChange(index, 'waist', e.target.value)} placeholder="e.g. 30" style={{width: '100%', padding: '5px', border: '1px solid #ccc', borderRadius: '4px'}}/></td>
+                                                                <td style={{border: '1px solid #ddd', padding: '8px'}}><input type="text" value={detail.hip} onChange={(e) => handleSizeDetailChange(index, 'hip', e.target.value)} placeholder="e.g. 34-36" style={{width: '100%', padding: '5px', border: '1px solid #ccc', borderRadius: '4px'}}/></td>
+                                                                <td style={{border: '1px solid #ddd', padding: '8px'}}><input type="text" value={detail.length} onChange={(e) => handleSizeDetailChange(index, 'length', e.target.value)} placeholder="e.g. 37" style={{width: '100%', padding: '5px', border: '1px solid #ccc', borderRadius: '4px'}}/></td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        </>
                                     )}
 
                                     <div className="form-actions">
