@@ -56,6 +56,7 @@ const ProductDetails = () => {
     const [selectedSize, setSelectedSize] = useState("");
     const [selectedImage, setSelectedImage] = useState(null);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    const [showSizeChart, setShowSizeChart] = useState(false);
 
     const sizes = ["L", "XL", "XXL", "XXXL"];
 
@@ -340,26 +341,26 @@ const ProductDetails = () => {
                     <div className="offers-container">
                         <div className="offer-box">
                             <div className="offer-header">
-                                <span className="offer-icon">%</span> Exclusive Discounts + Gifts
+                                <span className="offer-icon">%</span> Extra 10% off
                             </div>
                             <div className="offer-body">
-                                Only on App : <strong>DOWNLOAD NOW</strong>
+                                On orders above <strong>₹2,999</strong>
                             </div>
                         </div>
                         <div className="offer-box">
                             <div className="offer-header">
-                                <span className="offer-icon">₹</span> Flat ₹100 Off
+                                <span className="offer-icon">%</span> Extra 15% off
                             </div>
                             <div className="offer-body">
-                                Use Code : <strong style={{color: '#0d3b66', textDecoration: 'none'}}>WELCOME100</strong>
+                                On orders above <strong>₹4,999</strong>
                             </div>
                         </div>
                         <div className="offer-box">
                             <div className="offer-header">
-                                <span className="offer-icon">🎉</span> Buy 2 Get 1 Free
+                                <span className="offer-icon">%</span> Extra 20% off
                             </div>
                             <div className="offer-body">
-                                Add 3 items to cart to avail
+                                On orders above <strong>₹9,999</strong>
                             </div>
                         </div>
                     </div>
@@ -379,7 +380,7 @@ const ProductDetails = () => {
                     <div className="size-selector-unique mb-4">
                         <div className="size-header">
                             <h4>SIZE</h4>
-                            <button className="size-chart-btn"><FaRulerCombined /> Size Chart</button>
+                            <button className="size-chart-btn" onClick={() => setShowSizeChart(true)}><FaRulerCombined /> Size Chart</button>
                         </div>
                         <div className="size-options">
                             {sizes.map((size) => (
@@ -416,20 +417,6 @@ const ProductDetails = () => {
                         >
                             {isBuyingNow ? <FaSpinner className="spinner" /> : null}
                             BUY IT NOW
-                        </button>
-                        <button
-                            className="btn-wishlist-text"
-                            onClick={handleToggleWishlist}
-                            disabled={isTogglingWishlist}
-                        >
-                            {isTogglingWishlist ? (
-                                <FaSpinner className="spinner" />
-                            ) : isProductWishlisted ? (
-                                <FaHeart color="#cc0000" />
-                            ) : (
-                                <FaRegHeart />
-                            )}
-                            {isProductWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
                         </button>
                     </div>
 
@@ -610,6 +597,30 @@ const ProductDetails = () => {
                         {recentlyViewed.slice(0, 4).map((item) => (
                             <ProductCard key={item._id} product={item} />
                         ))}
+                    </div>
+                </div>
+            )}
+
+            {showSizeChart && (
+                <div className="modal-overlay" onClick={() => setShowSizeChart(false)} style={{
+                    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
+                    backgroundColor: 'rgba(0,0,0,0.7)', zIndex: 9999, 
+                    display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '1rem'
+                }}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{
+                        position: 'relative', background: '#fff', borderRadius: '8px', 
+                        padding: '1rem', maxWidth: '500px', width: '100%'
+                    }}>
+                        <button onClick={() => setShowSizeChart(false)} style={{
+                            position: 'absolute', top: '10px', right: '15px', 
+                            background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer'
+                        }}>×</button>
+                        <h4 style={{ textAlign: 'center', marginBottom: '1rem' }}>Size Chart</h4>
+                        <img 
+                            src="https://res.cloudinary.com/drizf8zcc/image/upload/v1780384652/products/lwgknbdrr3omwz0muh2d.jpg" 
+                            alt="Size Chart" 
+                            style={{ width: '100%', height: 'auto', borderRadius: '4px' }}
+                        />
                     </div>
                 </div>
             )}
