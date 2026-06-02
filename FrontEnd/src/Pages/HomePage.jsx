@@ -133,7 +133,7 @@ const HomePage = () => {
         <div>
             <section>
                 <div className="topBanner">
-                    <img src={topBanner} alt="" />
+                    <img src="https://res.cloudinary.com/drizf8zcc/image/upload/v1780405956/products/k9jpe1blr8zlcbfaapak.jpg" alt="Home Hero Banner" className="img-fluid w-100" />
                 </div>
             </section>
             <div className="slider">
