@@ -50,6 +50,7 @@ const ProductDetails = () => {
     const [openAccordion, setOpenAccordion] = useState("product_details");
     const [selectedSize, setSelectedSize] = useState("");
     const [selectedImage, setSelectedImage] = useState(null);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
     const sizes = ["L", "XL", "XXL", "XXXL"];
 
@@ -70,6 +71,12 @@ const ProductDetails = () => {
             window.removeEventListener("authChanged", syncAuthUser);
             window.removeEventListener("storage", syncAuthUser);
         };
+    }, []);
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth <= 768);
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
     }, []);
 
     useEffect(() => {
@@ -215,17 +222,39 @@ const ProductDetails = () => {
         autoplaySpeed: 5000
     };
 
+    const productImageSliderSettings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        arrows: false,
+        autoplay: false
+    };
+
     return (
         <div className="product-page-container">
             <div className="product-grid-unique">
                 <div>
-                    <div className="product-image-grid-2x2">
-                        {[product.image, ...(product.images || [])].filter(Boolean).map((img, idx) => (
-                            <div key={idx} className="grid-image-item">
-                                <img src={img} alt={`${product.name} - view ${idx + 1}`} />
-                            </div>
-                        ))}
-                    </div>
+                    {isMobile ? (
+                        <div className="product-image-slider-mobile mb-4">
+                            <Slider {...productImageSliderSettings}>
+                                {[product.image, ...(product.images || [])].filter(Boolean).map((img, idx) => (
+                                    <div key={idx} className="grid-image-item">
+                                        <img src={img} alt={`${product.name} - view ${idx + 1}`} style={{ width: '100%', height: 'auto', aspectRatio: '3/4', objectFit: 'cover' }} />
+                                    </div>
+                                ))}
+                            </Slider>
+                        </div>
+                    ) : (
+                        <div className="product-image-grid-2x2">
+                            {[product.image, ...(product.images || [])].filter(Boolean).map((img, idx) => (
+                                <div key={idx} className="grid-image-item">
+                                    <img src={img} alt={`${product.name} - view ${idx + 1}`} />
+                                </div>
+                            ))}
+                        </div>
+                    )}
 
                     <div className="rating-section mt-4">
                         <h3>Rate & Review this product</h3>
