@@ -46,6 +46,7 @@ const ProductDetails = () => {
     const [ratings, setRatings] = useState(emptyRatings);
     const [rating, setRating] = useState(0);
     const [review, setReview] = useState("");
+    const [reviewTitle, setReviewTitle] = useState("");
     const [image, setImage] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [message, setMessage] = useState("");
@@ -199,7 +200,8 @@ const ProductDetails = () => {
             formData.append("userId", userId);
             formData.append("productId", id);
             formData.append("userRating", rating);
-            formData.append("userReview", review.trim());
+            const finalReview = reviewTitle ? `**${reviewTitle}**\n${review}` : review;
+            formData.append("userReview", finalReview.trim());
             if (image) formData.append("productImage", image);
 
             const { data } = await axios.post(
@@ -211,6 +213,7 @@ const ProductDetails = () => {
             setMessage(data.message || "Review submitted successfully.");
             setRating(0);
             setReview("");
+            setReviewTitle("");
             setImage(null);
             await fetchRatings();
         } catch (error) {
@@ -564,7 +567,7 @@ const ProductDetails = () => {
                         {/* Right Column: Button */}
                         <div className="text-center" style={{flex: '1', minWidth: '200px'}}>
                             <button 
-                                onClick={() => setShowReviewForm(!showReviewForm)}
+                                onClick={() => setShowReviewForm(true)}
                                 style={{backgroundColor: '#0d3b66', color: 'white', border: 'none', padding: '0.6rem 1.5rem', borderRadius: '20px', fontWeight: 600, fontSize: '0.9rem'}}
                             >
                                 Write a store review
@@ -572,43 +575,100 @@ const ProductDetails = () => {
                         </div>
                     </div>
                     
-                    {/* Review Form Expansion */}
+                    {/* Review Form Modal */}
                     {showReviewForm && (
-                        <div className="mt-4 pt-4 border-top">
-                            <h4 className="text-center mb-3">Rate & Review this product</h4>
-                            <form onSubmit={handleSubmitRating} className="mx-auto" style={{maxWidth: '500px'}}>
-                                <div className="d-flex justify-content-center mb-3 review-star-input">
-                                    {[1, 2, 3, 4, 5].map((star) => (
-                                        <button
-                                            key={star}
-                                            type="button"
-                                            className="star-button px-1 bg-transparent border-0"
-                                            onClick={() => setRating(star)}
-                                        >
-                                            <FaStar size={24} color={star <= rating ? "#facc15" : "#d1d5db"} />
+                        <div className="modal-overlay" onClick={() => setShowReviewForm(false)} style={{
+                            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
+                            backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 9999, 
+                            display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '1rem'
+                        }}>
+                            <div className="modal-content shadow-lg bg-white" onClick={(e) => e.stopPropagation()} style={{
+                                position: 'relative', borderRadius: '12px', 
+                                padding: '2rem', maxWidth: '600px', width: '100%',
+                                display: 'flex', flexDirection: 'column'
+                            }}>
+                                {/* Product Title */}
+                                <h4 className="text-center mb-4" style={{fontFamily: 'var(--font-body)', fontWeight: 700, color: '#333'}}>
+                                    {product.name}
+                                </h4>
+                                
+                                <form onSubmit={handleSubmitRating}>
+                                    {/* Star Rating with Poor/Great */}
+                                    <div className="d-flex justify-content-center align-items-center mb-4 position-relative">
+                                        <div className="d-flex" style={{gap: '0.5rem'}}>
+                                            {[1, 2, 3, 4, 5].map((star) => (
+                                                <button
+                                                    key={star}
+                                                    type="button"
+                                                    className="bg-transparent border-0 p-0"
+                                                    style={{cursor: 'pointer'}}
+                                                    onClick={() => setRating(star)}
+                                                >
+                                                    <FaStar size={40} color={star <= rating ? "#0d3b66" : "#e2e8f0"} />
+                                                </button>
+                                            ))}
+                                        </div>
+                                        {/* Labels */}
+                                        <span style={{position: 'absolute', bottom: '-20px', left: 'calc(50% - 95px)', fontSize: '0.8rem', color: '#666', fontWeight: 500}}>Poor</span>
+                                        <span style={{position: 'absolute', bottom: '-20px', right: 'calc(50% - 95px)', fontSize: '0.8rem', color: '#666', fontWeight: 500}}>Great</span>
+                                    </div>
+
+                                    {/* Review Content */}
+                                    <div className="mb-3" style={{marginTop: '2.5rem'}}>
+                                        <label style={{display: 'block', fontSize: '0.9rem', marginBottom: '0.5rem', color: '#333', fontWeight: 500}}>Review content</label>
+                                        <textarea
+                                            value={review}
+                                            onChange={(e) => setReview(e.target.value)}
+                                            placeholder="Start writing here..."
+                                            className="form-control"
+                                            rows="4"
+                                            style={{fontSize: '0.95rem', padding: '0.75rem', borderColor: '#d1d5db', borderRadius: '6px'}}
+                                        />
+                                    </div>
+
+                                    {/* Review Title */}
+                                    <div className="mb-3">
+                                        <label style={{display: 'block', fontSize: '0.9rem', marginBottom: '0.5rem', color: '#333', fontWeight: 500}}>Review Title</label>
+                                        <input
+                                            type="text"
+                                            value={reviewTitle}
+                                            onChange={(e) => setReviewTitle(e.target.value)}
+                                            placeholder="Give your review a title"
+                                            className="form-control"
+                                            style={{fontSize: '0.95rem', padding: '0.75rem', borderColor: '#d1d5db', borderRadius: '6px'}}
+                                        />
+                                    </div>
+
+                                    {/* Optional Image */}
+                                    <div className="mb-4">
+                                        <label style={{display: 'block', fontSize: '0.9rem', marginBottom: '0.5rem', color: '#333', fontWeight: 500}}>Attach an Image (Optional)</label>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={(e) => setImage(e.target.files[0])}
+                                            className="form-control"
+                                            style={{fontSize: '0.9rem'}}
+                                        />
+                                    </div>
+
+                                    {/* Disclaimer */}
+                                    <p className="text-center" style={{fontSize: '0.75rem', color: '#718096', lineHeight: '1.4', marginBottom: '2rem'}}>
+                                        We'll only contact you about your review if necessary. By submitting your review, you agree to our <span style={{textDecoration: 'underline'}}>terms and conditions</span> and <span style={{textDecoration: 'underline'}}>privacy policy</span>.
+                                    </p>
+
+                                    {/* Actions */}
+                                    <div className="d-flex justify-content-between align-items-center">
+                                        <button type="button" onClick={() => setShowReviewForm(false)} style={{background: 'none', border: 'none', fontSize: '0.95rem', color: '#4a5568', cursor: 'pointer', padding: 0}}>
+                                            &larr; Back
                                         </button>
-                                    ))}
-                                </div>
-                                <textarea
-                                    value={review}
-                                    onChange={(e) => setReview(e.target.value)}
-                                    placeholder="Write your review..."
-                                    className="form-control mb-3"
-                                    rows="4"
-                                />
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={(e) => setImage(e.target.files[0])}
-                                    className="form-control mb-3"
-                                />
-                                <div className="text-center">
-                                    <button type="submit" className="btn-unique btn-primaryy mx-auto" disabled={isSubmitting}>
-                                        {isSubmitting ? <FaSpinner className="spinner" /> : "Submit Review"}
-                                    </button>
-                                </div>
-                                {message && <p className="text-center mt-2">{message}</p>}
-                            </form>
+                                        <button type="submit" style={{backgroundColor: '#0d3b66', color: 'white', border: 'none', padding: '0.6rem 2rem', borderRadius: '4px', fontWeight: 600, fontSize: '0.95rem'}} disabled={isSubmitting}>
+                                            {isSubmitting ? <FaSpinner className="spinner" /> : "Next"}
+                                        </button>
+                                    </div>
+                                    
+                                    {message && <p className="text-center mt-3 text-danger mb-0" style={{fontSize: '0.9rem'}}>{message}</p>}
+                                </form>
+                            </div>
                         </div>
                     )}
                 </div>
