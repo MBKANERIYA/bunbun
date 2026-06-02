@@ -10,10 +10,8 @@ import {
     FaCreditCard,
     FaSpinner,
     FaStar,
-    FaHeart,
-    FaRegHeart,
-    FaChevronDown,
-    FaChevronUp,
+    FaAngleDown,
+    FaAngleUp,
     FaShare,
     FaBolt,
     FaTruck,
@@ -428,18 +426,27 @@ const ProductDetails = () => {
                         />
                     </div>
 
-                    {product.description && (
-                        <div className="product-description mt-4" style={{ fontSize: '0.95rem', lineHeight: '1.7', color: 'var(--text-secondary)' }}>
-                            <p className="m-0">{product.description}</p>
-                        </div>
-                    )}
-
                     <div className="details-accordion mt-4">
+                        {/* DESCRIPTION */}
+                        {product.description && (
+                            <div className="detail-item">
+                                <div className="detail-item-header" onClick={() => toggleAccordion('description')}>
+                                    <h3>DESCRIPTION</h3>
+                                    {openAccordion === 'description' ? <FaAngleUp /> : <FaAngleDown />}
+                                </div>
+                                {openAccordion === 'description' && (
+                                    <div className="detail-item-content">
+                                        <p>{product.description}</p>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
                         {/* PRODUCT DETAILS */}
                         <div className="detail-item">
                             <div className="detail-item-header" onClick={() => toggleAccordion('product_details')}>
                                 <h3>PRODUCT DETAILS</h3>
-                                {openAccordion === 'product_details' ? <FaChevronUp /> : <FaChevronDown />}
+                                {openAccordion === 'product_details' ? <FaAngleUp /> : <FaAngleDown />}
                             </div>
                             {openAccordion === 'product_details' && (
                                 <div className="detail-item-content">
@@ -493,7 +500,7 @@ const ProductDetails = () => {
                         <div className="detail-item">
                             <div className="detail-item-header" onClick={() => toggleAccordion('return')}>
                                 <h3>RETURN AND EXCHANGE</h3>
-                                {openAccordion === 'return' ? <FaChevronUp /> : <FaChevronDown />}
+                                {openAccordion === 'return' ? <FaAngleUp /> : <FaAngleDown />}
                             </div>
                             {openAccordion === 'return' && (
                                 <div className="detail-item-content">
@@ -506,7 +513,7 @@ const ProductDetails = () => {
                         <div className="detail-item">
                             <div className="detail-item-header" onClick={() => toggleAccordion('shipping')}>
                                 <h3>SHIPPING INFORMATION</h3>
-                                {openAccordion === 'shipping' ? <FaChevronUp /> : <FaChevronDown />}
+                                {openAccordion === 'shipping' ? <FaAngleUp /> : <FaAngleDown />}
                             </div>
                             {openAccordion === 'shipping' && (
                                 <div className="detail-item-content">
@@ -519,7 +526,7 @@ const ProductDetails = () => {
                         <div className="detail-item">
                             <div className="detail-item-header" onClick={() => toggleAccordion('seller')}>
                                 <h3>SELLER INFORMATION</h3>
-                                {openAccordion === 'seller' ? <FaChevronUp /> : <FaChevronDown />}
+                                {openAccordion === 'seller' ? <FaAngleUp /> : <FaAngleDown />}
                             </div>
                             {openAccordion === 'seller' && (
                                 <div className="detail-item-content">
@@ -532,7 +539,7 @@ const ProductDetails = () => {
                         <div className="detail-item">
                             <div className="detail-item-header" onClick={() => toggleAccordion('help')}>
                                 <h3>NEED HELP?</h3>
-                                {openAccordion === 'help' ? <FaChevronUp /> : <FaChevronDown />}
+                                {openAccordion === 'help' ? <FaAngleUp /> : <FaAngleDown />}
                             </div>
                             {openAccordion === 'help' && (
                                 <div className="detail-item-content">
@@ -540,10 +547,6 @@ const ProductDetails = () => {
                                 </div>
                             )}
                         </div>
-                    </div>
-
-                    <div className="delivery-info-unique">
-                        Check Delivery Options for your Pincode
                     </div>
                 </div>
             </div>
