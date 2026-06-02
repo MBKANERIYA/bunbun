@@ -13,7 +13,12 @@ import {
     FaHeart,
     FaRegHeart,
     FaChevronDown,
-    FaChevronUp
+    FaChevronUp,
+    FaShare,
+    FaBolt,
+    FaTruck,
+    FaMoneyBillAlt,
+    FaRulerCombined
 } from "react-icons/fa";
 import ProductCard from "../Component/ProductCard";
 import Slider from "react-slick";
@@ -305,22 +310,67 @@ const ProductDetails = () => {
                 </div>
 
                 <div className="product-info-unique">
-                    <h1 className="product-title-unique">{product.name}</h1>
+                    <div className="title-row">
+                        <h1 className="product-title-unique">{product.name}</h1>
+                        <button className="share-btn"><FaShare /></button>
+                    </div>
 
                     <div className="price-container-unique">
+                        <span className="original-price">{formatPrice(product.mrp)}</span>
                         <span className="current-price">{formatPrice(product.selling_price)}</span>
-                        <div className="original-price-wrapper">
-                            <span className="original-price">{formatPrice(product.mrp)}</span>
-                            {discount > 0 && (
-                                <span className="discount-badgee">{discount}% OFF</span>
-                            )}
+                        {discount > 0 && (
+                            <span className="sale-badge">SALE</span>
+                        )}
+                    </div>
+                    <p className="taxes-info-unique">Inclusive of all taxes.</p>
+
+                    <div className="rating-row">
+                        <div className="stars">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                                <FaStar
+                                    key={star}
+                                    size={16}
+                                    color={star <= (ratings.averageRating || 5) ? "#0d3b66" : "#d1d5db"}
+                                />
+                            ))}
+                        </div>
+                        <span className="rating-count">({ratings.totalRatings > 0 ? ratings.totalRatings : 9})</span>
+                    </div>
+
+                    <div className="bought-banner">
+                        <FaBolt className="bolt-icon" />
+                        <strong>506</strong> Bought this in 24 hours
+                    </div>
+
+                    <div className="offers-container">
+                        <div className="offer-box">
+                            <div className="offer-header">
+                                <span className="offer-icon">%</span> Exclusive Discounts + Gifts
+                            </div>
+                            <div className="offer-body">
+                                Only on App : <strong>DOWNLOAD NOW</strong>
+                            </div>
                         </div>
                     </div>
-                    <p className="taxes-info-unique">Inclusive of all taxes</p>
+
+                    <div className="delivery-details-section">
+                        <h4>Check Delivery Details</h4>
+                        <div className="pincode-input-group">
+                            <input type="text" placeholder="380001" />
+                            <button className="check-btn">Check</button>
+                        </div>
+                        <ul className="delivery-info-list">
+                            <li><FaTruck className="icon" /> Delivery between <strong className="green-text">8th and 9th Jun</strong></li>
+                            <li><FaMoneyBillAlt className="icon" /> Cash On Delivery <strong className="green-text">available</strong></li>
+                        </ul>
+                    </div>
 
                     <div className="size-selector-unique mb-4">
-                        <h4 className="mb-2" style={{ fontSize: '1.1rem', fontWeight: 600 }}>Select Size</h4>
-                        <div className="d-flex gap-2" style={{ display: 'flex', gap: '10px' }}>
+                        <div className="size-header">
+                            <h4>SIZE</h4>
+                            <button className="size-chart-btn"><FaRulerCombined /> Size Chart</button>
+                        </div>
+                        <div className="size-options">
                             {sizes.map((size) => (
                                 <button
                                     key={size}
@@ -328,16 +378,6 @@ const ProductDetails = () => {
                                     onClick={() => {
                                         setSelectedSize(size);
                                         if (message.includes("size")) setMessage("");
-                                    }}
-                                    style={{
-                                        border: '1px solid var(--border-color)',
-                                        background: selectedSize === size ? 'var(--primary-color)' : 'var(--background-white)',
-                                        color: selectedSize === size ? 'white' : 'var(--text-primary)',
-                                        padding: '0.6rem 1.2rem',
-                                        borderRadius: '4px',
-                                        cursor: 'pointer',
-                                        transition: 'all 0.2s',
-                                        fontWeight: 500
                                     }}
                                 >
                                     {size}
@@ -349,36 +389,36 @@ const ProductDetails = () => {
                         )}
                     </div>
 
-                    <div className="actions-container-unique">
+                    <div className="actions-container-stacked">
                         <button
-                            className="btn-unique btn-secondaryy"
+                            className="btn-add-to-cart"
                             onClick={handleAddToCart}
                             disabled={isAddingToCart || isBuyingNow}
                         >
-                            {isAddingToCart ? <FaSpinner className="spinner" /> : <FaShoppingCart />}
-                            Add to Cart
+                            {isAddingToCart ? <FaSpinner className="spinner" /> : null}
+                            ADD TO CART
                         </button>
                         <button
-                            className="btn-unique btn-primaryy"
+                            className="btn-buy-now"
                             onClick={handleBuyNow}
                             disabled={isAddingToCart || isBuyingNow}
                         >
-                            {isBuyingNow ? <FaSpinner className="spinner" /> : <FaCreditCard />}
-                            Buy Now
+                            {isBuyingNow ? <FaSpinner className="spinner" /> : null}
+                            BUY IT NOW
                         </button>
                         <button
-                            className="btn-unique btn-secondaryy wishlist-action"
+                            className="btn-wishlist-text"
                             onClick={handleToggleWishlist}
                             disabled={isTogglingWishlist}
                         >
                             {isTogglingWishlist ? (
                                 <FaSpinner className="spinner" />
                             ) : isProductWishlisted ? (
-                                <FaHeart />
+                                <FaHeart color="#cc0000" />
                             ) : (
                                 <FaRegHeart />
                             )}
-                            {isProductWishlisted ? "Wishlisted" : "Wishlist"}
+                            {isProductWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
                         </button>
                     </div>
 
