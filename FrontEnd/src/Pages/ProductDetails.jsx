@@ -330,16 +330,11 @@ const ProductDetails = () => {
                                 <FaStar
                                     key={star}
                                     size={16}
-                                    color={star <= (ratings.averageRating || 5) ? "#0d3b66" : "#d1d5db"}
+                                    color={star <= (ratings.averageRating || 0) ? "#0d3b66" : "#d1d5db"}
                                 />
                             ))}
                         </div>
-                        <span className="rating-count">({ratings.totalRatings > 0 ? ratings.totalRatings : 9})</span>
-                    </div>
-
-                    <div className="bought-banner">
-                        <FaBolt className="bolt-icon" />
-                        <strong>506</strong> Bought this in 24 hours
+                        <span className="rating-count">({ratings.totalRatings || 0})</span>
                     </div>
 
                     <div className="offers-container">
@@ -349,6 +344,22 @@ const ProductDetails = () => {
                             </div>
                             <div className="offer-body">
                                 Only on App : <strong>DOWNLOAD NOW</strong>
+                            </div>
+                        </div>
+                        <div className="offer-box">
+                            <div className="offer-header">
+                                <span className="offer-icon">₹</span> Flat ₹100 Off
+                            </div>
+                            <div className="offer-body">
+                                Use Code : <strong style={{color: '#0d3b66', textDecoration: 'none'}}>WELCOME100</strong>
+                            </div>
+                        </div>
+                        <div className="offer-box">
+                            <div className="offer-header">
+                                <span className="offer-icon">🎉</span> Buy 2 Get 1 Free
+                            </div>
+                            <div className="offer-body">
+                                Add 3 items to cart to avail
                             </div>
                         </div>
                     </div>
