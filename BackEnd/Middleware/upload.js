@@ -6,8 +6,11 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-let uploadImage = (path, originalname) => {
-  return cloudinary.uploader.upload(path, { public_id: originalname });
+let uploadImage = (path) => {
+  return cloudinary.uploader.upload(path, {
+    folder: "products",
+    resource_type: "image",
+  });
 };
 
 module.exports = uploadImage;

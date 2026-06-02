@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-06-02 — Fix 413 Content Too Large on Vercel Product Upload
+**What**: Increased body-parser JSON limit from 100KB default to 10MB and hardened frontend error handling for Vercel's 413 response shape.
+**Why**: When adding a product with multiple images, the JSON payload (containing Cloudinary URLs + form data) exceeded body-parser's 100KB default limit, causing a 413 error. Vercel returns 413 errors as `{code, message}` objects — when this object was passed directly to React state and rendered as JSX, it caused React Error #31 ("Objects are not valid as a React child").
+**Files Changed**: `BackEnd/App.js`, `FrontEnd/src/Pages/AdminPanel.jsx`
+- Added `{ limit: '10mb' }` to `bodyParser.json()` and added `bodyParser.urlencoded({ extended: true, limit: '10mb' })`.
+- Rewrote the `handleAddProduct` catch block to safely extract string error messages from any error response shape (Vercel 413 `{code, message}`, standard API `{error}`, or fallback `err.message`), preventing objects from being rendered as React children.
+
 ## 2026-06-01 — Update Primary Theme Color
 **What**: Replaced the various blue (`#2c3e50`) and purple (`#5345B9`) primary colors with a consistent dark charcoal (`#333333`) across the entire site.
 **Why**: To ensure visual consistency and match the clean, premium aesthetic set by the main navigation header.

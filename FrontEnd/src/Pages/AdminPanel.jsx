@@ -5,6 +5,51 @@ import '../Style/Admin.css';
 
 const ADMIN_USER = 'admin';
 const ADMIN_PASS = 'admin123';
+const MAX_ADDITIONAL_IMAGES = 10;
+const MAX_IMAGE_UPLOAD_BYTES = 3 * 1024 * 1024;
+
+const compressImageForUpload = (file) => new Promise((resolve, reject) => {
+    if (file.size <= MAX_IMAGE_UPLOAD_BYTES) {
+        resolve(file);
+        return;
+    }
+
+    const image = new Image();
+    const objectUrl = URL.createObjectURL(file);
+
+    image.onload = () => {
+        URL.revokeObjectURL(objectUrl);
+
+        const maxDimension = 1920;
+        const scale = Math.min(1, maxDimension / Math.max(image.width, image.height));
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.round(image.width * scale);
+        canvas.height = Math.round(image.height * scale);
+        canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
+
+        canvas.toBlob((blob) => {
+            if (!blob) {
+                reject(new Error('Could not prepare the selected image.'));
+                return;
+            }
+
+            if (blob.size > MAX_IMAGE_UPLOAD_BYTES) {
+                reject(new Error('One selected image is too large. Please choose an image smaller than 3 MB.'));
+                return;
+            }
+
+            const baseName = file.name.replace(/\.[^.]+$/, '') || 'product-image';
+            resolve(new File([blob], `${baseName}.jpg`, { type: 'image/jpeg' }));
+        }, 'image/jpeg', 0.78);
+    };
+
+    image.onerror = () => {
+        URL.revokeObjectURL(objectUrl);
+        reject(new Error('One selected file could not be read as an image.'));
+    };
+
+    image.src = objectUrl;
+});
 
 const AdminPanel = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -164,14 +209,21 @@ const AdminPanel = () => {
 
     const handleAdditionalImagesChange = (e) => {
         const files = Array.from(e.target.files || []);
-        if (files.length > 0) {
-            setAdditionalImages(prev => prev ? [...prev, ...files] : [...files]);
-            const newPreviews = files.map(file => URL.createObjectURL(file));
-            setAdditionalImagesPreviews(prev => [...prev, ...newPreviews]);
-            
-            // Clear the input value so selecting the same file again works
-            e.target.value = null;
+        const remainingSlots = MAX_ADDITIONAL_IMAGES - additionalImagesPreviews.length;
+        const acceptedFiles = files.slice(0, Math.max(0, remainingSlots));
+
+        if (files.length > remainingSlots) {
+            setSubmitMsg({ type: 'error', text: `You can upload up to ${MAX_ADDITIONAL_IMAGES} additional images.` });
         }
+
+        if (acceptedFiles.length > 0) {
+            setAdditionalImages(prev => prev ? [...prev, ...acceptedFiles] : [...acceptedFiles]);
+            const newPreviews = acceptedFiles.map(file => URL.createObjectURL(file));
+            setAdditionalImagesPreviews(prev => [...prev, ...newPreviews]);
+        }
+
+        // Clear the input value so selecting the same file again works
+        e.target.value = null;
     };
 
     const removeAdditionalImage = (indexToRemove) => {
@@ -191,35 +243,25 @@ const AdminPanel = () => {
         setSubmitMsg({ type: '', text: '' });
 
         try {
-            const data = new FormData();
-            
-            // Append textual form data
-            Object.keys(formData).forEach(key => {
-                if (key === 'sizeDetails') {
-                    if (formData.category === 'Blouse') {
-                        data.append(key, JSON.stringify(formData[key]));
-                    }
-                } else if (formData[key]) {
-                    data.append(key, formData[key]);
-                }
-            });
+            const uploadFile = async (file) => {
+                const uploadData = new FormData();
+                uploadData.append('image', await compressImageForUpload(file));
+                const response = await axios.post(apiUrl('/v1/product/uploadImage'), uploadData);
+                return response.data.url;
+            };
 
-            // Append main image file
+            const data = { ...formData };
+            if (formData.category !== 'Blouse') delete data.sizeDetails;
+
             if (mainImage) {
-                data.append('image', mainImage);
+                data.image = await uploadFile(mainImage);
             }
 
-            // Append additional image files
-            if (additionalImages && additionalImages.length > 0) {
-                Array.from(additionalImages).forEach(file => {
-                    data.append('images', file);
-                });
+            const uploadedAdditionalImages = [];
+            for (const file of additionalImages || []) {
+                uploadedAdditionalImages.push(await uploadFile(file));
             }
-
-            // Keep track of existing images if we are editing
-            if (editProductId && existingImages.length > 0) {
-                data.append('existingImages', JSON.stringify(existingImages));
-            }
+            data.images = [...existingImages, ...uploadedAdditionalImages];
 
             if (editProductId) {
                 await axios.put(apiUrl(`/v1/product/updateProduct/${editProductId}`), data);
@@ -253,7 +295,23 @@ const AdminPanel = () => {
             // Refetch products if we edited
             if (editProductId) fetchProducts();
         } catch (err) {
-            setSubmitMsg({ type: 'error', text: err.response?.data?.error || 'Failed to add product.' });
+            const status = err.response?.status;
+            const data = err.response?.data;
+            let errorText;
+
+            if (status === 413) {
+                errorText = 'The request is too large. Please reduce the number of images or use smaller image files.';
+            } else if (typeof data?.error === 'string') {
+                errorText = data.error;
+            } else if (typeof data?.message === 'string') {
+                errorText = data.message;
+            } else if (typeof err.message === 'string') {
+                errorText = err.message;
+            } else {
+                errorText = 'Failed to add product.';
+            }
+
+            setSubmitMsg({ type: 'error', text: errorText });
         } finally {
             setSubmitting(false);
         }
@@ -531,8 +589,9 @@ const AdminPanel = () => {
                                                 )}
                                             </div>
                                             <div className="form-group full-width">
-                                                <label>Additional Images (Multiple)</label>
-                                                <input type="file" name="images" accept="image/*" multiple onChange={handleAdditionalImagesChange} />
+                                                <label>Additional Images (Multiple, up to {MAX_ADDITIONAL_IMAGES})</label>
+                                                <input type="file" name="images" accept="image/*" multiple onChange={handleAdditionalImagesChange} disabled={additionalImagesPreviews.length >= MAX_ADDITIONAL_IMAGES} />
+                                                <small>{additionalImagesPreviews.length} / {MAX_ADDITIONAL_IMAGES} selected</small>
                                                 {additionalImagesPreviews.length > 0 && (
                                                     <div className="image-previews-wrapper">
                                                         {additionalImagesPreviews.map((src, index) => (

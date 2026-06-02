@@ -1,6 +1,35 @@
 const { productSchema, categorySchema } = require("../Models");
 const { productService } = require("../Services");
 const uploadImage = require("../Middleware/upload");
+const fs = require("fs/promises");
+
+const MAX_ADDITIONAL_IMAGES = 10;
+
+const uploadProductFile = async (file) => {
+    try {
+        const cloud = await uploadImage(file.path);
+        return cloud.secure_url || cloud.url;
+    } finally {
+        await fs.unlink(file.path).catch(() => {});
+    }
+};
+
+const hasTooManyAdditionalImages = (images) => (
+    Array.isArray(images) && images.length > MAX_ADDITIONAL_IMAGES
+);
+
+module.exports.uploadProductImage = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: "Please select an image to upload." });
+        }
+
+        const url = await uploadProductFile(req.file);
+        res.status(201).json({ url });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
 
 module.exports.addProduct = async (req, res) => {
     try {
@@ -16,19 +45,19 @@ module.exports.addProduct = async (req, res) => {
 
         // Process main image
         if (req.files && req.files['image'] && req.files['image'][0]) {
-            const { path, originalname } = req.files['image'][0];
-            const cloud = await uploadImage(path, originalname);
-            body.image = cloud.url;
+            body.image = await uploadProductFile(req.files['image'][0]);
         }
 
         // Process additional images
         if (req.files && req.files['images'] && req.files['images'].length > 0) {
             body.images = [];
             for (let i = 0; i < req.files['images'].length; i++) {
-                const { path, originalname } = req.files['images'][i];
-                const cloud = await uploadImage(path, originalname);
-                body.images.push(cloud.url);
+                body.images.push(await uploadProductFile(req.files['images'][i]));
             }
+        }
+
+        if (hasTooManyAdditionalImages(body.images)) {
+            return res.status(400).json({ error: `You can upload up to ${MAX_ADDITIONAL_IMAGES} additional images.` });
         }
 
         const products = await productService.addProduct(body);
@@ -69,26 +98,26 @@ module.exports.updateProduct = async (req, res) => {
 
         // Process main image
         if (req.files && req.files['image'] && req.files['image'][0]) {
-            const { path, originalname } = req.files['image'][0];
-            const cloud = await uploadImage(path, originalname);
-            body.image = cloud.url;
+            body.image = await uploadProductFile(req.files['image'][0]);
         }
 
         // Parse existing images if any are kept
         if (body.existingImages) {
             body.images = JSON.parse(body.existingImages);
             delete body.existingImages;
-        } else {
+        } else if (!Array.isArray(body.images)) {
             body.images = [];
         }
 
         // Process additional new images
         if (req.files && req.files['images'] && req.files['images'].length > 0) {
             for (let i = 0; i < req.files['images'].length; i++) {
-                const { path, originalname } = req.files['images'][i];
-                const cloud = await uploadImage(path, originalname);
-                body.images.push(cloud.url);
+                body.images.push(await uploadProductFile(req.files['images'][i]));
             }
+        }
+
+        if (hasTooManyAdditionalImages(body.images)) {
+            return res.status(400).json({ error: `You can upload up to ${MAX_ADDITIONAL_IMAGES} additional images.` });
         }
 
         const updatedProduct = await productService.updateProduct(id, body);

@@ -10,7 +10,8 @@ const router = require("./Routes")
 let app = express()
 
 app.use(cors())
-app.use(bodyParser.json())
+app.use(bodyParser.json({ limit: '25mb' }))
+app.use(bodyParser.urlencoded({ extended: true, limit: '25mb' }))
 app.use("/images", express.static(path.join(__dirname, "public/images")))
 
 app.get("/health", (req, res) => {

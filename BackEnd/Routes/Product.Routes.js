@@ -3,18 +3,20 @@ const { productController } = require("../Controllers")
 const upload = require("../Middleware/multer")
 
 let route = express.Router()
+const MAX_ADDITIONAL_IMAGES = 10;
 
+route.post("/uploadImage", upload.single("image"), productController.uploadProductImage)
 
 route.post("/addProduct", upload.fields([
     { name: 'image', maxCount: 1 },
-    { name: 'images', maxCount: 5 }
+    { name: 'images', maxCount: MAX_ADDITIONAL_IMAGES }
 ]), (req, res, next) => {
     req.body = Object.assign({}, req.body);
     next();
 }, productController.addProduct)
 route.put("/updateProduct/:id", upload.fields([
     { name: 'image', maxCount: 1 },
-    { name: 'images', maxCount: 5 }
+    { name: 'images', maxCount: MAX_ADDITIONAL_IMAGES }
 ]), (req, res, next) => {
     req.body = Object.assign({}, req.body);
     next();
