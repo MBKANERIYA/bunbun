@@ -6,10 +6,11 @@ import '../Style/Admin.css';
 const ADMIN_USER = 'admin';
 const ADMIN_PASS = 'admin123';
 const MAX_ADDITIONAL_IMAGES = 10;
-const MAX_IMAGE_UPLOAD_BYTES = 3 * 1024 * 1024;
+const TARGET_MAX_BYTES = 200 * 1024; // 200 KB
 
 const compressImageForUpload = (file) => new Promise((resolve, reject) => {
-    if (file.size <= MAX_IMAGE_UPLOAD_BYTES) {
+    // If the file is already smaller than 200KB, just use it
+    if (file.size <= TARGET_MAX_BYTES) {
         resolve(file);
         return;
     }
@@ -20,27 +21,24 @@ const compressImageForUpload = (file) => new Promise((resolve, reject) => {
     image.onload = () => {
         URL.revokeObjectURL(objectUrl);
 
-        const maxDimension = 1920;
+        // Reduce dimensions to max 1024px for aggressive compression
+        const maxDimension = 1024;
         const scale = Math.min(1, maxDimension / Math.max(image.width, image.height));
         const canvas = document.createElement('canvas');
         canvas.width = Math.round(image.width * scale);
         canvas.height = Math.round(image.height * scale);
         canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
 
+        // Use 0.7 quality to target ~200KB for typical 1024px images
         canvas.toBlob((blob) => {
             if (!blob) {
                 reject(new Error('Could not prepare the selected image.'));
                 return;
             }
 
-            if (blob.size > MAX_IMAGE_UPLOAD_BYTES) {
-                reject(new Error('One selected image is too large. Please choose an image smaller than 3 MB.'));
-                return;
-            }
-
             const baseName = file.name.replace(/\.[^.]+$/, '') || 'product-image';
             resolve(new File([blob], `${baseName}.jpg`, { type: 'image/jpeg' }));
-        }, 'image/jpeg', 0.78);
+        }, 'image/jpeg', 0.7);
     };
 
     image.onerror = () => {
