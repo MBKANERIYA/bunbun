@@ -1,3 +1,4 @@
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Header from "./Component/Header";
 import HomePage from "./Pages/HomePage";
@@ -21,6 +22,15 @@ import BunbunClothingGold from './Pages/BunbunClothingGold';
 import EditProfile from './Pages/EditProfile';
 import AdminPanel from './Pages/AdminPanel';
 
+// Scroll to top on every route change
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
+
 // Layout wrapper that hides Header/Footer on /admin
 const AppLayout = () => {
   const location = useLocation();
@@ -28,6 +38,7 @@ const AppLayout = () => {
 
   return (
     <>
+      <ScrollToTop />
       {!isAdmin && <CartSidebar />}
       {!isAdmin && <Header />}
       <Routes>

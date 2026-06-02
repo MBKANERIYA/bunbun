@@ -164,3 +164,30 @@
 .grand-total-detailed strong {
     font-weight: 700; /* Bolder total */
 }
+
+/* ===== Mobile Responsive ===== */
+@media (max-width: 768px) {
+    .detailed-summary-card {
+        padding: 15px;
+    }
+
+    .detailed-summary-card h3 {
+        font-size: 1.25rem;
+    }
+
+    .item-image-detailed {
+        height: 80px;
+    }
+
+    .item-name-detailed {
+        font-size: 0.85rem;
+    }
+
+    .selling-price {
+        font-size: 0.95rem;
+    }
+
+    .mrp {
+        font-size: 0.8rem;
+    }
+}

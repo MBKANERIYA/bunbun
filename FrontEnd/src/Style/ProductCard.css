@@ -151,3 +151,74 @@
     color: var(--secondary-color);
     text-decoration: line-through;
 }
+
+/* ===== Mobile Responsive ===== */
+@media (max-width: 768px) {
+    .product-card {
+        border-radius: 8px;
+    }
+
+    .product-card:hover {
+        transform: translateY(-2px);
+    }
+
+    .card-content {
+        padding: 10px;
+    }
+
+    .product-name {
+        font-size: 13px;
+        margin: 0 0 4px 0;
+    }
+
+    .price {
+        font-size: 15px;
+    }
+
+    .mrp {
+        font-size: 12px;
+    }
+
+    .discount-badge {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+
+    .wishlist-icon {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+        top: 8px;
+        right: 8px;
+    }
+
+    /* Show Add to Cart on mobile (no hover) */
+    .card-actions {
+        transform: translateY(0);
+        opacity: 1;
+        padding: 10px;
+    }
+
+    .add-to-cart-btn {
+        padding: 8px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .card-content {
+        padding: 8px;
+    }
+
+    .product-name {
+        font-size: 12px;
+    }
+
+    .price {
+        font-size: 14px;
+    }
+
+    .price-section {
+        gap: 4px;
+    }
+}
