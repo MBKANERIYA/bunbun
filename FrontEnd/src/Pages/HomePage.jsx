@@ -133,7 +133,7 @@ const HomePage = () => {
         <div>
             <section>
                 <div className="topBanner">
-                    <img src="https://res.cloudinary.com/drizf8zcc/image/upload/v1780405956/products/k9jpe1blr8zlcbfaapak.jpg" alt="Home Hero Banner" className="img-fluid w-100" />
+                    <img src="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780463096/bunbun_banner_1_fdn2hr.png" alt="Home Hero Banner" className="img-fluid w-100" />
                 </div>
             </section>
             <div className="slider">
@@ -229,7 +229,7 @@ const HomePage = () => {
                     </div>
                 </div>
             </section>
-             <div className="slider">
+            <div className="slider">
                 <div className="slide-track">
                     {loopMedia.map((icon, index) => (
                         <div className="slide" key={index}>
