@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-06-03 — Add Guest Cart & Checkout Login Requirement
+**What**: Implemented the ability for users to add products to their cart without logging in, and forced a login prompt when trying to checkout. Guest carts are synced to the backend upon login.
+**Why**: User requested "without login add to cart functionality. login needed at check out page" to reduce friction when browsing and adding items.
+**Files Changed**: `CartContext.jsx`, `Address.jsx`
+- Rewrote `CartContext.jsx` to store items in `localStorage` (`guestCart`) when no `userId` is present.
+- Updated `addToCart` to fetch product details on-the-fly for the guest cart so the UI displays correctly.
+- Added `syncGuestCart` logic in `useEffect` to merge the guest cart into the backend `cart` when the user successfully logs in.
+- Updated `Address.jsx` (Checkout page) to check for `userId`. If not authenticated, alerts the user and redirects to the homepage.
+
+## 2026-06-03 — Update Website Favicon
+**What**: Changed the website favicon from the default Vite SVG to `b_fav.png`.
+**Why**: User requested to use `b_fav.png` as the favicon to match the brand identity.
+**Files Changed**: `FrontEnd/index.html`
+- Updated the `<link rel="icon">` tag to point to `/b_fav.png` and updated the `type` attribute to `image/png`.
+
 ## 2026-06-02 — Fix 413 Content Too Large on Vercel Product Upload
 **What**: Increased body-parser JSON limit from 100KB default to 10MB and hardened frontend error handling for Vercel's 413 response shape.
 **Why**: When adding a product with multiple images, the JSON payload (containing Cloudinary URLs + form data) exceeded body-parser's 100KB default limit, causing a 413 error. Vercel returns 413 errors as `{code, message}` objects — when this object was passed directly to React state and rendered as JSX, it caused React Error #31 ("Objects are not valid as a React child").
@@ -179,3 +194,13 @@
 **Files Changed**: `AdminPanel.jsx`
 - Initialized `activeTab`, `formData`, and `editProductId` states from `sessionStorage` (if present).
 - Added `useEffect` hooks to synchronize state changes back into `sessionStorage`.
+
+## 2026-06-04 � SEO-friendly product URLs
+**What**: Removed product ID from product details page URL.
+**Why**: To improve SEO by relying solely on product title slugs.
+**Files Changed**: backend/Models/Product.Model.js, backend/Controllers/Product.Controller.js, backend/Routes/Product.Routes.js, frontend/src/App.jsx, frontend/src/Pages/ProductDetails.jsx, frontend/src/Pages/OrderSummery.jsx, frontend/src/Component/Cart.jsx, frontend/src/Component/ProductCard.jsx, frontend/src/Component/CartSidebar.jsx
+- Added slug field to Product.Model.js.
+- Created and ran migration script to generate slugs for all existing products.
+- Updated addProduct and updateProduct to generate slugs dynamically.
+- Created new route singleProductBySlug/:slug to fetch products via slug.
+- Removed id param from frontend routes and updated all navigation logic to use product.slug.

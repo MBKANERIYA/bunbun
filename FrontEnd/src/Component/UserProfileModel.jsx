@@ -29,7 +29,7 @@ const UserProfileModal = ({ isOpen, onClose }) => {
                 <nav className="profile-nav">
                     <a href="/cart" className="profile-link">Cart</a>
                     <a href="/wishlist" className="profile-link">Wishlist</a>
-                    <a href="/editProfile" className="profile-link">Edit Profile</a>
+                    <a href="/edit-profile" className="profile-link">Edit Profile</a>
                 </nav>
 
                 <button className="logout-btn" onClick={handleLogout}>

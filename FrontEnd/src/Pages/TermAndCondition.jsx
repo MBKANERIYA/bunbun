@@ -87,7 +87,7 @@ const TermsAndConditions = () => {
         <section className="mb-6">
           <h2 className="text-xl font-semibold mb-2">9. Privacy</h2>
           <p>
-            Our <a href="/privacyPolicy" className="text-blue-600 underline">Privacy Policy</a>
+            Our <a href="/privacy-policy" className="text-blue-600 underline">Privacy Policy</a>
             explains how we collect, use and share your personal information. By
             using our services you consent to our privacy practices described there.
           </p>

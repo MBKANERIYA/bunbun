@@ -58,9 +58,8 @@ const Cart = () => {
 
     const goToProductPage = (product) => {
         if (!product || !product._id || !product.name) return;
-        const productId = product._id;
-        const productSlug = product.name.replace(/\s+/g, '-').toLowerCase();
-        navigate(`/product/${productId}/${productSlug}`);
+        const productSlug = product.slug || product.name.replace(/\s+/g, '-').toLowerCase();
+        navigate(`/product/${productSlug}`);
     };
 
     useEffect(() => {
@@ -226,7 +225,7 @@ const Cart = () => {
                             <strong>Total</strong>
                             <strong>₹{finalTotal.toLocaleString()}</strong>
                         </div>
-                        <Link to="/address" className="btn btn-primary-filled checkout-btn">
+                        <Link to="/checkout/address" className="btn btn-primary-filled checkout-btn">
                             Proceed to Checkout
                         </Link>
                     </div>

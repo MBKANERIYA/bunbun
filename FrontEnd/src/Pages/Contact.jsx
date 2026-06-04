@@ -1,4 +1,5 @@
 import React from "react";
+import PageMeta from "../Component/PageMeta";
 import { Phone, MessageCircle, ArrowRight } from "lucide-react";
 
 const ContactUs = () => {
@@ -7,6 +8,7 @@ const ContactUs = () => {
   ];
   return (
     <>
+      <PageMeta title="Contact Us" description="Get in touch with Bunbun Clothing. Call or WhatsApp us during business hours for any questions." />
       <div className="slider">
         <div className="slide-track">
           

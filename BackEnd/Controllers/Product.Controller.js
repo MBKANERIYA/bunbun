@@ -60,6 +60,17 @@ module.exports.addProduct = async (req, res) => {
             return res.status(400).json({ error: `You can upload up to ${MAX_ADDITIONAL_IMAGES} additional images.` });
         }
 
+        // Generate slug
+        const generateSlug = (name) => (name || 'product').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+        let baseSlug = generateSlug(body.name);
+        let slug = baseSlug;
+        let count = 1;
+        while (await productSchema.exists({ slug })) {
+            slug = `${baseSlug}-${count}`;
+            count++;
+        }
+        body.slug = slug;
+
         const products = await productService.addProduct(body);
 
         // Push product to category document if it exists
@@ -118,6 +129,18 @@ module.exports.updateProduct = async (req, res) => {
 
         if (hasTooManyAdditionalImages(body.images)) {
             return res.status(400).json({ error: `You can upload up to ${MAX_ADDITIONAL_IMAGES} additional images.` });
+        }
+
+        if (body.name) {
+            const generateSlug = (name) => (name || 'product').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+            let baseSlug = generateSlug(body.name);
+            let slug = baseSlug;
+            let count = 1;
+            while (await productSchema.exists({ slug, _id: { $ne: id } })) {
+                slug = `${baseSlug}-${count}`;
+                count++;
+            }
+            body.slug = slug;
         }
 
         const updatedProduct = await productService.updateProduct(id, body);
@@ -191,6 +214,24 @@ module.exports.getSingleProduct = async (req, res) => {
         message: "product get successfully",
         singleProduct
     })
+}
+
+module.exports.getSingleProductBySlug = async (req, res) => {
+    try {
+        const { slug } = req.params;
+        let singleProduct = await productSchema.findOne({ slug });
+        if (!singleProduct) {
+            return res.status(404).json({
+                message: "Product not found"
+            });
+        }
+        res.status(200).json({
+            message: "product get successfully",
+            singleProduct
+        });
+    } catch (err) {
+        res.status(500).json({ err: err.message });
+    }
 }
 
 module.exports.deleteProduct = async (req, res) => {

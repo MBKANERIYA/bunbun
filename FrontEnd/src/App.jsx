@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Header from "./Component/Header";
 import HomePage from "./Pages/HomePage";
 import Footer from './Component/Footer';
@@ -42,22 +42,42 @@ const AppLayout = () => {
       {!isAdmin && <CartSidebar />}
       {!isAdmin && <Header />}
       <Routes>
+        {/* ── Main Pages ── */}
         <Route path="/" element={<HomePage />} />
-        <Route path="/collection" element={<CollectionPage />} />
+        <Route path="/collections" element={<CollectionPage />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/about" element={<About />} />
         <Route path="/wishlist" element={<Wishlist />} />
-        <Route path="/product/:id/:name" element={<ProductDetails />} />
-        <Route path="/address" element={<AddressForm />} />
+        <Route path="/product/:slug" element={<ProductDetails />} />
+        <Route path="/checkout/address" element={<AddressForm />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
-        <Route path="/ReturnPolicy" element={<ReturnPolicy />} />
-        <Route path="/ShippingPolicy" element={<ShippingPolicy />} />
-        <Route path="/termAndCondtion" element={<TermAndCondition />} />
-        <Route path="/bunbunclothingGold" element={<BunbunClothingGold />} />
-        <Route path="/editProfile" element={<EditProfile />} />
+
+        {/* ── Policy Pages ── */}
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/return-policy" element={<ReturnPolicy />} />
+        <Route path="/shipping-policy" element={<ShippingPolicy />} />
+        <Route path="/terms-and-conditions" element={<TermAndCondition />} />
+
+        {/* ── Brand Pages ── */}
+        <Route path="/bunbun-clothing-gold" element={<BunbunClothingGold />} />
+        <Route path="/edit-profile" element={<EditProfile />} />
+
+        {/* ── Admin ── */}
         <Route path="/admin" element={<AdminPanel />} />
+
+        {/* ── Legacy Route Redirects (301-style for SEO) ── */}
+        <Route path="/collection" element={<Navigate to="/collections" replace />} />
+        <Route path="/PrivacyPolicy" element={<Navigate to="/privacy-policy" replace />} />
+        <Route path="/privacyPolicy" element={<Navigate to="/privacy-policy" replace />} />
+        <Route path="/ReturnPolicy" element={<Navigate to="/return-policy" replace />} />
+        <Route path="/returnPolicy" element={<Navigate to="/return-policy" replace />} />
+        <Route path="/ShippingPolicy" element={<Navigate to="/shipping-policy" replace />} />
+        <Route path="/shippingPolicy" element={<Navigate to="/shipping-policy" replace />} />
+        <Route path="/termAndCondtion" element={<Navigate to="/terms-and-conditions" replace />} />
+        <Route path="/bunbunclothingGold" element={<Navigate to="/bunbun-clothing-gold" replace />} />
+        <Route path="/editProfile" element={<Navigate to="/edit-profile" replace />} />
+        <Route path="/address" element={<Navigate to="/checkout/address" replace />} />
       </Routes>
       {!isAdmin && <Footer />}
     </>

@@ -12,9 +12,8 @@ const CartSidebar = () => {
 
     const handleCardClick = (item) => {
         if (!item || !item.name || !item._id) return; // safety check
-        const productId = item._id;
-        const productSlug = item.name.replace(/\s+/g, '-').toLowerCase();
-        navigate(`/product/${productId}/${productSlug}`);
+        const productSlug = item.slug || item.name.replace(/\s+/g, '-').toLowerCase();
+        navigate(`/product/${productSlug}`);
     };
 
 
@@ -31,7 +30,7 @@ const CartSidebar = () => {
     };
     const handleCheckout = () => {
         closeCart();
-        navigate("/address");
+        navigate("/checkout/address");
     };
 
     const subtotal = cart?.cartTotal || 0;

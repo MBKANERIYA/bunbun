@@ -1,8 +1,10 @@
 import React from 'react';
+import PageMeta from '../Component/PageMeta';
 
 const AboutUs = () => {
   return (
     <div className="max-w-6xl mx-auto px-6 py-16 text-gray-800 container pb-5 ps-5 pe-5">
+      <PageMeta title="About Us" description="Learn about Bunbun Clothing — where tradition meets elegance. Premium Indian ethnic wear crafted with passion." />
       <h1 className="text-4xl font-bold mb-6 text-center text-rose-700">About Bunbun Clothing</h1>
       <p className="text-lg leading-relaxed mb-8 text-center">
         Welcome to <span className="font-semibold text-rose-600">Bunbun Clothing</span> — where tradition meets elegance. We are more than just a saree brand; we are a celebration of India’s timeless artistry, weaving together heritage, culture, and modern sophistication in every drape.

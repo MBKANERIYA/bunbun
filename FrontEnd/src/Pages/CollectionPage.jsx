@@ -5,6 +5,7 @@ import { Accordion, Form, Offcanvas, Button } from "react-bootstrap";
 import { BsFilterLeft, BsFillGrid3X3GapFill, BsFillGridFill, BsGrid1X2Fill } from 'react-icons/bs';
 
 import ProductCard from "../Component/ProductCard";
+import PageMeta from "../Component/PageMeta";
 import { apiUrl } from "../utils/apiConfig";
 
 const CollectionPage = () => {
@@ -141,6 +142,7 @@ const CollectionPage = () => {
 
     return (
         <div className="container-fluid collection-page my-5">
+            <PageMeta title={category ? `${category} Collection` : 'All Collections'} description={`Shop ${category || 'all'} products at Bunbun Clothing. Filter by price, color, and category.`} />
             <Button
                 variant="dark"
                 className="d-lg-none w-100 mb-4 mobile-filter-btn"

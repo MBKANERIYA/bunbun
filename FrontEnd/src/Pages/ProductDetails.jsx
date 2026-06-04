@@ -33,7 +33,7 @@ const formatPrice = (value) =>
     }).format(Number(value) || 0);
 
 const ProductDetails = () => {
-    const { id } = useParams();
+    const { slug } = useParams();
     const navigate = useNavigate();
     const { addToCart } = useCart();
     const { isWishlisted, addToWishlist, removeFromWishlist } = useWishlist();
@@ -107,14 +107,14 @@ const ProductDetails = () => {
         const limitedItems = [product, ...filteredItems].slice(0, 6);
 
         localStorage.setItem("recentlyViewed", JSON.stringify(limitedItems));
-        setRecentlyViewed(limitedItems.filter((item) => item._id !== id));
-    }, [product, id]);
+        setRecentlyViewed(limitedItems.filter((item) => item._id !== product._id));
+    }, [product]);
 
     useEffect(() => {
         const fetchProduct = async () => {
             try {
                 const { data } = await axios.get(
-                    apiUrl(`/v1/product/singleProduct/${id}`)
+                    apiUrl(`/v1/product/singleProductBySlug/${slug}`)
                 );
 
                 if (data.singleProduct) {
@@ -125,12 +125,12 @@ const ProductDetails = () => {
             }
         };
 
-        fetchProduct();
-    }, [id]);
+        if (slug) fetchProduct();
+    }, [slug]);
 
-    const fetchRatings = async () => {
+    const fetchRatings = async (productId) => {
         try {
-            const { data } = await axios.get(apiUrl(`/v1/rating/getRating/${id}`));
+            const { data } = await axios.get(apiUrl(`/v1/rating/getRating/${productId}`));
             setRatings(data || emptyRatings);
         } catch (error) {
             if (error.response?.status === 404) {
@@ -142,8 +142,10 @@ const ProductDetails = () => {
     };
 
     useEffect(() => {
-        fetchRatings();
-    }, [id]);
+        if (product && product._id) {
+            fetchRatings(product._id);
+        }
+    }, [product]);
 
     const handleAddToCart = async () => {
         if (!selectedSize) {
@@ -198,7 +200,7 @@ const ProductDetails = () => {
             setIsSubmitting(true);
             const formData = new FormData();
             formData.append("userId", userId);
-            formData.append("productId", id);
+            formData.append("productId", product._id);
             formData.append("userRating", rating);
             const finalReview = reviewTitle ? `**${reviewTitle}**\n${review}` : review;
             formData.append("userReview", finalReview.trim());
@@ -215,7 +217,7 @@ const ProductDetails = () => {
             setReview("");
             setReviewTitle("");
             setImage(null);
-            await fetchRatings();
+            await fetchRatings(product._id);
         } catch (error) {
             console.error("Error submitting rating:", error);
             setMessage(error.response?.data?.message || "Error submitting rating");

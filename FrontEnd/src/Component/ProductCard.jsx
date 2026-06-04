@@ -17,7 +17,7 @@ const ProductCard = ({ product, showWishlistIcon = true }) => {
     const productId = product._id;
     const isProductWishlisted = isWishlisted(productId);
 
-    const productSlug = (product.name || 'product').replace(/ /g, '-').toLowerCase();
+    const productSlug = product.slug || (product.name || 'product').replace(/ /g, '-').toLowerCase();
 
     const handleToggleWishlist = async (e) => {
         e.stopPropagation(); // Prevents navigation
@@ -38,7 +38,7 @@ const ProductCard = ({ product, showWishlistIcon = true }) => {
     };
 
     const handleCardClick = () => {
-        navigate(`/product/${productId}/${productSlug}`);
+        navigate(`/product/${productSlug}`);
     };
 
     const mrp = Number(product.mrp);

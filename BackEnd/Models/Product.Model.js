@@ -7,6 +7,10 @@ let productSchema = new mongoose.Schema({
     image: {
         type: String
     },
+    slug: {
+        type: String,
+        unique: true
+    },
     images: [{
         type: String
     }],

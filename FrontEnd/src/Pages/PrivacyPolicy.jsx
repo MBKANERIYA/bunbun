@@ -1,8 +1,10 @@
 import React from "react";
+import PageMeta from "../Component/PageMeta";
 
 const PrivacyPolicy = () => {
   return (
     <div className="bg-gray-50 min-h-screen py-12 px-6 md:px-16">
+      <PageMeta title="Privacy Policy" description="Bunbun Clothing Privacy Policy — how we collect, use, and protect your personal information." />
       <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-md p-8">
         <h1 className="text-3xl font-bold mb-2">Privacy Policy</h1>
         <p className="text-gray-500 mb-6">Last updated: <strong>October 14, 2025</strong></p>

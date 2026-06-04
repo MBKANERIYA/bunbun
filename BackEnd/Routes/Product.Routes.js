@@ -26,4 +26,6 @@ route.delete("/deleteProduct/:id", productController.deleteProduct)
 route.post("/filterProduct", productController.filterProduct)
 route.get("/singleProduct/:productId", productController.getSingleProduct)
 
+route.get('/singleProductBySlug/:slug', productController.getSingleProductBySlug)
+
 module.exports = route

@@ -38,10 +38,10 @@ const Footer = () => {
             <ul className="list-unstyled">
               <a href="/about">About Us</a>
               <a href="/contact">Contact Us</a>
-              <a href="/returnPolicy">Return Policy</a>
-              <a href="/shippingPolicy">Shipping Policy</a>
-              <a href="/privacyPolicy">Privacy Policy</a>
-              <a href="/termAndCondtion">Terms of Service</a>
+              <a href="/return-policy">Return Policy</a>
+              <a href="/shipping-policy">Shipping Policy</a>
+              <a href="/privacy-policy">Privacy Policy</a>
+              <a href="/terms-and-conditions">Terms of Service</a>
               <a href="/">Track Order</a>
               <a href="/">Place Return Request</a>
             </ul>

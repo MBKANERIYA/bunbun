@@ -45,9 +45,8 @@ const DetailedSummary = ({ selectedAddress }) => {
 
     const goToProductPage = (product) => {
         if (!product || !product._id || !product.name) return;
-        const productId = product._id;
-        const productSlug = product.name.replace(/\s+/g, '-').toLowerCase();
-        navigate(`/product/${productId}/${productSlug}`);
+        const productSlug = product.slug || product.name.replace(/\s+/g, '-').toLowerCase();
+        navigate(`/product/${productSlug}`);
     };
 
     const subtotal = parsePrice(cart.cartTotal) || 0;

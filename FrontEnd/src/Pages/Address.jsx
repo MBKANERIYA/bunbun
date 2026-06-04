@@ -4,8 +4,12 @@ import { FaPlus, FaTimes, FaHome } from "react-icons/fa";
 import DetailedSummary from "./OrderSummery";
 import { apiUrl } from "../utils/apiConfig";
 
+import { getAuthUserId } from "../utils/auth";
+import { useNavigate } from "react-router-dom";
+
 const AddAddress = () => {
-  const userId = "6892e8456c2cbf8ecb95c1ea";
+  const userId = getAuthUserId();
+  const navigate = useNavigate();
   const [showForm, setShowForm] = useState(false);
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
@@ -42,8 +46,13 @@ const AddAddress = () => {
   };
 
   useEffect(() => {
+    if (!userId) {
+      alert("Please log in to proceed to checkout.");
+      navigate("/");
+      return;
+    }
     fetchAddresses();
-  }, []);
+  }, [userId, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

@@ -34,13 +34,12 @@ const Header = () => {
     const closeLoginModal = () => setIsLoginModalOpen(false);
     const closeProfileModal = () => setIsProfileModalOpen(false);
 
-
     const toggleSearch = () => {
         setShowSearch(!showSearch);
     };
 
     const handleCategoryClick = (category) => {
-        navigate(`/collection?category=${encodeURIComponent(category)}`);
+        navigate(`/collections?category=${encodeURIComponent(category)}`);
     };
 
     return (
@@ -97,9 +96,9 @@ const Header = () => {
                             <div className="collapse navbar-collapse" id="mainNav">
                                 {/* Your <ul className="navbar-nav">...</ul> remains unchanged here */}
                                 <ul className="navbar-nav mx-auto">
-                                    <li className="nav-item" ><Link to="collection?category=Saree"className="nav-link">Sarees</Link></li>
+                                    <li className="nav-item" ><Link to="/collections?category=Saree" className="nav-link">Sarees</Link></li>
                                     <li className="nav-item dropdown">
-                                        <a className="nav-link text-danger" href="/collection" role="button">Shop</a>
+                                        <a className="nav-link text-danger" href="/collections" role="button">Shop</a>
                                         <div className="dropdown-menu mega-menu">
                                             <div className="row g-4">
 
@@ -107,25 +106,25 @@ const Header = () => {
                                                 <div className="col-md-4">
                                                     <h5>By Category</h5>
                                                     <a className="dropdown-item" onClick={() => handleCategoryClick("Saree")} style={{ cursor: "pointer" }}>All Sarees</a>
-                                                    <Link className="dropdown-item" to="/shop/ready-to-wear">Ready to Wear Sarees</Link>
-                                                    <Link className="dropdown-item" to="/shop/essentials">Essentials</Link>
-                                                    <Link className="dropdown-item" to="/bunbunclothingGold">Bunbun Clothing Gold</Link>
+                                                    <Link className="dropdown-item" to="/collections?category=ReadyToWear">Ready to Wear Sarees</Link>
+                                                    <Link className="dropdown-item" to="/collections?category=Essentials">Essentials</Link>
+                                                    <Link className="dropdown-item" to="/bunbun-clothing-gold">Bunbun Clothing Gold</Link>
                                                     <a className="dropdown-item" onClick={() => handleCategoryClick("Blouse")} style={{ cursor: "pointer" }}>Blouses</a>
                                                 </div>
                                                 {/* Column 2: Shop by Collection */}
                                                 <div className="col-md-4">
                                                     <h5>By Collection</h5>
-                                                    <Link className="dropdown-item" to="/collections/all">Explore Collections</Link>
-                                                    <Link className="dropdown-item" to="/collections/trending">Trending Now</Link>
-                                                    <Link className="dropdown-item" to="/collections/bestsellers">Best Sellers</Link>
-                                                    <Link className="dropdown-item" to="/collections/heritage">Indian Heritage</Link>
+                                                    <Link className="dropdown-item" to="/collections">Explore Collections</Link>
+                                                    <Link className="dropdown-item" to="/collections?sort=trending">Trending Now</Link>
+                                                    <Link className="dropdown-item" to="/collections?sort=bestsellers">Best Sellers</Link>
+                                                    <Link className="dropdown-item" to="/collections?category=Heritage">Indian Heritage</Link>
                                                 </div>
 
                                             </div>
                                         </div>
                                     </li>
                                     <li className="nav-item" ><Link className="nav-link">Ready to Wear Sarees</Link></li>
-                                    <li className="nav-item" ><Link className="nav-link" to="/bunbunclothingGold" style={{ color: "#d4af37" }}>Bunbun Clothing Gold</Link></li>
+                                    <li className="nav-item" ><Link className="nav-link" to="/bunbun-clothing-gold" style={{ color: "#d4af37" }}>Bunbun Clothing Gold</Link></li>
                                     <li className="nav-item">
                                         <Link className="nav-link" to="/about">About Us</Link>
                                     </li>
@@ -166,7 +165,6 @@ const Header = () => {
             <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} />
             <UserProfileModal isOpen={isProfileModalOpen} onClose={closeProfileModal} />
         </header>
-        // The old search overlay div has been completely removed from here
     );
 };
 

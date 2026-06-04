@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import PageMeta from "../Component/PageMeta"
 import axios from "axios"
 import ProductCard from "../Component/ProductCard"
 import "slick-carousel/slick/slick.css";
@@ -104,7 +105,7 @@ const HomePage = () => {
     }, [])
 
     const handleCategoryClick = (category) => {
-        navigate(`/collection?category=${encodeURIComponent(category)}`);
+        navigate(`/collections?category=${encodeURIComponent(category)}`);
     };
 
     const settings = {
@@ -131,6 +132,7 @@ const HomePage = () => {
 
     return (
         <div>
+            <PageMeta title="Shop Indian Sarees, Blouses & Shapewear Online" description="Bunbun Clothing - Premium Indian ethnic wear. Shop the latest sarees, blouses, shapewear and more with free shipping." />
             <section>
                 <div className="topBanner">
                     <img src="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780463096/bunbun_banner_1_fdn2hr.png" alt="Home Hero Banner" className="img-fluid w-100" />
