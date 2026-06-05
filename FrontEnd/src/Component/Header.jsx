@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faSearch, faShoppingBag, faTimes, faUser } from '@fortawesome/free-solid-svg-icons';
+import { Heart, Search, ShoppingBag, X, User, ChevronRight, ChevronLeft } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useWishlist } from "./WishlistContext";
 import { useCart } from "./CartContext";
@@ -18,6 +17,10 @@ const Header = () => {
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     // Add new state for the profile modal
     const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+
+    // Mobile menu state
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [activeSubmenu, setActiveSubmenu] = useState(null);
 
     const handleAccountClick = () => {
         const authToken = localStorage.getItem('authToken');
@@ -42,18 +45,30 @@ const Header = () => {
         navigate(`/collections?category=${encodeURIComponent(category)}`);
     };
 
+    const openMobileMenu = () => {
+        setMobileMenuOpen(true);
+        setActiveSubmenu(null);
+    };
+
+    const closeMobileMenu = () => {
+        setMobileMenuOpen(false);
+        setActiveSubmenu(null);
+    };
+
+    const handleMobileNavClick = (path) => {
+        navigate(path);
+        closeMobileMenu();
+    };
+
     return (
         <header className="main-header sticky-top">
             <nav className="navbar navbar-expand-lg navbar-light bg-white">
                 <div className="container-fluid align-items-center">
 
-                    {/* --- THIS IS THE MAIN CHANGE --- */}
-                    {/* We now render one of two views based on the 'showSearch' state */}
-
                     {showSearch ? (
                         // --- VIEW 1: WHEN SEARCH IS ACTIVE ---
                         <div className="w-100 d-flex align-items-center search-header-active">
-                            <FontAwesomeIcon icon={faSearch} className="search-bar-icon" />
+                            <Search className="search-bar-icon" />
                             <input
                                 type="text"
                                 className="form-control form-control-lg border-0 bg-transparent search-bar-input"
@@ -63,12 +78,12 @@ const Header = () => {
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
                             <button className="icon-btn close-search-btn" title="Close Search" onClick={toggleSearch}>
-                                <FontAwesomeIcon icon={faTimes} />
+                                <X />
                             </button>
                         </div>
 
                     ) : (
-                        // --- VIEW 2: NORMAL HEADER (wrapped in a React Fragment) ---
+                        // --- VIEW 2: NORMAL HEADER ---
                         <>
                             {/* Logo */}
                             <Link className="navbar-brand" to="/">
@@ -79,26 +94,22 @@ const Header = () => {
                                 />
                             </Link>
 
-                            {/* Mobile Toggler */}
+                            {/* Mobile Toggler - custom handler instead of Bootstrap collapse */}
                             <button
                                 className="navbar-toggler"
                                 type="button"
-                                data-bs-toggle="collapse"
-                                data-bs-target="#mainNav"
-                                aria-controls="mainNav"
-                                aria-expanded="false"
+                                onClick={openMobileMenu}
                                 aria-label="Toggle navigation"
                             >
                                 <span className="navbar-toggler-icon"></span>
                             </button>
 
-                            {/* Navigation Links */}
+                            {/* Desktop Navigation Links (hidden on mobile, shown on lg+) */}
                             <div className="collapse navbar-collapse" id="mainNav">
-                                {/* Your <ul className="navbar-nav">...</ul> remains unchanged here */}
                                 <ul className="navbar-nav mx-auto">
                                     <li className="nav-item" ><Link to="/collections?category=Saree" className="nav-link">Sarees</Link></li>
                                     <li className="nav-item dropdown">
-                                        <a className="nav-link text-danger" href="/collections" role="button">Shop</a>
+                                        <a className="nav-link dropdown-toggle text-danger" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
                                         <div className="dropdown-menu mega-menu">
                                             <div className="row g-4">
 
@@ -137,13 +148,10 @@ const Header = () => {
                             {/* Action Icons */}
                             <div className="d-flex align-items-center fs-5 header-icons">
                                 <button className="icon-btn" title="Search" onClick={toggleSearch}>
-                                    <FontAwesomeIcon icon={faSearch} />
-                                </button>
-                                <button onClick={handleAccountClick} className="icon-btn" title="My Account">
-                                    <FontAwesomeIcon icon={faUser} />
+                                    <Search />
                                 </button>
                                 <Link to="/wishlist" className="icon-btn" title="Wishlist">
-                                    <FontAwesomeIcon icon={faHeart} />
+                                    <Heart />
 
                                     {/* Conditionally render the badge only if count > 0 */}
                                     {wishlistCount > 0 && (
@@ -151,7 +159,7 @@ const Header = () => {
                                     )}
                                 </Link>
                                 <Link to="/cart" className="icon-btn" title="Shopping Cart">
-                                    <FontAwesomeIcon icon={faShoppingBag} />
+                                    <ShoppingBag />
                                     {itemCount > 0 && (
                                         <span className="count-badge">{itemCount}</span>
                                     )}
@@ -162,6 +170,98 @@ const Header = () => {
                     )}
                 </div>
             </nav>
+
+            {/* ===== MOBILE OVERLAY MENU ===== */}
+            <div className={`mobile-menu-overlay ${mobileMenuOpen ? 'open' : ''}`} onClick={closeMobileMenu}></div>
+            <div className={`mobile-menu-panel ${mobileMenuOpen ? 'open' : ''}`}>
+                {/* Panel Header */}
+                <div className="mobile-menu-header">
+                    <button className="mobile-menu-close" onClick={closeMobileMenu}>
+                        <X />
+                    </button>
+                    <Link to="/cart" className="mobile-menu-cart" onClick={closeMobileMenu}>
+                        <ShoppingBag />
+                        {itemCount > 0 && (
+                            <span className="count-badge">{itemCount}</span>
+                        )}
+                    </Link>
+                </div>
+
+                {/* Main Menu (slides out when submenu is active) */}
+                <div className={`mobile-menu-body ${activeSubmenu ? 'slide-out' : ''}`}>
+                    <ul className="mobile-nav-list">
+                        <li>
+                            <a onClick={() => handleMobileNavClick('/collections?category=Saree')}>
+                                SAREE
+                            </a>
+                        </li>
+                        <li>
+                            <a onClick={() => setActiveSubmenu('shop')}>
+                                SHOP
+                                <ChevronRight className="mobile-nav-arrow" />
+                            </a>
+                        </li>
+                        <li>
+                            <a onClick={() => handleMobileNavClick('/collections?category=ReadyToWear')}>
+                                READY TO WEAR SAREES
+                            </a>
+                        </li>
+                        <li>
+                            <a onClick={() => setActiveSubmenu('collections')}>
+                                COLLECTIONS
+                                <ChevronRight className="mobile-nav-arrow" />
+                            </a>
+                        </li>
+                        <li>
+                            <a onClick={() => handleMobileNavClick('/bunbun-clothing-gold')}>
+                                BUNBUN GOLD
+                            </a>
+                        </li>
+                        <li>
+                            <a onClick={() => handleMobileNavClick('/sale')}>
+                                SALE
+                            </a>
+                        </li>
+                        <li>
+                            <a onClick={() => handleMobileNavClick('/about')}>
+                                ABOUT US
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                {/* Shop Submenu */}
+                <div className={`mobile-submenu ${activeSubmenu === 'shop' ? 'slide-in' : ''}`}>
+                    <button className="mobile-submenu-back" onClick={() => setActiveSubmenu(null)}>
+                        <ChevronLeft />
+                        <span>BACK</span>
+                    </button>
+                    <h4 className="mobile-submenu-title">SHOP</h4>
+                    <ul className="mobile-nav-list">
+                        <li><a onClick={() => handleMobileNavClick('/collections?category=Saree')}>All Sarees</a></li>
+                        <li><a onClick={() => handleMobileNavClick('/collections?category=ReadyToWear')}>Ready to Wear Sarees</a></li>
+                        <li><a onClick={() => handleMobileNavClick('/collections?category=Essentials')}>Essentials</a></li>
+                        <li><a onClick={() => handleMobileNavClick('/bunbun-clothing-gold')}>Bunbun Clothing Gold</a></li>
+                        <li><a onClick={() => handleMobileNavClick('/collections?category=Blouse')}>Blouses</a></li>
+                    </ul>
+                </div>
+
+                {/* Collections Submenu */}
+                <div className={`mobile-submenu ${activeSubmenu === 'collections' ? 'slide-in' : ''}`}>
+                    <button className="mobile-submenu-back" onClick={() => setActiveSubmenu(null)}>
+                        <ChevronLeft />
+                        <span>BACK</span>
+                    </button>
+                    <h4 className="mobile-submenu-title">COLLECTIONS</h4>
+                    <ul className="mobile-nav-list">
+                        <li><a onClick={() => handleMobileNavClick('/collections')}>Explore Collections</a></li>
+                        <li><a onClick={() => handleMobileNavClick('/collections?sort=trending')}>Trending Now</a></li>
+                        <li><a onClick={() => handleMobileNavClick('/collections?sort=bestsellers')}>Best Sellers</a></li>
+                        <li><a onClick={() => handleMobileNavClick('/collections?category=Heritage')}>Indian Heritage</a></li>
+                    </ul>
+                </div>
+            </div>
+
             <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} />
             <UserProfileModal isOpen={isProfileModalOpen} onClose={closeProfileModal} />
         </header>

@@ -135,14 +135,34 @@ const HomePage = () => {
             <PageMeta title="Shop Indian Sarees, Blouses & Shapewear Online" description="Bunbun Clothing - Premium Indian ethnic wear. Shop the latest sarees, blouses, shapewear and more with free shipping." />
             <section>
                 <div className="topBanner">
-                    <img src="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780463096/bunbun_banner_1_fdn2hr.png" alt="Home Hero Banner" className="img-fluid w-100" />
+                    <Carousel 
+                        showThumbs={false} 
+                        showStatus={false} 
+                        infiniteLoop 
+                        autoPlay 
+                        interval={4000}
+                        stopOnHover={false}
+                    >
+                        <div>
+                            <picture>
+                                <source media="(max-width: 768px)" srcSet="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780655158/sfvc_1_yae3sr.png" />
+                                <img src="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780463096/bunbun_banner_1_fdn2hr.png" alt="Home Hero Banner" className="img-fluid w-100" />
+                            </picture>
+                        </div>
+                        <div>
+                            <picture>
+                                <source media="(max-width: 768px)" srcSet="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780657437/jfyg_vqmwqn.png" />
+                                <img src="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780655163/jfythg_owjoqg.png" alt="Home Hero Banner 2" className="img-fluid w-100" />
+                            </picture>
+                        </div>
+                    </Carousel>
                 </div>
             </section>
-            <div className="slider">
-                <div className="slide-track">
+            <div className="icon-slider">
+                <div className="icon-slide-track">
                     {loopIcons.map((icon, index) => (
-                        <div className="slide" key={index}>
-                            <img src={icon} style={{ width: "150px" }} alt={`icon-${index}`} />
+                        <div className="icon-slide" key={index}>
+                            <img src={icon} alt={`icon-${index}`} />
                         </div>
                     ))}
                 </div>
@@ -178,7 +198,7 @@ const HomePage = () => {
                         {(product || [])
                             .filter((p) => p.subcategory === "Silk Saree")
                             .map((product, index) => (
-                                <div key={index} className="px-3 d-flex justify-content-center">
+                                <div key={index} className="px-2">
                                     <ProductCard product={product} />
                                 </div>
                             ))}
@@ -196,7 +216,7 @@ const HomePage = () => {
                             {(product || [])
                                 .filter((p) => p.subcategory === "Georgette Saree")
                                 .map((product, index) => (
-                                    <div key={index} className="px-2 d-flex justify-content-center">
+                                    <div key={index} className="px-2">
                                         <ProductCard product={product} />
                                     </div>
                                 ))}
@@ -231,11 +251,11 @@ const HomePage = () => {
                     </div>
                 </div>
             </section>
-            <div className="slider">
-                <div className="slide-track">
+            <div className="icon-slider">
+                <div className="icon-slide-track">
                     {loopMedia.map((icon, index) => (
-                        <div className="slide" key={index}>
-                            <img src={icon} style={{ width: "150px" }} alt={`icon-${index}`} />
+                        <div className="icon-slide" key={index}>
+                            <img src={icon} alt={`icon-${index}`} />
                         </div>
                     ))}
                 </div>
@@ -251,7 +271,7 @@ const HomePage = () => {
                             {(product || [])
                                 .filter((p) => p.subcategory === "Printed Saree")
                                 .map((product, index) => (
-                                    <div key={index} className="px-2 d-flex justify-content-center">
+                                    <div key={index} className="px-2">
                                         <ProductCard product={product} />
                                     </div>
                                 ))}
