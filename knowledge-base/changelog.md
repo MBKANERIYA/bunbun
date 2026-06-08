@@ -300,6 +300,13 @@
 **Files Changed**: `FrontEnd/src/Style/Header.css`
 - Modified `.mobile-menu-panel` to use `left: 0` and `transform: translateX(-100%)`.
 
+## 2026-06-08 — Expand YouTube Shorts Section
+**What**: Updated the "FEATURED PRODUCTS" shorts section to display 5 videos instead of 4, keeping them all in a single row.
+**Why**: User requested 5 videos in the grid, duplicating one of the existing videos to test the layout.
+**Files Changed**: `FrontEnd/src/Pages/HomePage.jsx`
+- Changed the grid classes from `.col-6 .col-md-3` to use Bootstrap 5's `.row-cols-md-5` with auto-flowing columns `.col`.
+- Added a 5th iframe matching the first YouTube short.
+
 ## 2026-06-08 — Header UI Polish & Login Button
 **What**: Removed the default border and focus outline from the mobile menu hamburger toggle. Added a prominent Login/Register button to the bottom of the mobile slide-out menu.
 **Why**: User requested removing the border from the toggle button and adding a login/logout button only in the mobile dropdown at the bottom.

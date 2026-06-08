@@ -285,9 +285,9 @@ const HomePage = () => {
                 </div>
             </div>
             <section className="featured-shorts mt-5 container-fluid pe-5 ps-5">
-                <h2 className="text-center fw-bold mb-4">FEATURED SHORTS</h2>
-                <div className="row g-4">
-                    <div className="col-6 col-md-3">
+                <h2 className="text-center fw-bold mb-4">FEATURED PRODUCTS</h2>
+                <div className="row row-cols-2 row-cols-md-5 g-4 justify-content-center">
+                    <div className="col">
                         <div className="short-video-card">
                             <iframe
                                 src="https://www.youtube.com/embed/S7MwBlM3HpU?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=S7MwBlM3HpU&playsinline=1"
@@ -300,7 +300,7 @@ const HomePage = () => {
                             ></iframe>
                         </div>
                     </div>
-                    <div className="col-6 col-md-3">
+                    <div className="col">
                         <div className="short-video-card">
                             <iframe
                                 src="https://www.youtube.com/embed/NiRjMVy-Tdk?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=NiRjMVy-Tdk&playsinline=1"
@@ -313,7 +313,7 @@ const HomePage = () => {
                             ></iframe>
                         </div>
                     </div>
-                    <div className="col-6 col-md-3">
+                    <div className="col">
                         <div className="short-video-card">
                             <iframe
                                 src="https://www.youtube.com/embed/JXFPwReAGN4?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=JXFPwReAGN4&playsinline=1"
@@ -326,10 +326,23 @@ const HomePage = () => {
                             ></iframe>
                         </div>
                     </div>
-                    <div className="col-6 col-md-3">
+                    <div className="col">
                         <div className="short-video-card">
                             <iframe
                                 src="https://www.youtube.com/embed/BEJ9-sMNnNQ?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=BEJ9-sMNnNQ&playsinline=1"
+                                title="YouTube video player"
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowFullScreen
+                                className="w-100"
+                                style={{ aspectRatio: "9/16" }}
+                            ></iframe>
+                        </div>
+                    </div>
+                    <div className="col">
+                        <div className="short-video-card">
+                            <iframe
+                                src="https://www.youtube.com/embed/S7MwBlM3HpU?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=S7MwBlM3HpU&playsinline=1"
                                 title="YouTube video player"
                                 frameBorder="0"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
