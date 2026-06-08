@@ -10,9 +10,16 @@ import { useNavigate } from "react-router-dom";
 const AddAddress = () => {
   const userId = getAuthUserId();
   const navigate = useNavigate();
-  const [showForm, setShowForm] = useState(false);
+  const isGuest = !userId;
+
+  const [showForm, setShowForm] = useState(isGuest); // Auto-open form for guests
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
+
+  // Guest info fields
+  const [guestName, setGuestName] = useState("");
+  const [guestPhone, setGuestPhone] = useState("");
+
   const [address, setAddress] = useState({
     street: "",
     city: "",
@@ -24,8 +31,9 @@ const AddAddress = () => {
     isDefault: false,
   });
 
-  // Fetch last 5 addresses
+  // Fetch last 3 addresses (only for logged-in users)
   const fetchAddresses = async () => {
+    if (!userId) return;
     try {
       const res = await axios.get(apiUrl(`/v1/address/getAdd/${userId}`));
       const all = res.data.addresses || [];
@@ -46,13 +54,10 @@ const AddAddress = () => {
   };
 
   useEffect(() => {
-    if (!userId) {
-      alert("Please log in to proceed to checkout.");
-      navigate("/");
-      return;
+    if (userId) {
+      fetchAddresses();
     }
-    fetchAddresses();
-  }, [userId, navigate]);
+  }, [userId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -65,6 +70,30 @@ const AddAddress = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (isGuest) {
+      // Validate guest fields
+      if (!guestName.trim()) {
+        alert("Please enter your full name.");
+        return;
+      }
+      if (!guestPhone.trim() || guestPhone.trim().length < 10) {
+        alert("Please enter a valid 10-digit mobile number.");
+        return;
+      }
+
+      // For guests, just use the address locally (don't save to DB)
+      const guestAddress = {
+        ...address,
+        guestName: guestName.trim(),
+        guestPhone: guestPhone.trim(),
+      };
+      setSelectedAddress(guestAddress);
+      setShowForm(false);
+      return;
+    }
+
+    // Logged-in user: save address to DB
     try {
       const payload = { userId, address };
       await axios.post(apiUrl("/v1/address/add"), payload, {
@@ -106,17 +135,19 @@ const AddAddress = () => {
             boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
           }}
         >
-          <h2 className="m-0">Add a New Address</h2>
-          <button
-            className="toggle-btn btn btn-outline-dark"
-            onClick={() => setShowForm(!showForm)}
-          >
-            {showForm ? <><FaTimes /> Close</> : <><FaPlus /> Add</>}
-          </button>
+          <h2 className="m-0">{isGuest ? "Delivery Details" : "Add a New Address"}</h2>
+          {!isGuest && (
+            <button
+              className="toggle-btn btn btn-outline-dark"
+              onClick={() => setShowForm(!showForm)}
+            >
+              {showForm ? <><FaTimes /> Close</> : <><FaPlus /> Add</>}
+            </button>
+          )}
         </div>
 
-        {/* Select Existing Address Dropdown */}
-        {!showForm && addresses.length > 0 && (
+        {/* Select Existing Address Dropdown (logged-in only) */}
+        {!isGuest && !showForm && addresses.length > 0 && (
           <div className="ms-4 me-4 mt-4">
             <label htmlFor="selectAddress" className="form-label fw-semibold">Select an Address</label>
             <select
@@ -138,10 +169,49 @@ const AddAddress = () => {
           </div>
         )}
 
-        {/* Collapsible Add Form */}
+        {/* Address Form */}
         {showForm && (
           <div className="address-form-container pb-0">
             <form onSubmit={handleSubmit} className="address-form">
+
+              {/* Guest-only: Name & Phone fields */}
+              {isGuest && (
+                <>
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label htmlFor="guestName">Full Name <span style={{ color: 'red' }}>*</span></label>
+                      <input
+                        type="text"
+                        id="guestName"
+                        name="guestName"
+                        value={guestName}
+                        onChange={(e) => setGuestName(e.target.value)}
+                        placeholder="e.g., Priya Sharma"
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="guestPhone">Mobile Number <span style={{ color: 'red' }}>*</span></label>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ fontWeight: 600, fontSize: '0.95rem', color: '#555' }}>+91</span>
+                        <input
+                          type="tel"
+                          id="guestPhone"
+                          name="guestPhone"
+                          value={guestPhone}
+                          onChange={(e) => setGuestPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                          placeholder="e.g., 9876543210"
+                          maxLength={10}
+                          required
+                          style={{ flex: 1 }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <hr style={{ margin: '10px 0 15px', borderColor: '#eee' }} />
+                </>
+              )}
+
               <div className="form-group">
                 <label htmlFor="street">Street Address</label>
                 <input
@@ -220,50 +290,84 @@ const AddAddress = () => {
                 ></textarea>
               </div>
 
-              <div className="form-group">
-                <label>Address Type</label>
-                <div className="radio-group">
-                  <label>
-                    <input
-                      type="radio"
-                      name="type"
-                      value="shipping"
-                      checked={address.type === "shipping"}
-                      onChange={handleChange}
-                    />
-                    Shipping
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="type"
-                      value="billing"
-                      checked={address.type === "billing"}
-                      onChange={handleChange}
-                    />
-                    Billing
-                  </label>
-                </div>
-              </div>
+              {!isGuest && (
+                <>
+                  <div className="form-group">
+                    <label>Address Type</label>
+                    <div className="radio-group">
+                      <label>
+                        <input
+                          type="radio"
+                          name="type"
+                          value="shipping"
+                          checked={address.type === "shipping"}
+                          onChange={handleChange}
+                        />
+                        Shipping
+                      </label>
+                      <label>
+                        <input
+                          type="radio"
+                          name="type"
+                          value="billing"
+                          checked={address.type === "billing"}
+                          onChange={handleChange}
+                        />
+                        Billing
+                      </label>
+                    </div>
+                  </div>
 
-              <div className="form-group checkbox-group">
-                <input
-                  type="checkbox"
-                  id="isDefault"
-                  name="isDefault"
-                  checked={address.isDefault}
-                  onChange={handleCheckboxChange}
-                />
-                <label htmlFor="isDefault">Set as default address</label>
-              </div>
+                  <div className="form-group checkbox-group">
+                    <input
+                      type="checkbox"
+                      id="isDefault"
+                      name="isDefault"
+                      checked={address.isDefault}
+                      onChange={handleCheckboxChange}
+                    />
+                    <label htmlFor="isDefault">Set as default address</label>
+                  </div>
+                </>
+              )}
 
-              <button type="submit" className="submit-btn">Add Address</button>
+              <button type="submit" className="submit-btn">
+                {isGuest ? "Use This Address" : "Add Address"}
+              </button>
             </form>
           </div>
         )}
 
-        {/* Show Saved Addresses */}
-        {!showForm && (
+        {/* Show selected guest address confirmation */}
+        {isGuest && !showForm && selectedAddress && (
+          <div className="saved-addresses ms-4 me-4 mt-4">
+            <div
+              className="address-card d-flex align-items-start p-3 mb-3 rounded border border-dark"
+              style={{
+                backgroundColor: "#fff",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+              }}
+            >
+              <FaHome className="address-icon me-3 mt-1" size={22} color="#6c757d" />
+              <div className="address-info">
+                <p className="mb-1"><strong>{selectedAddress.guestName}</strong></p>
+                <p className="mb-1">📞 +91 {selectedAddress.guestPhone}</p>
+                <p className="mb-1">{selectedAddress.street}, {selectedAddress.city}, {selectedAddress.state}</p>
+                <p className="mb-1">{selectedAddress.country} - {selectedAddress.postalCode}</p>
+                {selectedAddress.additionalInformation && <p className="text-muted">{selectedAddress.additionalInformation}</p>}
+              </div>
+            </div>
+            <button
+              className="btn btn-outline-dark btn-sm"
+              onClick={() => setShowForm(true)}
+            >
+              Edit Details
+            </button>
+          </div>
+        )}
+
+        {/* Show Saved Addresses (logged-in users only) */}
+        {!isGuest && !showForm && (
           <div className="saved-addresses ms-4 me-4 mt-4">
             {addresses.length > 0 ? (
               <div className="address-list">
@@ -301,7 +405,7 @@ const AddAddress = () => {
 
       {/* Right Column — Order Summary */}
       <div className="col-6">
-        <DetailedSummary selectedAddress={selectedAddress} />
+        <DetailedSummary selectedAddress={selectedAddress} isGuest={isGuest} />
       </div>
     </div>
   );

@@ -14,7 +14,7 @@ const loadRazorpay = () => {
     });
 };
 
-const DetailedSummary = ({ selectedAddress }) => {
+const DetailedSummary = ({ selectedAddress, isGuest = false }) => {
     const { cart, loading } = useCart();
     const [isProcessing, setIsProcessing] = useState(false);
 
@@ -104,7 +104,11 @@ const DetailedSummary = ({ selectedAddress }) => {
                         if (verifyRes.status === 200) {
                             // 4. Create Order in DB
                             const orderPayload = {
-                                userId: "6892e8456c2cbf8ecb95c1ea", // Default user as in Address.jsx
+                                userId: isGuest ? 'guest' : "6892e8456c2cbf8ecb95c1ea",
+                                guestInfo: isGuest ? {
+                                    name: selectedAddress?.guestName || 'Guest',
+                                    phone: selectedAddress?.guestPhone || '',
+                                } : undefined,
                                 items: cart.product,
                                 amount: {
                                     subtotal: subtotal,
@@ -130,9 +134,9 @@ const DetailedSummary = ({ selectedAddress }) => {
                     }
                 },
                 prefill: {
-                    name: "User",
-                    email: "user@example.com",
-                    contact: "9999999999"
+                    name: selectedAddress?.guestName || "User",
+                    email: "",
+                    contact: selectedAddress?.guestPhone || "9999999999"
                 },
                 theme: {
                     color: "#3399cc"

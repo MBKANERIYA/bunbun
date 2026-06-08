@@ -27,6 +27,6 @@ const bannerSchema = new mongoose.Schema({
     ]
 }, { timestamps: true });
 
-const Banner = mongoose.model("bannerSchema", bannerSchema);
+const Banner = mongoose.models.bannerSchema || mongoose.model("bannerSchema", bannerSchema);
 
 module.exports = Banner;

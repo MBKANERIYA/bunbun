@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Heart, Search, ShoppingBag, X, User, ChevronRight, ChevronLeft } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { apiUrl } from '../utils/apiConfig';
 import { useWishlist } from "./WishlistContext";
 import { useCart } from "./CartContext";
 import LoginModal from "./LoginModel";
@@ -9,6 +11,8 @@ import UserProfileModal from "./UserProfileModel";
 const Header = () => {
     const [showSearch, setShowSearch] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+    const [searchSuggestions, setSearchSuggestions] = useState([]);
+    const [isSearching, setIsSearching] = useState(false);
     const { wishlistIds } = useWishlist();
     const wishlistCount = wishlistIds.size;
     const { itemCount } = useCart();
@@ -21,6 +25,31 @@ const Header = () => {
     // Mobile menu state
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [activeSubmenu, setActiveSubmenu] = useState(null);
+
+    // Fetch search suggestions
+    useEffect(() => {
+        const fetchSuggestions = async () => {
+            if (searchQuery.length >= 2) {
+                setIsSearching(true);
+                try {
+                    const response = await axios.get(apiUrl(`/v1/product/searchProduct?q=${encodeURIComponent(searchQuery)}`));
+                    setSearchSuggestions(response.data.products || []);
+                } catch (error) {
+                    console.error("Error fetching search suggestions:", error);
+                } finally {
+                    setIsSearching(false);
+                }
+            } else {
+                setSearchSuggestions([]);
+            }
+        };
+
+        const timeoutId = setTimeout(() => {
+            fetchSuggestions();
+        }, 300); // Debounce search
+
+        return () => clearTimeout(timeoutId);
+    }, [searchQuery]);
 
     const handleAccountClick = () => {
         const authToken = localStorage.getItem('authToken');
@@ -67,42 +96,89 @@ const Header = () => {
 
                     {showSearch ? (
                         // --- VIEW 1: WHEN SEARCH IS ACTIVE ---
-                        <div className="w-100 d-flex align-items-center search-header-active">
-                            <Search className="search-bar-icon" />
-                            <input
-                                type="text"
-                                className="form-control form-control-lg border-0 bg-transparent search-bar-input"
-                                placeholder="Search our store..."
-                                autoFocus
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                            />
-                            <button className="icon-btn close-search-btn" title="Close Search" onClick={toggleSearch}>
-                                <X />
-                            </button>
+                        <div className="w-100 position-relative">
+                            <div className="w-100 d-flex align-items-center search-header-active">
+                                <Search className="search-bar-icon" />
+                                <input
+                                    type="text"
+                                    className="form-control form-control-lg border-0 bg-transparent search-bar-input"
+                                    placeholder="Search our store..."
+                                    autoFocus
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                />
+                                <button className="icon-btn close-search-btn" title="Close Search" onClick={toggleSearch}>
+                                    <X />
+                                </button>
+                            </div>
+                            
+                            {/* Search Suggestions Dropdown */}
+                            {searchQuery.length >= 2 && (
+                                <div className="search-suggestions-dropdown shadow-lg bg-white position-absolute w-100 mt-1 rounded-3 overflow-hidden" style={{ zIndex: 2500, border: '1px solid #eee', maxHeight: '70vh', overflowY: 'auto', left: 0 }}>
+                                    {isSearching ? (
+                                        <div className="p-3 text-center text-muted">Searching...</div>
+                                    ) : searchSuggestions.length > 0 ? (
+                                        <ul className="list-unstyled mb-0">
+                                            {searchSuggestions.map((product) => (
+                                                <li key={product._id} className="suggestion-item border-bottom">
+                                                    <Link 
+                                                        to={`/product/${product.slug}`} 
+                                                        className="d-flex align-items-center p-3 text-decoration-none text-dark hover-bg-light"
+                                                        onClick={() => { setShowSearch(false); setSearchQuery(''); }}
+                                                    >
+                                                        <img 
+                                                            src={product.image} 
+                                                            alt={product.name} 
+                                                            className="rounded" 
+                                                            style={{ width: '40px', height: '40px', objectFit: 'cover', marginRight: '15px' }} 
+                                                        />
+                                                        <div>
+                                                            <div className="fw-semibold text-truncate" style={{ maxWidth: '250px' }}>{product.name}</div>
+                                                            <div className="text-muted small">₹{product.selling_price}</div>
+                                                        </div>
+                                                    </Link>
+                                                </li>
+                                            ))}
+                                            <li className="text-center p-2 bg-light">
+                                                <Link 
+                                                    to={`/collections?q=${encodeURIComponent(searchQuery)}`} 
+                                                    className="text-primary text-decoration-none small fw-bold"
+                                                    onClick={() => { setShowSearch(false); setSearchQuery(''); }}
+                                                >
+                                                    View all results
+                                                </Link>
+                                            </li>
+                                        </ul>
+                                    ) : (
+                                        <div className="p-3 text-center text-muted">No products found.</div>
+                                    )}
+                                </div>
+                            )}
                         </div>
-
                     ) : (
                         // --- VIEW 2: NORMAL HEADER ---
                         <>
-                            {/* Logo */}
-                            <Link className="navbar-brand" to="/">
-                                <img
-                                    src="/bunbun_logo.png"
-                                    alt="Bunbun Clothing Logo"
-                                    className="logo-img"
-                                />
-                            </Link>
+                            {/* Mobile Toggler & Logo grouped on the left */}
+                            <div className="d-flex align-items-center">
+                                {/* Mobile Toggler */}
+                                <button
+                                    className="navbar-toggler border-0 shadow-none ps-0 pe-2"
+                                    type="button"
+                                    onClick={openMobileMenu}
+                                    aria-label="Toggle navigation"
+                                >
+                                    <span className="navbar-toggler-icon"></span>
+                                </button>
 
-                            {/* Mobile Toggler - custom handler instead of Bootstrap collapse */}
-                            <button
-                                className="navbar-toggler"
-                                type="button"
-                                onClick={openMobileMenu}
-                                aria-label="Toggle navigation"
-                            >
-                                <span className="navbar-toggler-icon"></span>
-                            </button>
+                                {/* Logo */}
+                                <Link className="navbar-brand m-0" to="/">
+                                    <img
+                                        src="/bunbun_logo.png"
+                                        alt="Bunbun Clothing Logo"
+                                        className="logo-img"
+                                    />
+                                </Link>
+                            </div>
 
                             {/* Desktop Navigation Links (hidden on mobile, shown on lg+) */}
                             <div className="collapse navbar-collapse" id="mainNav">

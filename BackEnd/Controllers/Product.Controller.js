@@ -234,6 +234,33 @@ module.exports.getSingleProductBySlug = async (req, res) => {
     }
 }
 
+module.exports.searchProduct = async (req, res) => {
+    try {
+        const { q } = req.query;
+        if (!q || q.length < 2) {
+            return res.status(200).json({ products: [] });
+        }
+        // Case-insensitive search by product name
+        const products = await productSchema.find({ name: { $regex: q, $options: 'i' } }).limit(5);
+        res.status(200).json({ products });
+    } catch (err) {
+        res.status(500).json({ err: err.message });
+    }
+}
+
+module.exports.getProductsByIds = async (req, res) => {
+    try {
+        const { ids } = req.body;
+        if (!ids || !Array.isArray(ids)) {
+            return res.status(400).json({ products: [] });
+        }
+        const products = await productSchema.find({ _id: { $in: ids } });
+        res.status(200).json({ products });
+    } catch (err) {
+        res.status(500).json({ err: err.message });
+    }
+}
+
 module.exports.deleteProduct = async (req, res) => {
     try {
         const { id } = req.params;

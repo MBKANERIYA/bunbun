@@ -27,5 +27,7 @@ route.post("/filterProduct", productController.filterProduct)
 route.get("/singleProduct/:productId", productController.getSingleProduct)
 
 route.get('/singleProductBySlug/:slug', productController.getSingleProductBySlug)
+route.get('/searchProduct', productController.searchProduct)
+route.post('/getProductsByIds', productController.getProductsByIds)
 
 module.exports = route

@@ -17,7 +17,8 @@ export const WishlistProvider = ({ children }) => {
 
     const fetchWishlistIds = useCallback(async () => {
         if (!userId) {
-            setWishlistIds(new Set());
+            const localWishlist = JSON.parse(localStorage.getItem('local_wishlist')) || [];
+            setWishlistIds(new Set(localWishlist));
             setLoading(false);
             return;
         }
@@ -28,10 +29,14 @@ export const WishlistProvider = ({ children }) => {
             const ids = response.data?.wishlist?.product
                 ?.map(item => item.productId?._id)
                 .filter(Boolean) || [];
-            setWishlistIds(new Set(ids));
+            
+            // Merge with local wishlist
+            const localWishlist = JSON.parse(localStorage.getItem('local_wishlist')) || [];
+            setWishlistIds(new Set([...ids, ...localWishlist]));
         } catch (error) {
             console.error("Failed to fetch wishlist IDs:", error);
-            setWishlistIds(new Set());
+            const localWishlist = JSON.parse(localStorage.getItem('local_wishlist')) || [];
+            setWishlistIds(new Set(localWishlist));
         } finally {
             setLoading(false);
         }
@@ -55,8 +60,12 @@ export const WishlistProvider = ({ children }) => {
 
     const addToWishlistAPI = async (productId) => {
         if (!userId) {
-            alert("Please login to add products to wishlist.");
-            return false;
+            const localWishlist = JSON.parse(localStorage.getItem('local_wishlist')) || [];
+            if (!localWishlist.includes(productId)) {
+                localWishlist.push(productId);
+                localStorage.setItem('local_wishlist', JSON.stringify(localWishlist));
+            }
+            return true;
         }
 
         try {
@@ -70,7 +79,12 @@ export const WishlistProvider = ({ children }) => {
     };
 
     const removeFromWishlistAPI = async (productId) => {
-        if (!userId) return false;
+        if (!userId) {
+            let localWishlist = JSON.parse(localStorage.getItem('local_wishlist')) || [];
+            localWishlist = localWishlist.filter(id => id !== productId);
+            localStorage.setItem('local_wishlist', JSON.stringify(localWishlist));
+            return true;
+        }
 
         try {
             await axios.delete(apiUrl(`/v1/wishlist/removeWishlist/${userId}/${productId}`));

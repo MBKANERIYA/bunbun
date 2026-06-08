@@ -31,6 +31,6 @@ let ratingSchema = new mongoose.Schema({
 
 }, { timestamps: true })
 
-let rating = mongoose.model("ratingSchema", ratingSchema)
+let rating = mongoose.models.ratingSchema || mongoose.model("ratingSchema", ratingSchema)
 
 module.exports = rating

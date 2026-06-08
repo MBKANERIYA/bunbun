@@ -300,6 +300,72 @@
 **Files Changed**: `FrontEnd/src/Style/Header.css`
 - Modified `.mobile-menu-panel` to use `left: 0` and `transform: translateX(-100%)`.
 
+## 2026-06-08 — Guest Checkout (No Login Required)
+**What**: Removed the login requirement for checkout. Guest users can now complete the entire purchase flow by providing their name, phone number, and address inline.
+**Why**: User requested that the checkout process should work without login. If the user is not logged in, mandatory name and mobile number fields appear alongside the address form.
+**Files Changed**: `FrontEnd/src/Pages/Address.jsx`, `FrontEnd/src/Pages/OrderSummery.jsx`
+- **Address.jsx**: Removed `userId` check redirect. Added `isGuest` flag. When guest, auto-opens the form with `Full Name` and `Mobile Number` fields (mandatory). Address is stored locally instead of saved to DB. Guest sees a confirmation card with an "Edit Details" button after submitting.
+- **OrderSummery.jsx**: Accepts `isGuest` prop. Uses guest name/phone for Razorpay prefill and passes `guestInfo` in the order payload.
+
+## 2026-06-08 — Customer Reviews Section on Homepage
+**What**: Added a "WHAT OUR CUSTOMERS SAY" section below "THE SAREE STORE" on the homepage, showing real customer reviews in a slider.
+**Why**: User requested that customer-added reviews be displayed on the homepage for social proof.
+**Files Changed**: `backend/Controllers/Rating.Controller.js`, `backend/Routes/Rating.Routes.js`, `FrontEnd/src/Pages/HomePage.jsx`, `FrontEnd/src/Style/HomePage.css`
+- **Backend**: Added `getAllReviews` controller that fetches all reviews across all products, flattens them into a single array sorted by newest first (limited to 20).
+- **Route**: Registered `GET /v1/rating/getAllReviews`.
+- **Frontend**: Added reviews state, fetch call, and a Slick slider section with review cards showing avatar (first letter of name), star rating, review text, and product name.
+- **CSS**: Added premium review card styles with hover effects, gradient avatars, gold star colors, and mobile responsiveness.
+
+## 2026-06-08 — Mobile Slider Navigation Hidden
+**What**: Removed the left/right slider navigation arrows entirely on mobile devices.
+**Why**: User requested that slider nav icons be removed on mobile to keep the interface cleaner (since mobile users can easily swipe).
+**Files Changed**: `FrontEnd/src/Style/HomePage.css`
+- Added `@media (max-width: 767px)` rule to set `display: none !important;` for `.slick-prev`, `.slick-next`, and `.carousel .control-arrow`.
+
+## 2026-06-08 — Guest Wishlist functionality
+**What**: Removed the login requirement for adding items to the wishlist. Non-logged-in users now have their wishlist stored in their browser's `localStorage`.
+**Why**: User requested that the wishlist should not require an account. 
+**Files Changed**: `FrontEnd/src/Component/WishlistContext.jsx`, `FrontEnd/src/Pages/Wishlist.jsx`, `backend/Controllers/Product.Controller.js`, `backend/Routes/Product.Routes.js`
+- **WishlistContext**: Refactored `addToWishlistAPI` and `removeFromWishlistAPI` to use `localStorage` if no user is logged in.
+- **Wishlist Page**: Modified to read `localStorage` IDs and fetch the actual product data using a new backend endpoint.
+- **Backend API**: Added `getProductsByIds` endpoint to allow fetching the detailed product data required for rendering the wishlist items stored in `localStorage`.
+
+## 2026-06-08 — Refined Slider Navigation Arrows
+**What**: Removed background from slider arrows, moved them inside the product slider container, and added text-shadow for better contrast.
+**Why**: User requested that only the arrow icon be visible, and then noted it wasn't visible properly (likely due to no background and being positioned outside the layout bounds).
+**Files Changed**: `FrontEnd/src/Style/HomePage.css`
+- Removed background-color, border-radius, and box-shadow from `.slick-prev` and `.slick-next`.
+- Shifted arrows from `left/right: -20px` to `5px` to keep them safely inside the container.
+- Added a dark `text-shadow` to the white arrow icons (`:before` elements) so they are clearly visible against any image background.
+
+## 2026-06-08 — Added Slider Navigation Buttons
+**What**: Styled the left/right navigation arrows for both the hero carousel and product sliders to be clearly visible on desktop.
+**Why**: User requested slider nav buttons on desktop so they can easily click through banners and products.
+**Files Changed**: `FrontEnd/src/Style/HomePage.css`
+- Added custom CSS for `.slick-prev` and `.slick-next` to make them solid white circles with shadow.
+- Made `react-responsive-carousel` arrows visible by default on desktop viewports.
+
+## 2026-06-08 — Mobile Header Layout & Search Fixes
+**What**: Restructured the mobile header to group the logo and hamburger menu toggle button together on the left, and fixed search dropdown visibility on mobile.
+**Why**: User requested the logo be next to the toggle button on the left. The search suggestions dropdown was also hidden behind other elements on mobile.
+**Files Changed**: `FrontEnd/src/Component/Header.jsx`
+- Grouped `navbar-toggler` and `navbar-brand` (logo) inside a `d-flex align-items-center` container.
+- Increased `search-suggestions-dropdown` z-index to 2500 and added `maxHeight` + `overflowY` to ensure it stays fully visible and scrollable over all mobile content.
+
+## 2026-06-08 — Fix Mongoose OverwriteModelError
+**What**: Updated all Mongoose model files to check if the model already exists in memory before defining it.
+**Why**: Nodemon hot-reloading was crashing the backend server with `OverwriteModelError: Cannot overwrite \`ModelName\` model once compiled.`
+**Files Changed**: `backend/Models/*.js` (Wishlist, User, Product, Rating, Order, Cart, Banner, Address)
+- Appended `mongoose.models.ModelName ||` to all `mongoose.model` exports to safely reuse existing schemas during hot reloads.
+
+## 2026-06-08 — Live Product Search Suggestions
+**What**: Added live product search suggestions to the header search bar.
+**Why**: User requested that typing 2+ letters in the search bar should show a dropdown of product suggestions.
+**Files Changed**: `FrontEnd/src/Component/Header.jsx`, `backend/Controllers/Product.Controller.js`, `backend/Routes/Product.Routes.js`
+- **Frontend**: Added `searchSuggestions` and `isSearching` state in `Header.jsx`. Created a debounced `useEffect` that calls the backend search API when `searchQuery.length >= 2`. Rendered a dropdown showing product images, names, and prices.
+- **Backend**: Added `searchProduct` controller method that performs a case-insensitive regex search on product names and limits results to 5.
+- **Routes**: Added `GET /v1/Product/searchProduct`.
+
 ## 2026-06-08 — Firebase Mobile OTP Login
 **What**: Integrated Firebase Phone Authentication to send real SMS OTPs for free (10,000/mo). Replaced custom OTP logic.
 **Why**: User wanted to send actual OTPs to phones for free without setting up a paid SMS gateway.

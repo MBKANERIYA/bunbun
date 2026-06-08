@@ -30,6 +30,6 @@ const cartSchema = new mongoose.Schema({
     }
 })
 
-let cart = mongoose.model("cartSchema",cartSchema)
+let cart = mongoose.models.cartSchema || mongoose.model("cartSchema",cartSchema)
 
 module.exports = cart

@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { apiUrl } from "../utils/apiConfig";
+import { FaStar } from "react-icons/fa";
 
 
 
@@ -22,6 +23,7 @@ const HomePage = () => {
     const [categoryImage, setCategoryImage] = useState([])
     const [product, setProduct] = useState([])
     const [recentlyViewed, setRecentlyViewed] = useState([]);
+    const [reviews, setReviews] = useState([]);
     const navigate = useNavigate();
 
     const icons = [
@@ -100,12 +102,58 @@ const HomePage = () => {
     console.log(bestSellerBanner);
     console.log(exclusiveCollectionBanner);
 
+    const sampleReviews = [
+        { _id: 's1', userName: 'Priya Sharma', userRating: 5, userReview: 'Absolutely love the quality! The blouse fits perfectly and the fabric is so soft. Will definitely buy again.', productName: 'Designer Blouse' },
+        { _id: 's2', userName: 'Anjali Patel', userRating: 5, userReview: 'Best shapewear I have ever purchased. Very comfortable for daily wear and the stitching is flawless.', productName: 'Premium Shapewear' },
+        { _id: 's3', userName: 'Meera Joshi', userRating: 4, userReview: 'Beautiful design and fast delivery. The color was exactly as shown in the pictures. Highly recommended!', productName: 'Silk Saree' },
+        { _id: 's4', userName: 'Kavita Reddy', userRating: 5, userReview: 'Amazing collection and great customer service. The packaging was premium and the product exceeded my expectations.', productName: 'Bridal Blouse' },
+        { _id: 's5', userName: 'Sneha Gupta', userRating: 4, userReview: 'Wonderful experience shopping here. The material quality is top-notch and very reasonably priced for what you get.', productName: 'Cotton Blouse' },
+        { _id: 's6', userName: 'Ritu Agarwal', userRating: 5, userReview: 'I received so many compliments wearing this! The craftsmanship is exceptional. Bunbun never disappoints.', productName: 'Party Wear Blouse' },
+    ];
+
+    const fetchReviews = async () => {
+        try {
+            const response = await axios.get(apiUrl("/v1/rating/getAllReviews"));
+            const fetchedReviews = response.data?.reviews || [];
+            setReviews(fetchedReviews.length > 0 ? fetchedReviews : sampleReviews);
+        } catch (error) {
+            console.error("Failed to fetch reviews:", error);
+            setReviews(sampleReviews);
+        }
+    }
+
     useEffect(() => {
         fetchBanners()
         fetchProducts()
+        fetchReviews()
         const viewedItems = JSON.parse(localStorage.getItem("recentlyViewed")) || [];
         setRecentlyViewed(viewedItems);
     }, [])
+
+    const reviewSliderSettings = {
+        infinite: true,
+        speed: 500,
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        arrows: true,
+        autoplay: true,
+        autoplaySpeed: 4000,
+        pauseOnHover: true,
+        responsive: [
+            {
+                breakpoint: 992,
+                settings: {
+                    slidesToShow: 2,
+                },
+            },
+            {
+                breakpoint: 576,
+                settings: {
+                    slidesToShow: 1,
+                },
+            },
+        ],
+    };
 
     const handleCategoryClick = (category) => {
         navigate(`/collections?category=${encodeURIComponent(category)}`);
@@ -275,6 +323,44 @@ const HomePage = () => {
                     </div>
                 </div>
             </section>
+
+            {/* Customer Reviews Section */}
+            {reviews.length > 0 && (
+                <section className="customer-reviews mt-5 container-fluid pe-5 ps-5">
+                    <h2 className="text-center fw-bold mb-4">WHAT OUR CUSTOMERS SAY</h2>
+                    <div className="reviews-slider">
+                        <Slider {...reviewSliderSettings}>
+                            {reviews.map((review, index) => (
+                                <div key={review._id || index} className="px-3">
+                                    <div className="review-card">
+                                        <div className="review-card-header">
+                                            <div className="review-avatar">
+                                                {review.userName?.charAt(0)?.toUpperCase() || 'C'}
+                                            </div>
+                                            <div className="review-user-info">
+                                                <h6 className="review-user-name">{review.userName}</h6>
+                                                <div className="review-stars">
+                                                    {[...Array(5)].map((_, i) => (
+                                                        <FaStar
+                                                            key={i}
+                                                            className={i < review.userRating ? 'star-filled' : 'star-empty'}
+                                                        />
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p className="review-text">"{review.userReview}"</p>
+                                        {review.productName && (
+                                            <p className="review-product-name">— {review.productName}</p>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                        </Slider>
+                    </div>
+                </section>
+            )}
+
             <div className="icon-slider">
                 <div className="icon-slide-track">
                     {loopMedia.map((icon, index) => (

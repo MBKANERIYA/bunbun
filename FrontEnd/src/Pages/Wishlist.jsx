@@ -40,9 +40,28 @@ const Wishlist = () => {
     useEffect(() => {
         const fetchWishlist = async () => {
             if (!userId) {
-                setWishlistItems([]);
-                setError(null);
-                setLoading(false);
+                const localWishlist = JSON.parse(localStorage.getItem('local_wishlist')) || [];
+                if (localWishlist.length === 0) {
+                    setWishlistItems([]);
+                    setError(null);
+                    setLoading(false);
+                    return;
+                }
+                
+                setLoading(true);
+                try {
+                    const response = await axios.post(apiUrl('/v1/product/getProductsByIds'), { ids: localWishlist });
+                    // Map the products to match the structure expected by the rest of the component
+                    // { productId: { ...productData } }
+                    const formattedItems = response.data.products.map(product => ({ productId: product }));
+                    setWishlistItems(formattedItems);
+                    setError(null);
+                } catch (err) {
+                    console.error("Failed to fetch local wishlist:", err);
+                    setError("Could not load your local wishlist.");
+                } finally {
+                    setLoading(false);
+                }
                 return;
             }
 

@@ -99,6 +99,6 @@ let productSchema = new mongoose.Schema({
     }]
 })
 
-let product = mongoose.model("productSchema", productSchema)
+let product = mongoose.models.productSchema || mongoose.model("productSchema", productSchema)
 
 module.exports = product

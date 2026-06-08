@@ -62,6 +62,6 @@ let UserSchema = new mongoose.Schema({
     }
 }, { timestamps: true })
 
-let User = mongoose.model("UserSchema", UserSchema)
+let User = mongoose.models.UserSchema || mongoose.model("UserSchema", UserSchema)
 
 module.exports = User

@@ -154,6 +154,67 @@
     margin: 0 !important;
 }
 
+/* Slick Slider Navigation Arrows (Product Sliders) */
+.slick-prev,
+.slick-next {
+    width: 40px !important;
+    height: 40px !important;
+    background-color: transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    z-index: 20 !important; /* higher z-index to stay above images */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+.slick-prev {
+    left: 5px !important; /* Move inside the container */
+}
+.slick-next {
+    right: 5px !important; /* Move inside the container */
+}
+.slick-prev:before,
+.slick-next:before {
+    color: #fff !important; /* White color */
+    text-shadow: 0 2px 4px rgba(0,0,0,0.6) !important; /* Shadow to make it visible on light backgrounds */
+    font-size: 35px !important;
+    opacity: 1 !important;
+}
+.slick-prev:hover,
+.slick-next:hover {
+    background-color: transparent !important;
+    opacity: 0.8 !important;
+}
+
+/* Hide ALL slider arrows on mobile devices */
+@media (max-width: 767px) {
+    .slick-prev,
+    .slick-next,
+    .carousel .control-arrow {
+        display: none !important;
+    }
+}
+
+/* Top Banner Carousel Arrows (Hero Slider) */
+@media (min-width: 768px) {
+    .carousel .control-arrow {
+        opacity: 0.8 !important;
+        background: transparent !important;
+        width: 60px;
+        transition: all 0.3s ease;
+        z-index: 20 !important;
+    }
+    .carousel .control-arrow:before {
+        font-size: 40px !important;
+        color: #fff !important;
+        text-shadow: 0 2px 5px rgba(0,0,0,0.6) !important;
+    }
+    .carousel .control-arrow:hover {
+        opacity: 1 !important;
+        background: transparent !important;
+    }
+}
+
 .icon-slider {
     overflow: hidden;
     position: relative;
@@ -338,5 +399,99 @@
 
     .icon-slide-track {
         width: calc(110px * 14);
+    }
+}
+
+/* ============ Customer Reviews Section ============ */
+.customer-reviews {
+    padding-bottom: 2rem;
+}
+
+.review-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 24px;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.review-card:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+.review-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.review-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.review-user-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin: 0;
+    color: #222;
+}
+
+.review-stars {
+    display: flex;
+    gap: 2px;
+    margin-top: 2px;
+}
+
+.review-stars .star-filled {
+    color: #f5a623;
+    font-size: 0.85rem;
+}
+
+.review-stars .star-empty {
+    color: #ddd;
+    font-size: 0.85rem;
+}
+
+.review-text {
+    font-size: 0.92rem;
+    color: #555;
+    line-height: 1.6;
+    flex-grow: 1;
+    margin-bottom: 10px;
+    font-style: italic;
+}
+
+.review-product-name {
+    font-size: 0.8rem;
+    color: #999;
+    margin: 0;
+    font-weight: 500;
+}
+
+/* Mobile adjustments */
+@media (max-width: 767px) {
+    .customer-reviews {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    .review-card {
+        min-height: 160px;
+        padding: 18px;
     }
 }

@@ -133,3 +133,50 @@ module.exports.getRatings = async (req, res) => {
         });
     }
 };
+
+module.exports.getAllReviews = async (req, res) => {
+    try {
+        const allRatings = await ratingSchema.find({})
+            .populate({
+                path: "productId",
+                select: "name image slug",
+            })
+            .populate({
+                path: "ratings.userId",
+                select: "fullName mobileNumber",
+            });
+
+        // Flatten all reviews into a single array
+        const reviews = [];
+        for (const doc of allRatings) {
+            if (!doc.productId) continue;
+            for (const r of doc.ratings) {
+                if (!r.userReview) continue; // skip reviews without text
+                reviews.push({
+                    _id: r._id,
+                    userName: r.userId?.fullName || 'Customer',
+                    userRating: r.userRating,
+                    userReview: r.userReview,
+                    productImage: r.productImage || doc.productId?.image,
+                    productName: doc.productId?.name,
+                    productSlug: doc.productId?.slug,
+                    createdAt: r._id.getTimestamp(),
+                });
+            }
+        }
+
+        // Sort by newest first and limit to 20
+        reviews.sort((a, b) => b.createdAt - a.createdAt);
+        const limitedReviews = reviews.slice(0, 20);
+
+        return res.status(200).json({
+            message: "Reviews fetched successfully",
+            reviews: limitedReviews,
+        });
+    } catch (err) {
+        return res.status(500).json({
+            message: "Internal Server Error",
+            error: err.message,
+        });
+    }
+};
