@@ -300,6 +300,73 @@
 **Files Changed**: `FrontEnd/src/Style/Header.css`
 - Modified `.mobile-menu-panel` to use `left: 0` and `transform: translateX(-100%)`.
 
+## 2026-06-08 — Header UI Polish & Login Button
+**What**: Removed the default border and focus outline from the mobile menu hamburger toggle. Added a prominent Login/Register button to the bottom of the mobile slide-out menu.
+**Why**: User requested removing the border from the toggle button and adding a login/logout button only in the mobile dropdown at the bottom.
+**Files Changed**: `FrontEnd/src/Component/Header.jsx`, `FrontEnd/src/Style/Header.css`
+- Added `border: none !important; box-shadow: none !important;` to `.navbar-toggler` in `Header.css`.
+- Transformed `.mobile-menu-body` into a flex column in `Header.css`.
+- Appended a fixed bottom `div` containing a Login / Profile button in `Header.jsx` that dynamically checks `localStorage` for `authToken`.
+
+## 2026-06-08 — Hide YouTube Shorts UI
+**What**: completely removed YouTube's default UI elements (titles, logos, pause buttons) from the Shorts on the homepage.
+**Why**: User requested a clean, uninterrupted viewing experience showing only the video.
+**Files Changed**: `FrontEnd/src/Style/HomePage.css`
+- Added `pointer-events: none` to the `.short-video-card iframe` to prevent mouse hover/click interactions from triggering YouTube's player UI.
+- Added `transform: scale(1.25)` to the iframe to crop out the persistent top channel title and bottom YouTube watermark.
+
+## 2026-06-08 — Update YouTube Shorts Settings
+**What**: Configured YouTube Shorts on the homepage to auto-play, loop, mute, and hide player controls.
+**Why**: User requested shorts to automatically play without showing YouTube controls or IDs for a cleaner viewing experience.
+**Files Changed**: `FrontEnd/src/Pages/HomePage.jsx`
+- Added URL query parameters (`autoplay=1`, `mute=1`, `controls=0`, `modestbranding=1`, `rel=0`, `loop=1`, `playlist={ID}`, `playsinline=1`) to all four iframe `src` attributes.
+
+## 2026-06-08 — Add YouTube Shorts Section
+**What**: Added a "Featured Shorts" section on the home page above the "Recently Viewed" section containing 4 embedded YouTube shorts.
+**Why**: User requested to embed specific YouTube shorts.
+**Files Changed**: `FrontEnd/src/Pages/HomePage.jsx`, `FrontEnd/src/Style/HomePage.css`
+- Added an embedded iframe grid for four YouTube Shorts in `HomePage.jsx`.
+- Added `.short-video-card` in `HomePage.css` for consistent aspect ratio and hover effects.
+
+## 2026-06-08 — Update Header Navigation Items
+**What**: Updated the main navigation items to Shop, Blouse, and Shapewear. Removed Sarees, Ready to Wear Sarees, and Bunbun Clothing Gold.
+**Why**: User requested a leaner navigation structure focused on the core categories.
+**Files Changed**: `FrontEnd/src/Component/Header.jsx`
+- Desktop Nav: Reordered links to `Shop`, `Blouse`, `Shapewear` and removed `Ready to Wear Sarees`, `Bunbun Clothing Gold`, and `Saree`.
+- Mobile Nav: Reordered and removed the same links in the main sidebar and the "Shop" submenu.
+
+## 2026-06-08 — Add Recently Viewed Section to Home Page
+**What**: Added a "Recently Viewed" section at the bottom of the home page.
+**Why**: User requested to add a recently viewed section above the footer on the home page.
+**Files Changed**: `FrontEnd/src/Pages/HomePage.jsx`
+- Added state for `recentlyViewed` and fetched it from `localStorage` inside `useEffect`.
+- Rendered a new `Slider` component mapping over `recentlyViewed` data, displaying `ProductCard` for each item.
+
+## 2026-06-08 — Update Top Categories Images & Labels
+**What**: Updated all four "TOP CATEGORIES" cards with a static image, updated their labels (Blouse, Shapewear, Palazzo, Kurti Set), and increased label font size.
+**Why**: User requested to use the new image for all top category cards, correct the labels, remove "live now", and enlarge the text for better visibility.
+**Files Changed**: `FrontEnd/src/Pages/HomePage.jsx`, `FrontEnd/src/Style/HomePage.css`
+- Replaced dynamic `categoryImage` sources with the static Cloudinary URL.
+- Added and updated `.category-label` text for all four categories.
+- Removed `.category-live-label` from the Shapewear card.
+- Increased `.category-label` font size to 1.2rem (desktop) and 0.95rem (mobile) in CSS.
+
+## 2026-06-08 — Replace Saree category cards with Palazzo & Kurti (Coming Soon)
+**What**: Replaced the two Saree category cards in the TOP CATEGORIES section with "Palazzo" and "Kurti" cards that have a dark opacity overlay and "Coming Soon" text. Added a "LIVE NOW" label under the Shapewear card.
+**Why**: Palazzo and Kurti categories are not yet available, so they display a premium "Coming Soon" overlay matching the previous Sarees Saturday design. The Shapewear card was marked as "LIVE NOW" to indicate it's active.
+**Files Changed**: `FrontEnd/src/Pages/HomePage.jsx`, `FrontEnd/src/Style/HomePage.css`
+- Replaced Sarees Saturday and Sarees cards with Palazzo and Kurti cards using `.category-card-wrapper` with a `.category-overlay` dark overlay.
+- Added `.coming-soon-text` styled with Playfair Display serif font at 1.6rem.
+- Added `.category-live-label` in red (#c0392b) for the Shapewear "LIVE NOW" text.
+- Added `.category-label` for Palazzo/Kurti card names below the image.
+- Added mobile responsive font sizes for overlay and labels.
+
+## 2026-06-08 — Fetch Shapewear products in bestseller section
+**What**: Changed the "BESTSELLER SAREES" section product filter from `subcategory === "Georgette Saree"` to `category === "Shapewear"`.
+**Why**: The section's banner already showcases shapewear imagery; the product slider needed to match by displaying Shapewear category products.
+**Files Changed**: `FrontEnd/src/Pages/HomePage.jsx`
+- Updated the `.filter()` call in the bestseller product slider from `p.subcategory === "Georgette Saree"` to `p.category === "Shapewear"`.
+
 ## 2026-06-05 — Fixed mobile product slider card display
 **What**: Fixed an issue where product cards were squished horizontally and showing multiple cards per view on mobile instead of the intended 1.3 slides.
 **Why**: The `d-flex justify-content-center` classes on the `Slider` wrapper `<div>` turned the slider items into flex containers without a defined width constraint, causing the nested `ProductCard` to shrink wrap and rendering the `react-slick` slider width calculations useless.

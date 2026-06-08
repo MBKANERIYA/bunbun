@@ -21,6 +21,7 @@ const HomePage = () => {
     const [exclusiveCollectionBanner, setExclusiveCollectionBanner] = useState({})
     const [categoryImage, setCategoryImage] = useState([])
     const [product, setProduct] = useState([])
+    const [recentlyViewed, setRecentlyViewed] = useState([]);
     const navigate = useNavigate();
 
     const icons = [
@@ -102,6 +103,8 @@ const HomePage = () => {
     useEffect(() => {
         fetchBanners()
         fetchProducts()
+        const viewedItems = JSON.parse(localStorage.getItem("recentlyViewed")) || [];
+        setRecentlyViewed(viewedItems);
     }, [])
 
     const handleCategoryClick = (category) => {
@@ -135,11 +138,11 @@ const HomePage = () => {
             <PageMeta title="Shop Indian Sarees, Blouses & Shapewear Online" description="Bunbun Clothing - Premium Indian ethnic wear. Shop the latest sarees, blouses, shapewear and more with free shipping." />
             <section>
                 <div className="topBanner">
-                    <Carousel 
-                        showThumbs={false} 
-                        showStatus={false} 
-                        infiniteLoop 
-                        autoPlay 
+                    <Carousel
+                        showThumbs={false}
+                        showStatus={false}
+                        infiniteLoop
+                        autoPlay
                         interval={4000}
                         stopOnHover={false}
                     >
@@ -171,32 +174,50 @@ const HomePage = () => {
                 <div className="categoryImage container-fluid ps-5 pe-5 mt-5">
                     <h2 className="text-center fw-bold mb-4">TOP CATEGORIES</h2>
                     <div className="row">
-                        <div className="col-3" onClick={() => handleCategoryClick("Saree")} style={{ cursor: "pointer" }}>
-                            <img src={categoryImage[0]} alt="Category 1" className="img-fluid" />
-                        </div>
+
                         <div className="col-3" onClick={() => handleCategoryClick("Blouse")} style={{ cursor: "pointer" }}>
-                            <img src={categoryImage[1]} alt="Category 2" className="img-fluid" />
+                            <img src="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780899400/Homepage1-jpg-563_688--06-08-2026_11_45_AM_ndww0h.png" alt="Blouses" className="img-fluid" />
+                            <p className="category-label">BLOUSE <span>⟶</span></p>
                         </div>
                         <div className="col-3" onClick={() => handleCategoryClick("Shapewear")} style={{ cursor: "pointer" }} >
-                            <img src={categoryImage[2]} alt="Category 3" className="img-fluid" />
+                            <img src="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780899400/Homepage1-jpg-563_688--06-08-2026_11_45_AM_ndww0h.png" alt="Shapewears" className="img-fluid" />
+                            <p className="category-label">SHAPEWEAR <span>⟶</span></p>
                         </div>
-                        <div className="col-3">
-                            <img src={categoryImage[3]} alt="Category 4" className="img-fluid" />
+                        <div className="col-3 category-coming-soon">
+                            <div className="category-card-wrapper">
+                                <img src="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780899400/Homepage1-jpg-563_688--06-08-2026_11_45_AM_ndww0h.png" alt="Palazzo" className="img-fluid" />
+                                <div className="category-overlay">
+                                    <p className="coming-soon-text">Coming Soon</p>
+                                </div>
+                            </div>
+                            <p className="category-label">PALAZZO <span>⟶</span></p>
+                        </div>
+                        <div className="col-3 category-coming-soon">
+                            <div className="category-card-wrapper">
+                                <img src="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780899400/Homepage1-jpg-563_688--06-08-2026_11_45_AM_ndww0h.png" alt="Kurti" className="img-fluid" />
+                                <div className="category-overlay">
+                                    <p className="coming-soon-text">Coming Soon</p>
+                                </div>
+                            </div>
+                            <p className="category-label">KURTI SET <span>⟶</span></p>
                         </div>
                     </div>
                 </div>
 
             </section>
             <section className="trending mt-5">
-                <h2 className="text-center fw-bold mb-4">TRENDING NOW</h2>
+                <h2 className="text-center fw-bold mb-4">BLOUSES COLLECTION</h2>
                 <div className="trendingBanner" onClick={() => handleCategoryClick("Saree")} style={{ cursor: "pointer" }}>
-                    <img src={trendingBanner} alt="" className="img-fluid w-100" />
+                    <picture>
+                        <source media="(max-width: 768px)" srcSet="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780897492/blouse_web_banner_vpx0tq.png" />
+                        <img src="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780897480/banner_pc_blouse_jezecv.png" alt="Trending Now Banner" className="img-fluid w-100" />
+                    </picture>
                 </div>
 
                 <div className="tredingProduct mt-4">
                     <Slider {...settings}>
                         {(product || [])
-                            .filter((p) => p.subcategory === "Silk Saree")
+                            .filter((p) => p.category === "Blouse")
                             .map((product, index) => (
                                 <div key={index} className="px-2">
                                     <ProductCard product={product} />
@@ -207,14 +228,17 @@ const HomePage = () => {
             </section>
             <section>
                 <div className="bestSeller mt-5">
-                    <h2 className="text-center mb-4 fw-bold">BESTSELLER SAREES</h2>
+                    <h2 className="text-center mb-4 fw-bold">SHAPEWEAR COLLECTION</h2>
                     <div className="bestSellerBanner">
-                        <img src={bestSellerBanner} alt="bestSellerBanner" />
+                        <picture>
+                            <source media="(max-width: 768px)" srcSet="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780897490/shapewearbm_gv9cm9.png" />
+                            <img src="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780897479/SHAPWEAR_BANNER_vs1yeh.png" alt="Bestseller Sarees Banner" />
+                        </picture>
                     </div>
                     <div className="tredingProduct mt-4">
                         <Slider {...settings}>
                             {(product || [])
-                                .filter((p) => p.subcategory === "Georgette Saree")
+                                .filter((p) => p.category === "Shapewear")
                                 .map((product, index) => (
                                     <div key={index} className="px-2">
                                         <ProductCard product={product} />
@@ -260,25 +284,79 @@ const HomePage = () => {
                     ))}
                 </div>
             </div>
-            <section>
-                <div className="exclusive mt-5">
-                    <h2 className="text-center mb-4 fw-bold">EXCLUSIVE COLLECTION</h2>
-                    <div className="exclusiveBanner">
-                        <img src={exclusiveCollectionBanner} alt="" />
+            <section className="featured-shorts mt-5 container-fluid pe-5 ps-5">
+                <h2 className="text-center fw-bold mb-4">FEATURED SHORTS</h2>
+                <div className="row g-4">
+                    <div className="col-6 col-md-3">
+                        <div className="short-video-card">
+                            <iframe
+                                src="https://www.youtube.com/embed/S7MwBlM3HpU?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=S7MwBlM3HpU&playsinline=1"
+                                title="YouTube video player"
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowFullScreen
+                                className="w-100"
+                                style={{ aspectRatio: "9/16" }}
+                            ></iframe>
+                        </div>
                     </div>
-                    <div className="tredingProduct mt-4">
-                        <Slider {...settings}>
-                            {(product || [])
-                                .filter((p) => p.subcategory === "Printed Saree")
-                                .map((product, index) => (
-                                    <div key={index} className="px-2">
-                                        <ProductCard product={product} />
-                                    </div>
-                                ))}
-                        </Slider>
+                    <div className="col-6 col-md-3">
+                        <div className="short-video-card">
+                            <iframe
+                                src="https://www.youtube.com/embed/NiRjMVy-Tdk?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=NiRjMVy-Tdk&playsinline=1"
+                                title="YouTube video player"
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowFullScreen
+                                className="w-100"
+                                style={{ aspectRatio: "9/16" }}
+                            ></iframe>
+                        </div>
+                    </div>
+                    <div className="col-6 col-md-3">
+                        <div className="short-video-card">
+                            <iframe
+                                src="https://www.youtube.com/embed/JXFPwReAGN4?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=JXFPwReAGN4&playsinline=1"
+                                title="YouTube video player"
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowFullScreen
+                                className="w-100"
+                                style={{ aspectRatio: "9/16" }}
+                            ></iframe>
+                        </div>
+                    </div>
+                    <div className="col-6 col-md-3">
+                        <div className="short-video-card">
+                            <iframe
+                                src="https://www.youtube.com/embed/BEJ9-sMNnNQ?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=BEJ9-sMNnNQ&playsinline=1"
+                                title="YouTube video player"
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowFullScreen
+                                className="w-100"
+                                style={{ aspectRatio: "9/16" }}
+                            ></iframe>
+                        </div>
                     </div>
                 </div>
             </section>
+
+
+            {recentlyViewed.length > 0 && (
+                <section className="recently-viewed mt-5 mb-5">
+                    <h2 className="text-center fw-bold mb-4">RECENTLY VIEWED</h2>
+                    <div className="tredingProduct mt-4">
+                        <Slider {...settings}>
+                            {recentlyViewed.map((product, index) => (
+                                <div key={index} className="px-2">
+                                    <ProductCard product={product} />
+                                </div>
+                            ))}
+                        </Slider>
+                    </div>
+                </section>
+            )}
         </div>
     )
 }

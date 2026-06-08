@@ -107,7 +107,6 @@ const Header = () => {
                             {/* Desktop Navigation Links (hidden on mobile, shown on lg+) */}
                             <div className="collapse navbar-collapse" id="mainNav">
                                 <ul className="navbar-nav mx-auto">
-                                    <li className="nav-item" ><Link to="/collections?category=Saree" className="nav-link">Sarees</Link></li>
                                     <li className="nav-item dropdown">
                                         <a className="nav-link dropdown-toggle text-danger" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
                                         <div className="dropdown-menu mega-menu">
@@ -116,11 +115,9 @@ const Header = () => {
                                                 {/* Column 1: Shop by Category */}
                                                 <div className="col-md-4">
                                                     <h5>By Category</h5>
-                                                    <a className="dropdown-item" onClick={() => handleCategoryClick("Saree")} style={{ cursor: "pointer" }}>All Sarees</a>
-                                                    <Link className="dropdown-item" to="/collections?category=ReadyToWear">Ready to Wear Sarees</Link>
+                                                    <a className="dropdown-item" onClick={() => handleCategoryClick("Blouse")} style={{ cursor: "pointer" }}>Blouse</a>
+                                                    <a className="dropdown-item" onClick={() => handleCategoryClick("Shapewear")} style={{ cursor: "pointer" }}>Shapewear</a>
                                                     <Link className="dropdown-item" to="/collections?category=Essentials">Essentials</Link>
-                                                    <Link className="dropdown-item" to="/bunbun-clothing-gold">Bunbun Clothing Gold</Link>
-                                                    <a className="dropdown-item" onClick={() => handleCategoryClick("Blouse")} style={{ cursor: "pointer" }}>Blouses</a>
                                                 </div>
                                                 {/* Column 2: Shop by Collection */}
                                                 <div className="col-md-4">
@@ -134,8 +131,8 @@ const Header = () => {
                                             </div>
                                         </div>
                                     </li>
-                                    <li className="nav-item" ><Link className="nav-link">Ready to Wear Sarees</Link></li>
-                                    <li className="nav-item" ><Link className="nav-link" to="/bunbun-clothing-gold" style={{ color: "#d4af37" }}>Bunbun Clothing Gold</Link></li>
+                                    <li className="nav-item" ><Link to="/collections?category=Blouse" className="nav-link">Blouse</Link></li>
+                                    <li className="nav-item" ><Link to="/collections?category=Shapewear" className="nav-link">Shapewear</Link></li>
                                     <li className="nav-item">
                                         <Link className="nav-link" to="/about">About Us</Link>
                                     </li>
@@ -191,30 +188,25 @@ const Header = () => {
                 <div className={`mobile-menu-body ${activeSubmenu ? 'slide-out' : ''}`}>
                     <ul className="mobile-nav-list">
                         <li>
-                            <a onClick={() => handleMobileNavClick('/collections?category=Saree')}>
-                                SAREE
-                            </a>
-                        </li>
-                        <li>
                             <a onClick={() => setActiveSubmenu('shop')}>
                                 SHOP
                                 <ChevronRight className="mobile-nav-arrow" />
                             </a>
                         </li>
                         <li>
-                            <a onClick={() => handleMobileNavClick('/collections?category=ReadyToWear')}>
-                                READY TO WEAR SAREES
+                            <a onClick={() => handleMobileNavClick('/collections?category=Blouse')}>
+                                BLOUSE
+                            </a>
+                        </li>
+                        <li>
+                            <a onClick={() => handleMobileNavClick('/collections?category=Shapewear')}>
+                                SHAPEWEAR
                             </a>
                         </li>
                         <li>
                             <a onClick={() => setActiveSubmenu('collections')}>
                                 COLLECTIONS
                                 <ChevronRight className="mobile-nav-arrow" />
-                            </a>
-                        </li>
-                        <li>
-                            <a onClick={() => handleMobileNavClick('/bunbun-clothing-gold')}>
-                                BUNBUN GOLD
                             </a>
                         </li>
                         <li>
@@ -228,6 +220,15 @@ const Header = () => {
                             </a>
                         </li>
                     </ul>
+                    <div className="mt-auto px-4 pb-4 pt-3">
+                        <button 
+                            className="btn w-100"
+                            onClick={() => { handleAccountClick(); closeMobileMenu(); }}
+                            style={{ padding: '12px', fontWeight: '600', letterSpacing: '1px', backgroundColor: '#8E44AD', color: '#fff', borderRadius: '6px' }}
+                        >
+                            {localStorage.getItem('authToken') ? 'PROFILE / LOGOUT' : 'LOGIN / REGISTER'}
+                        </button>
+                    </div>
                 </div>
 
                 {/* Shop Submenu */}
@@ -238,11 +239,9 @@ const Header = () => {
                     </button>
                     <h4 className="mobile-submenu-title">SHOP</h4>
                     <ul className="mobile-nav-list">
-                        <li><a onClick={() => handleMobileNavClick('/collections?category=Saree')}>All Sarees</a></li>
-                        <li><a onClick={() => handleMobileNavClick('/collections?category=ReadyToWear')}>Ready to Wear Sarees</a></li>
+                        <li><a onClick={() => handleMobileNavClick('/collections?category=Blouse')}>Blouse</a></li>
+                        <li><a onClick={() => handleMobileNavClick('/collections?category=Shapewear')}>Shapewear</a></li>
                         <li><a onClick={() => handleMobileNavClick('/collections?category=Essentials')}>Essentials</a></li>
-                        <li><a onClick={() => handleMobileNavClick('/bunbun-clothing-gold')}>Bunbun Clothing Gold</a></li>
-                        <li><a onClick={() => handleMobileNavClick('/collections?category=Blouse')}>Blouses</a></li>
                     </ul>
                 </div>
 
