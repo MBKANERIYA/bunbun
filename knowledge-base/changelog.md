@@ -300,6 +300,20 @@
 **Files Changed**: `FrontEnd/src/Style/Header.css`
 - Modified `.mobile-menu-panel` to use `left: 0` and `transform: translateX(-100%)`.
 
+## 2026-06-08 — Firebase Mobile OTP Login
+**What**: Integrated Firebase Phone Authentication to send real SMS OTPs for free (10,000/mo). Replaced custom OTP logic.
+**Why**: User wanted to send actual OTPs to phones for free without setting up a paid SMS gateway.
+**Files Changed**: `backend/Controllers/User.Controller.js`, `backend/Routes/User.Routes.js`, `FrontEnd/src/Component/LoginModel.jsx`, `FrontEnd/src/utils/firebase.js`
+- **Frontend**: Installed `firebase` SDK. Configured `firebase.js`. Updated `LoginModel.jsx` to use `signInWithPhoneNumber` and `RecaptchaVerifier` (invisible reCAPTCHA). The form now expects a 6-digit OTP from Firebase.
+- **Backend**: Added `firebaseLogin` controller that takes a verified `mobileNumber`, auto-creates the user if needed, and returns our custom JWT token. This keeps the rest of the application's auth logic unchanged.
+- **Routes**: Added `POST /v1/User/firebase-login`.
+
+## 2026-06-08 — Add Sign In Icon to Desktop Header
+**What**: Added a user account icon to the desktop header next to the search icon.
+**Why**: User requested a sign-in button on the main header for desktop users.
+**Files Changed**: `FrontEnd/src/Component/Header.jsx`
+- Added the `<User />` icon as a button within the `.header-icons` container, utilizing the existing `handleAccountClick` function. Hidden on mobile (`d-none d-lg-block`) to favor the new mobile menu login button.
+
 ## 2026-06-08 — Expand YouTube Shorts Section
 **What**: Updated the "FEATURED PRODUCTS" shorts section to display 5 videos instead of 4, keeping them all in a single row.
 **Why**: User requested 5 videos in the grid, duplicating one of the existing videos to test the layout.

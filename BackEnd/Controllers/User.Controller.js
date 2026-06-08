@@ -224,3 +224,120 @@ module.exports.verifyOtpAndResetPassword = async (req, res) => {
         res.status(500).json({ err: err.message });
     }
 };
+
+// ===== Firebase Mobile OTP Login =====
+
+module.exports.firebaseLogin = async (req, res) => {
+    try {
+        const { mobileNumber } = req.body;
+        if (!mobileNumber || !/^[6-9]\d{9}$/.test(mobileNumber)) {
+            return res.status(400).json({ message: "Please enter a valid 10-digit mobile number" });
+        }
+
+        // 1. Find user or auto-create if they don't exist
+        let user = await userSchema.findOne({ mobileNumber });
+        if (!user) {
+            user = new userSchema({
+                fullName: { firstName: "User", lastName: mobileNumber.slice(-4) },
+                email: `${mobileNumber}@bunbun.in`,
+                password: await bcrypt.hash(crypto.randomBytes(16).toString('hex'), 10),
+                mobileNumber,
+                gender: "Other",
+            });
+            await user.save();
+            console.log(`[Firebase Auto-Register] New user created for mobile: ${mobileNumber}`);
+        }
+
+        // 2. Generate our custom JWT token so the rest of the app works seamlessly
+        const token = jwt.sign(
+            { userId: user._id, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: "7d" }
+        );
+
+        const userWithoutPassword = user.toObject();
+        delete userWithoutPassword.password;
+
+        res.status(200).json({
+            message: "Login successful",
+            token,
+            user: userWithoutPassword
+        });
+
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+// Keeping these for legacy/fallback in case you ever switch off Firebase
+module.exports.sendLoginOtp = async (req, res) => {
+    try {
+        const { mobileNumber } = req.body;
+        if (!mobileNumber || !/^[6-9]\d{9}$/.test(mobileNumber)) {
+            return res.status(400).json({ message: "Please enter a valid 10-digit mobile number" });
+        }
+
+        // Auto-create user if not found (no separate registration)
+        let user = await userSchema.findOne({ mobileNumber });
+        if (!user) {
+            user = new userSchema({
+                fullName: { firstName: "User", lastName: mobileNumber.slice(-4) },
+                email: `${mobileNumber}@bunbun.in`,
+                password: await bcrypt.hash(crypto.randomBytes(16).toString('hex'), 10),
+                mobileNumber,
+                gender: "Other",
+            });
+            await user.save();
+            console.log(`[Auto-Register] New user created for mobile: ${mobileNumber}`);
+        }
+
+        const otp = generateOtp();
+        otpStore[mobileNumber] = otp;
+
+        // In production, integrate an SMS gateway (e.g., Twilio, MSG91) here.
+        // For development, we log the OTP and return it in the response.
+        console.log(`[Mock SMS] OTP for ${mobileNumber} is: ${otp}`);
+
+        res.status(200).json({ message: "OTP sent to mobile number successfully", devOtp: otp });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+module.exports.verifyLoginOtp = async (req, res) => {
+    try {
+        const { mobileNumber, otp } = req.body;
+        if (!mobileNumber || !otp) {
+            return res.status(400).json({ message: "Mobile number and OTP are required" });
+        }
+
+        if (otpStore[mobileNumber] !== otp) {
+            return res.status(400).json({ message: "Invalid or expired OTP" });
+        }
+
+        const user = await userSchema.findOne({ mobileNumber });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const token = jwt.sign(
+            { userId: user._id, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: "7d" }
+        );
+
+        const userWithoutPassword = user.toObject();
+        delete userWithoutPassword.password;
+
+        delete otpStore[mobileNumber];
+
+        res.status(200).json({
+            message: "Login successful",
+            token,
+            user: userWithoutPassword
+        });
+
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};

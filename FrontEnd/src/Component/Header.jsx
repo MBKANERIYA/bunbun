@@ -147,6 +147,9 @@ const Header = () => {
                                 <button className="icon-btn" title="Search" onClick={toggleSearch}>
                                     <Search />
                                 </button>
+                                <button className="icon-btn d-none d-lg-block" title="Account" onClick={handleAccountClick}>
+                                    <User />
+                                </button>
                                 <Link to="/wishlist" className="icon-btn" title="Wishlist">
                                     <Heart />
 

@@ -43,5 +43,9 @@ route.post("/forgot-password", UserController.forgotPassword);
 route.post("/reset-password", body("newPassword").isLength({ min: 6 }).withMessage("Password must be at least 6 characters"), UserController.verifyOtpAndResetPassword);
 route.post("/updateUser/:id", UserController.editUserProfile)
 
+// Mobile OTP Login
+route.post("/send-login-otp", UserController.sendLoginOtp);
+route.post("/verify-login-otp", UserController.verifyLoginOtp);
+route.post("/firebase-login", UserController.firebaseLogin);
 
 module.exports = route
