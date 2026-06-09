@@ -10,6 +10,13 @@
 - **CSS**: Created `MyOrders.css` with premium warm neutral design, smooth slide-down animation for expanded cards, responsive layout for mobile. Updated `UserProfileModel.css` to properly style button-based navigation links.
 - **Routing**: Added `/my-orders` route in `App.jsx`.
 
+## 2026-06-09 — Indian Pincode Auto-Fill
+**What**: Integrated the free Indian Postal Pincode API (`api.postalpincode.in`) into the address entry form.
+**Why**: The user requested that typing a 6-digit Indian PIN code automatically populate the City, State, and Country fields to speed up the checkout process.
+**Files Changed**: `FrontEnd/src/Pages/Address.jsx`
+- Updated the `handleChange` function to listen for exactly 6 digits in the `postalCode` input.
+- Added a GET request to the Pincode API to fetch the corresponding District, State, and Country data, automatically mapping it to the form's state.
+
 ## 2026-06-09 — Combo Discount Implementation
 **What**: Replaced the global subtotal-based percentage discounts (10%, 15%, 20%) with specific "Buy 2" combo offers.
 **Why**: The user requested new pricing models: 2 Plain Blouses for ₹629, 2 Kalamkari Blouses for ₹799, and 2 Shapewear for ₹499, with discounts auto-applying in the cart.

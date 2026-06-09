@@ -59,9 +59,27 @@ const AddAddress = () => {
     }
   }, [userId]);
 
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
     const { name, value } = e.target;
-    setAddress({ ...address, [name]: value });
+    setAddress(prev => ({ ...prev, [name]: value }));
+
+    // Auto-fetch city and state if pincode is 6 digits long
+    if (name === "postalCode" && value.length === 6) {
+      try {
+        const response = await axios.get(`https://api.postalpincode.in/pincode/${value}`);
+        if (response.data && response.data[0].Status === "Success") {
+          const postOffice = response.data[0].PostOffice[0];
+          setAddress(prev => ({
+            ...prev,
+            city: postOffice.District,
+            state: postOffice.State,
+            country: postOffice.Country || "India"
+          }));
+        }
+      } catch (err) {
+        console.error("Error fetching pincode details:", err);
+      }
+    }
   };
 
   const handleCheckboxChange = (e) => {
