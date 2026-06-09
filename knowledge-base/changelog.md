@@ -10,6 +10,31 @@
 - **CSS**: Created `MyOrders.css` with premium warm neutral design, smooth slide-down animation for expanded cards, responsive layout for mobile. Updated `UserProfileModel.css` to properly style button-based navigation links.
 - **Routing**: Added `/my-orders` route in `App.jsx`.
 
+## 2026-06-09 — Cart Sidebar Mobile Optimization
+**What**: Reordered the elements within the mobile Cart Sidebar to push the "Recent View" section to the bottom.
+**Why**: The user reported that displaying the recently viewed items at the top of the cart drawer on small screens pushed the actual cart contents and checkout buttons down too far.
+**Files Changed**:
+- `FrontEnd/src/Style/CartSidebar.css`: Modified the `@media (max-width: 768px)` query to switch `.cart-sidebar-body` from a grid layout to a flex column layout, leveraging the CSS `order` property to force `.cart-sidebar-content` above `.recently-viewed-list`.
+
+## 2026-06-09 — Mobile Cart Layout Refactor
+**What**: Completely redesigned the mobile view of the Shopping Cart items.
+**Why**: The user reported that the cart layout was poor on mobile devices. The previous layout stacked the image above the text and centered everything, making the items take up excessive vertical space.
+**Files Changed**:
+- `FrontEnd/src/Style/Cart.css`: Refactored the `@media (max-width: 576px)` query. Implemented `display: contents` on the product info wrapper to allow children to participate directly in a new 3-column CSS grid. The product image is now pinned to the left side, with details, price, and quantity controls compactly stacked on the right, and the delete button neatly positioned in the top-right corner.
+
+## 2026-06-09 — Blouse Navigation Dropdown
+**What**: Converted the top-level "Blouse" navigation link into a dropdown menu containing "Plain Blouse" and "Kalamkari Blouse".
+**Why**: The user wanted quicker, direct access to the new blouse subcategories directly from the main header navigation on both desktop and mobile.
+**Files Changed**:
+- `FrontEnd/src/Component/Header.jsx`: Changed the `nav-item` for Blouse to a `dropdown` in the desktop view, adding sub-links with `subcategory` query params. Updated the mobile side-drawer to trigger a dedicated "BLOUSE" slide-in submenu.
+
+## 2026-06-09 — Simplified Login Modal Layout
+**What**: Removed the blue informational left panel from the Login Modal and centered the form with the Bunbun logo at the top.
+**Why**: The user requested a cleaner, more focused login experience by stripping away the side panel and keeping only the interactive right panel.
+**Files Changed**:
+- `FrontEnd/src/Component/LoginModel.jsx`: Removed the `<div className="modal-left-panel">` section entirely and injected the `bunbun_logo.png` above the form title.
+- `FrontEnd/src/Style/LoginModel.css`: Removed the 40/60 CSS grid layout from `.modal-content` and set a fixed max-width of 450px to perfectly center the standalone form.
+
 ## 2026-06-09 — Indian Pincode Auto-Fill
 **What**: Integrated the free Indian Postal Pincode API (`api.postalpincode.in`) into the address entry form.
 **Why**: The user requested that typing a 6-digit Indian PIN code automatically populate the City, State, and Country fields to speed up the checkout process.

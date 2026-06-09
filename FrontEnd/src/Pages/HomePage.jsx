@@ -243,7 +243,7 @@ const HomePage = () => {
                         </div>
                         <div className="col-3 category-coming-soon">
                             <div className="category-card-wrapper">
-                                <img src="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780899400/Homepage1-jpg-563_688--06-08-2026_11_45_AM_ndww0h.png" alt="Kurti" className="img-fluid" style={{ aspectRatio: "4/5", objectFit: "cover" }} />
+                                <img src="https://res.cloudinary.com/dacwlu4mo/image/upload/v1781003332/ChatGPT_Image_Jun_9_2026_04_37_35_PM_ab96pt.png" alt="Kurti" className="img-fluid" style={{ aspectRatio: "4/5", objectFit: "cover" }} />
                                 <div className="category-overlay">
                                     <p className="coming-soon-text">Coming Soon</p>
                                 </div>

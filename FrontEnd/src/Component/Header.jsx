@@ -111,7 +111,7 @@ const Header = () => {
                                     <X />
                                 </button>
                             </div>
-                            
+
                             {/* Search Suggestions Dropdown */}
                             {searchQuery.length >= 2 && (
                                 <div className="search-suggestions-dropdown shadow-lg bg-white position-absolute w-100 mt-1 rounded-3 overflow-hidden" style={{ zIndex: 2500, border: '1px solid #eee', maxHeight: '70vh', overflowY: 'auto', left: 0 }}>
@@ -121,16 +121,16 @@ const Header = () => {
                                         <ul className="list-unstyled mb-0">
                                             {searchSuggestions.map((product) => (
                                                 <li key={product._id} className="suggestion-item border-bottom">
-                                                    <Link 
-                                                        to={`/product/${product.slug}`} 
+                                                    <Link
+                                                        to={`/product/${product.slug}`}
                                                         className="d-flex align-items-center p-3 text-decoration-none text-dark hover-bg-light"
                                                         onClick={() => { setShowSearch(false); setSearchQuery(''); }}
                                                     >
-                                                        <img 
-                                                            src={product.image} 
-                                                            alt={product.name} 
-                                                            className="rounded" 
-                                                            style={{ width: '40px', height: '40px', objectFit: 'cover', marginRight: '15px' }} 
+                                                        <img
+                                                            src={product.image}
+                                                            alt={product.name}
+                                                            className="rounded"
+                                                            style={{ width: '40px', height: '40px', objectFit: 'cover', marginRight: '15px' }}
                                                         />
                                                         <div>
                                                             <div className="fw-semibold text-truncate" style={{ maxWidth: '250px' }}>{product.name}</div>
@@ -140,8 +140,8 @@ const Header = () => {
                                                 </li>
                                             ))}
                                             <li className="text-center p-2 bg-light">
-                                                <Link 
-                                                    to={`/collections?q=${encodeURIComponent(searchQuery)}`} 
+                                                <Link
+                                                    to={`/collections?q=${encodeURIComponent(searchQuery)}`}
                                                     className="text-primary text-decoration-none small fw-bold"
                                                     onClick={() => { setShowSearch(false); setSearchQuery(''); }}
                                                 >
@@ -207,11 +207,18 @@ const Header = () => {
                                             </div>
                                         </div>
                                     </li>
-                                    <li className="nav-item" ><Link to="/collections?category=Blouse" className="nav-link">Blouse</Link></li>
-                                    <li className="nav-item" ><Link to="/collections?category=Shapewear" className="nav-link">Shapewear</Link></li>
-                                    <li className="nav-item">
-                                        <Link className="nav-link" to="/about">About Us</Link>
+                                    <li className="nav-item dropdown">
+                                        <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Blouse
+                                        </a>
+                                        <ul className="dropdown-menu">
+                                            <li><Link className="dropdown-item" to="/collections?category=Blouse">All Blouses</Link></li>
+                                            <li><Link className="dropdown-item" to="/collections?category=Blouse&subcategory=Plain">Plain Blouse</Link></li>
+                                            <li><Link className="dropdown-item" to="/collections?category=Blouse&subcategory=Printed">Kalamkari Blouse</Link></li>
+                                        </ul>
                                     </li>
+                                    <li className="nav-item" ><Link to="/collections?category=Shapewear" className="nav-link">Shapewear</Link></li>
+
                                     <li className="nav-item">
                                         <Link className="nav-link" to="/sale">SALE</Link>
                                     </li>
@@ -273,8 +280,9 @@ const Header = () => {
                             </a>
                         </li>
                         <li>
-                            <a onClick={() => handleMobileNavClick('/collections?category=Blouse')}>
+                            <a onClick={() => setActiveSubmenu('blouse')}>
                                 BLOUSE
+                                <ChevronRight className="mobile-nav-arrow" />
                             </a>
                         </li>
                         <li>
@@ -300,10 +308,10 @@ const Header = () => {
                         </li>
                     </ul>
                     <div className="mt-auto px-4 pb-4 pt-3">
-                        <button 
+                        <button
                             className="btn w-100"
                             onClick={() => { handleAccountClick(); closeMobileMenu(); }}
-                            style={{ padding: '12px', fontWeight: '600', letterSpacing: '1px', backgroundColor: '#8E44AD', color: '#fff', borderRadius: '6px' }}
+                            style={{ padding: '12px', fontWeight: '600', letterSpacing: '1px', backgroundColor: '#1A2E44', color: '#fff', borderRadius: '6px' }}
                         >
                             {localStorage.getItem('authToken') ? 'PROFILE / LOGOUT' : 'LOGIN / REGISTER'}
                         </button>
@@ -321,6 +329,20 @@ const Header = () => {
                         <li><a onClick={() => handleMobileNavClick('/collections?category=Blouse')}>Blouse</a></li>
                         <li><a onClick={() => handleMobileNavClick('/collections?category=Shapewear')}>Shapewear</a></li>
                         <li><a onClick={() => handleMobileNavClick('/collections?category=Essentials')}>Essentials</a></li>
+                    </ul>
+                </div>
+
+                {/* Blouse Submenu */}
+                <div className={`mobile-submenu ${activeSubmenu === 'blouse' ? 'slide-in' : ''}`}>
+                    <button className="mobile-submenu-back" onClick={() => setActiveSubmenu(null)}>
+                        <ChevronLeft />
+                        <span>BACK</span>
+                    </button>
+                    <h4 className="mobile-submenu-title">BLOUSE</h4>
+                    <ul className="mobile-nav-list">
+                        <li><a onClick={() => handleMobileNavClick('/collections?category=Blouse')}>All Blouses</a></li>
+                        <li><a onClick={() => handleMobileNavClick('/collections?category=Blouse&subcategory=Plain')}>Plain Blouse</a></li>
+                        <li><a onClick={() => handleMobileNavClick('/collections?category=Blouse&subcategory=Printed')}>Kalamkari Blouse</a></li>
                     </ul>
                 </div>
 

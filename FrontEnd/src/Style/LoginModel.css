@@ -14,10 +14,8 @@
 }
 
 .modal-content {
-    display: grid;
-    grid-template-columns: 40% 60%;
     width: 100%;
-    max-width: 800px;
+    max-width: 450px;
     background-color: #fff;
     border-radius: 12px;
     box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);

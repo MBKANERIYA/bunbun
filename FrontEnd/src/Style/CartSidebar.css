@@ -391,7 +391,20 @@ body {
     }
 
     .cart-sidebar-body {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .recently-viewed-list {
+        order: 2;
+        padding: 1.5rem 1rem;
+        background-color: #f8f9fa;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .cart-sidebar-content {
+        order: 1;
+        flex: 1 1 auto;
     }
 
     .recently-viewed-section {

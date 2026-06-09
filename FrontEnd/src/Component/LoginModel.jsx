@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import { FaSpinner } from 'react-icons/fa'; 
+import { FaSpinner } from 'react-icons/fa';
 import { notifyAuthChanged } from '../utils/auth';
 import { apiUrl } from '../utils/apiConfig';
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
@@ -72,7 +72,7 @@ const LoginModal = ({ isOpen, onClose }) => {
             // If recaptcha fails, we might need to reset it
             if (window.recaptchaVerifier) {
                 try {
-                    window.recaptchaVerifier.render().then(function(widgetId) {
+                    window.recaptchaVerifier.render().then(function (widgetId) {
                         grecaptcha.reset(widgetId);
                     });
                 } catch (e) {
@@ -123,23 +123,14 @@ const LoginModal = ({ isOpen, onClose }) => {
     return ReactDOM.createPortal(
         <div className="modal-overlay" onClick={handleClose}>
             <div className="modal-content" onClick={e => e.stopPropagation()}>
-                
-                {/* Left Panel */}
-                <div className="modal-left-panel">
-                    <h2>Bunbun Clothing</h2>
-                    <h3>Quick & secure login with your mobile number!</h3>
-                    <div className="features" style={{ marginTop: '1rem', fontSize: '0.9rem', lineHeight: '1.8' }}>
-                        <div className="feature-item">✓ Powered by Firebase Security</div>
-                        <div className="feature-item">✓ Fast SMS Delivery</div>
-                        <div className="feature-item">✓ Exclusive Member Deals</div>
-                        <div className="feature-item">✓ Track Your Orders</div>
-                    </div>
-                </div>
 
                 <div className="modal-right-panel">
                     <button className="close-btn" onClick={handleClose}>&times;</button>
-                    <h4>{!otpSent ? 'Login / Sign Up' : 'Verify OTP'}</h4>
-                    
+                    <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+                        <img src="/bunbun_logo.png" alt="Bunbun Logo" style={{ width: '160px', display: 'inline-block' }} />
+                    </div>
+                    <h4 style={{ textAlign: 'center' }}>{!otpSent ? 'Login / Sign Up' : 'Verify OTP'}</h4>
+
                     {error && <p className="error-message">{error}</p>}
                     {success && <p className="success-message">{success}</p>}
 
@@ -192,8 +183,8 @@ const LoginModal = ({ isOpen, onClose }) => {
                                         style={{ flex: 1, opacity: 0.7 }}
                                     />
                                 </div>
-                                <span 
-                                    className="auth-switch-link" 
+                                <span
+                                    className="auth-switch-link"
                                     onClick={() => { setOtpSent(false); setOtpCode(''); setError(null); setSuccess(null); }}
                                     style={{ fontSize: '0.8rem', cursor: 'pointer' }}
                                 >
@@ -214,7 +205,7 @@ const LoginModal = ({ isOpen, onClose }) => {
                                     autoFocus
                                     style={{ letterSpacing: '12px', textAlign: 'center', fontSize: '1.5rem', fontWeight: '700' }}
                                 />
-                                <small style={{display:'block', textAlign:'center', marginTop:'5px', color:'#666'}}>Firebase OTP is 6 digits</small>
+                                <small style={{ display: 'block', textAlign: 'center', marginTop: '5px', color: '#666' }}>Firebase OTP is 6 digits</small>
                             </div>
 
                             <button type="submit" className="continue-btn" disabled={isLoading || otpCode.length !== 6}>

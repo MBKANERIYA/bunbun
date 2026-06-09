@@ -47,8 +47,8 @@ const Footer = () => {
             <h6 className="fw-bold mb-3">GET IN TOUCH</h6>
             <p className="mb-1 fw-bold">BUNBUN CLOTHING</p>
             <p className="mb-1">Working Hours: <br />10:30 AM - 7:00 PM (Monday–Saturday)</p>
-            <p className="mb-1 fw-bold">Whatsapp Us: </p>
-            <p className="fw-bold">Call Us: </p>
+            <p className="mb-1 fw-bold">Whatsapp Us : &nbsp;&nbsp;<span>9276569990</span></p>
+            <p className="fw-bold">Call Us : &nbsp;&nbsp;<span>9276569990</span></p>
           </div>
 
         </div>
@@ -84,11 +84,6 @@ const Footer = () => {
         </div>
 
         {/* App Download Button */}
-        <div className="mt-3 text-start">
-          <button className="btn btn-dark border-white text-white rounded-pill px-4 py-2">
-            Download The App
-          </button>
-        </div>
 
       </div>
     </footer>
