@@ -10,6 +10,12 @@
 - **CSS**: Created `MyOrders.css` with premium warm neutral design, smooth slide-down animation for expanded cards, responsive layout for mobile. Updated `UserProfileModel.css` to properly style button-based navigation links.
 - **Routing**: Added `/my-orders` route in `App.jsx`.
 
+## 2026-06-09 — Added Blouse Category Selection to Admin Panel
+**What**: Added a mandatory radio button group for "Plain" or "Printed" when adding a new Blouse product in the Admin Panel.
+**Why**: The user requested a way to categorize blouses into plain or printed designs directly from the product creation form.
+**Files Changed**: `FrontEnd/src/Pages/AdminPanel.jsx`
+- Tied the new radio buttons to the existing `subcategory` field in the `formData` state.
+
 ## 2026-06-09 — Performance Optimizations (Lazy Loading)
 **What**: Implemented React lazy loading for all routes and added native lazy loading to heavy media assets.
 **Why**: The application was loading all pages and heavy YouTube iframes synchronously on the initial load, leading to high time-to-interactive and UI lagging.

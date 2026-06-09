@@ -707,6 +707,19 @@ const AdminPanel = () => {
                                         <div className="form-section">
                                             <h3 className="form-section-title">Blouse Specific Details</h3>
                                             <div className="form-grid">
+                                                <div className="form-group full-width" style={{ gridColumn: '1 / -1' }}>
+                                                    <label>Blouse Category *</label>
+                                                    <div style={{ display: 'flex', gap: '20px', marginTop: '10px' }}>
+                                                        <label style={{ display: 'flex', alignItems: 'center', gap: '5px', fontWeight: 'normal', cursor: 'pointer' }}>
+                                                            <input type="radio" name="subcategory" value="Plain" checked={formData.subcategory === 'Plain'} onChange={handleInputChange} required />
+                                                            Plain
+                                                        </label>
+                                                        <label style={{ display: 'flex', alignItems: 'center', gap: '5px', fontWeight: 'normal', cursor: 'pointer' }}>
+                                                            <input type="radio" name="subcategory" value="Printed" checked={formData.subcategory === 'Printed'} onChange={handleInputChange} required />
+                                                            Printed
+                                                        </label>
+                                                    </div>
+                                                </div>
                                                 <div className="form-group">
                                                     <label>Blouse Type</label>
                                                     <input type="text" name="blouseType" value={formData.blouseType} onChange={handleInputChange} placeholder="Stitched (Optional)" />
