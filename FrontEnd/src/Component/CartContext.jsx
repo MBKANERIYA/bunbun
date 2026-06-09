@@ -109,7 +109,9 @@ export const CartProvider = ({ children }) => {
                             name: productDetail.name,
                             image: productDetail.image,
                             selling_price: productDetail.selling_price,
-                            mrp: productDetail.mrp
+                            mrp: productDetail.mrp,
+                            category: productDetail.category,
+                            subcategory: productDetail.subcategory
                         },
                         quantity: 1,
                         size: size,

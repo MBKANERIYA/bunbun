@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="row text-start">
 
           {/* Popular Searches */}
-          <div className="col-md-3 col-sm-6 mb-4">
+          {/* <div className="col-md-3 col-sm-6 mb-4">
             <h6 className="fw-bold mb-3">POPULAR SEARCHES</h6>
             <ul className="list-unstyled">
               <a href="/">Sudathi Gold</a>
@@ -17,7 +17,7 @@ const Footer = () => {
               <a href="/">Shark Tank Sale</a>
               <a href="/">Mouni Roy Sarees</a>
             </ul>
-          </div>
+          </div> */}
 
           {/* Information */}
           <div className="col-md-2 col-sm-6 mb-4">

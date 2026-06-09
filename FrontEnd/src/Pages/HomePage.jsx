@@ -223,26 +223,27 @@ const HomePage = () => {
                     <h2 className="text-center fw-bold mb-4">TOP CATEGORIES</h2>
                     <div className="row">
 
-                        <div className="col-3" onClick={() => handleCategoryClick("Blouse")} style={{ cursor: "pointer" }}>
-                            <img src="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780899400/Homepage1-jpg-563_688--06-08-2026_11_45_AM_ndww0h.png" alt="Blouses" className="img-fluid" />
-                            <p className="category-label">BLOUSE <span>⟶</span></p>
+                        <div className="col-3" onClick={() => navigate(`/collections?category=${encodeURIComponent("Blouse")}&subcategory=${encodeURIComponent("Plain")}`)} style={{ cursor: "pointer" }}>
+                            <div className="category-card-wrapper">
+                                <img src="https://res.cloudinary.com/drizf8zcc/image/upload/v1780996653/products/xkluigbdizxxvg9vyxbt.jpg" alt="Plain Blouses" className="img-fluid" style={{ aspectRatio: "4/5", objectFit: "cover" }} />
+                            </div>
+                            <p className="category-label">PLAIN BLOUSE <span>⟶</span></p>
+                        </div>
+                        <div className="col-3" onClick={() => navigate(`/collections?category=${encodeURIComponent("Blouse")}&subcategory=${encodeURIComponent("Printed")}`)} style={{ cursor: "pointer" }}>
+                            <div className="category-card-wrapper">
+                                <img src="https://res.cloudinary.com/drizf8zcc/image/upload/v1780997353/products/ecfsxo1aa430vykeiikp.jpg" alt="Kalamkari Blouses" className="img-fluid" style={{ aspectRatio: "4/5", objectFit: "cover" }} />
+                            </div>
+                            <p className="category-label">KALAMKARI BLOUSE <span>⟶</span></p>
                         </div>
                         <div className="col-3" onClick={() => handleCategoryClick("Shapewear")} style={{ cursor: "pointer" }} >
-                            <img src="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780899400/Homepage1-jpg-563_688--06-08-2026_11_45_AM_ndww0h.png" alt="Shapewears" className="img-fluid" />
+                            <div className="category-card-wrapper">
+                                <img src="https://res.cloudinary.com/drizf8zcc/image/upload/v1780898529/products/x0zvztaapyzicsuulp4w.jpg" alt="Shapewears" className="img-fluid" style={{ aspectRatio: "4/5", objectFit: "cover" }} />
+                            </div>
                             <p className="category-label">SHAPEWEAR <span>⟶</span></p>
                         </div>
                         <div className="col-3 category-coming-soon">
                             <div className="category-card-wrapper">
-                                <img src="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780899400/Homepage1-jpg-563_688--06-08-2026_11_45_AM_ndww0h.png" alt="Palazzo" className="img-fluid" />
-                                <div className="category-overlay">
-                                    <p className="coming-soon-text">Coming Soon</p>
-                                </div>
-                            </div>
-                            <p className="category-label">PALAZZO <span>⟶</span></p>
-                        </div>
-                        <div className="col-3 category-coming-soon">
-                            <div className="category-card-wrapper">
-                                <img src="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780899400/Homepage1-jpg-563_688--06-08-2026_11_45_AM_ndww0h.png" alt="Kurti" className="img-fluid" />
+                                <img src="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780899400/Homepage1-jpg-563_688--06-08-2026_11_45_AM_ndww0h.png" alt="Kurti" className="img-fluid" style={{ aspectRatio: "4/5", objectFit: "cover" }} />
                                 <div className="category-overlay">
                                     <p className="coming-soon-text">Coming Soon</p>
                                 </div>
@@ -254,7 +255,7 @@ const HomePage = () => {
 
             </section>
             <section className="trending mt-5">
-                <h2 className="text-center fw-bold mb-4">BLOUSES COLLECTION</h2>
+                <h2 className="text-center fw-bold mb-4">PLAIN BLOUSES COLLECTION</h2>
                 <div className="trendingBanner" onClick={() => handleCategoryClick("Saree")} style={{ cursor: "pointer" }}>
                     <picture>
                         <source media="(max-width: 768px)" srcSet="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780897492/blouse_web_banner_vpx0tq.png" />
@@ -265,7 +266,7 @@ const HomePage = () => {
                 <div className="tredingProduct mt-4">
                     <Slider {...settings}>
                         {(product || [])
-                            .filter((p) => p.category === "Blouse")
+                            .filter((p) => p.category === "Blouse" && p.subcategory === "Plain")
                             .map((product, index) => (
                                 <div key={index} className="px-2">
                                     <ProductCard product={product} />
@@ -297,6 +298,28 @@ const HomePage = () => {
                 </div>
             </section>
             <section>
+                <div className="bestSeller mt-5">
+                    <h2 className="text-center mb-4 fw-bold">KALAMKARI BLOUSES COLLECTION</h2>
+                    <div className="bestSellerBanner">
+                        <picture>
+                            <source media="(max-width: 768px)" srcSet="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780996760/SCX_iejspv.png" />
+                            <img src="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780996756/printed_blouse_cy720u.png" alt="Bestseller Sarees Banner" loading="lazy" />
+                        </picture>
+                    </div>
+                    <div className="tredingProduct mt-4">
+                        <Slider {...settings}>
+                            {(product || [])
+                                .filter((p) => p.category === "Blouse" && p.subcategory === "Printed")
+                                .map((product, index) => (
+                                    <div key={index} className="px-2">
+                                        <ProductCard product={product} />
+                                    </div>
+                                ))}
+                        </Slider>
+                    </div>
+                </div>
+            </section>
+            {/* <section>
                 <div className="sareeStore container-fluid pe-5 ps-5 mt-5">
                     <h2 className="text-center fw-bold mb-4">THE SAREE STORE</h2>
                     <div className="sareeStoreImages">
@@ -322,7 +345,7 @@ const HomePage = () => {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> */}
 
             {/* Customer Reviews Section */}
             {reviews.length > 0 && (

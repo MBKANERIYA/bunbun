@@ -10,6 +10,35 @@
 - **CSS**: Created `MyOrders.css` with premium warm neutral design, smooth slide-down animation for expanded cards, responsive layout for mobile. Updated `UserProfileModel.css` to properly style button-based navigation links.
 - **Routing**: Added `/my-orders` route in `App.jsx`.
 
+## 2026-06-09 — Combo Discount Implementation
+**What**: Replaced the global subtotal-based percentage discounts (10%, 15%, 20%) with specific "Buy 2" combo offers.
+**Why**: The user requested new pricing models: 2 Plain Blouses for ₹629, 2 Kalamkari Blouses for ₹799, and 2 Shapewear for ₹499, with discounts auto-applying in the cart.
+**Files Changed**:
+- `FrontEnd/src/Component/Cart.jsx` & `FrontEnd/src/Pages/OrderSummery.jsx`: Rewrote the `calculateOrderDiscount` algorithm to scan the cart for qualifying pairs of specific product categories/subcategories and subtract the exact differential amount from the total. Updated the offer banners in the cart sidebar.
+- `FrontEnd/src/Component/CartContext.jsx`: Updated the guest cart logic to include `category` and `subcategory` when storing local cart data so that the new combo discounts can also calculate for unregistered users.
+
+## 2026-06-09 — Unified Top Category Card Sizes
+**What**: Updated the "Top Categories" section so all cards have a uniform size and aspect ratio matching the "Kurti Set" card.
+**Why**: The newly uploaded category images had varying aspect ratios, causing the grid layout to look uneven.
+**Files Changed**: `FrontEnd/src/Pages/HomePage.jsx`
+- Wrapped all `img` tags in the `<div className="category-card-wrapper">` div to provide rounded corners.
+- Added `aspectRatio: "4/5"` and `objectFit: "cover"` inline styles to all images to enforce a strict, uniform aspect ratio.
+
+## 2026-06-09 — Reorganized Top Categories Grid
+**What**: Updated the "Top Categories" image links grid on the homepage to remove Palazzo and add specific blouse subcategories.
+**Why**: The user requested that the categories highlight the new Plain and Printed (Kalamkari) blouse variations rather than a generic blouse link and a coming soon placeholder for Palazzo.
+**Files Changed**: `FrontEnd/src/Pages/HomePage.jsx`
+- Removed the Palazzo card.
+- Replaced the generic "Blouse" card with two new cards: "Plain Blouse" and "Kalamkari Blouse".
+- Updated `onClick` handlers for the new blouse cards to navigate directly to their respective subcategory filters on the collection page.
+
+## 2026-06-09 — Plain and Printed Blouses Collection Filters
+**What**: Updated the "Plain Blouses Collection" and "Kalamkari Blouses Collection" sections on the homepage to exclusively display "Plain" and "Printed" blouses respectively.
+**Why**: The user requested that the blouse sliders differentiate between plain and printed styles, utilizing the new `subcategory` feature.
+**Files Changed**: `FrontEnd/src/Pages/HomePage.jsx`
+- Changed the Plain Blouses slider filter to `p.category === "Blouse" && p.subcategory === "Plain"`.
+- Changed the Printed Blouses slider filter to `p.category === "Blouse" && p.subcategory === "Printed"`.
+
 ## 2026-06-09 — Added Blouse Category Selection to Admin Panel
 **What**: Added a mandatory radio button group for "Plain" or "Printed" when adding a new Blouse product in the Admin Panel.
 **Why**: The user requested a way to categorize blouses into plain or printed designs directly from the product creation form.

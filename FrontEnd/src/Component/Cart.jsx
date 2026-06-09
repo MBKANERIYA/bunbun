@@ -37,9 +37,9 @@ const Cart = () => {
     const [activeOffer, setActiveOffer] = useState(0);
     const navigate = useNavigate();
     const offers = useMemo(() => [
-        { title: "Extra 10% off", detail: "On orders above ₹2,999" },
-        { title: "Extra 15% off", detail: "On orders above ₹4,999" },
-        { title: "Extra 20% off", detail: "On orders above ₹9,999" },
+        { title: "Combo Offer", detail: "2 Plain Blouses at just ₹629" },
+        { title: "Combo Offer", detail: "2 Kalamkari Blouses at just ₹799" },
+        { title: "Combo Offer", detail: "2 Shapewear at just ₹499" },
     ], []);
 
     const handleRemoveFromCart = async () => {
@@ -93,15 +93,59 @@ const Cart = () => {
 
     const subtotal = cart.cartTotal || 0;
     
-    // Calculate global cart discount based on subtotal tiers
-    const calculateOrderDiscount = (total) => {
-        if (total > 9999) return { percentage: 20, amount: Math.round(total * 0.20) };
-        if (total > 4999) return { percentage: 15, amount: Math.round(total * 0.15) };
-        if (total > 2999) return { percentage: 10, amount: Math.round(total * 0.10) };
-        return { percentage: 0, amount: 0 };
+    // Calculate combo discount based on quantity and category
+    const calculateOrderDiscount = (cartItems) => {
+        if (!cartItems || cartItems.length === 0) return { amount: 0 };
+
+        let plainBlouseItems = [];
+        let printedBlouseItems = [];
+        let shapewearItems = [];
+
+        cartItems.forEach(item => {
+            const product = item.productId;
+            if (!product) return;
+            const price = Number(product.selling_price) || 0;
+            const qty = Number(item.quantity) || 1;
+            
+            for(let i=0; i<qty; i++) {
+                if (product.category === "Blouse" && product.subcategory === "Plain") {
+                    plainBlouseItems.push(price);
+                } else if (product.category === "Blouse" && product.subcategory === "Printed") {
+                    printedBlouseItems.push(price);
+                } else if (product.category === "Shapewear") {
+                    shapewearItems.push(price);
+                }
+            }
+        });
+
+        plainBlouseItems.sort((a,b) => a-b);
+        printedBlouseItems.sort((a,b) => a-b);
+        shapewearItems.sort((a,b) => a-b);
+
+        let comboDiscountAmount = 0;
+        
+        while(shapewearItems.length >= 2) {
+            let p1 = shapewearItems.pop();
+            let p2 = shapewearItems.pop();
+            if ((p1 + p2) > 499) comboDiscountAmount += (p1 + p2) - 499;
+        }
+
+        while(plainBlouseItems.length >= 2) {
+            let p1 = plainBlouseItems.pop();
+            let p2 = plainBlouseItems.pop();
+            if ((p1 + p2) > 629) comboDiscountAmount += (p1 + p2) - 629;
+        }
+
+        while(printedBlouseItems.length >= 2) {
+            let p1 = printedBlouseItems.pop();
+            let p2 = printedBlouseItems.pop();
+            if ((p1 + p2) > 799) comboDiscountAmount += (p1 + p2) - 799;
+        }
+
+        return { amount: comboDiscountAmount };
     };
 
-    const discountInfo = calculateOrderDiscount(subtotal);
+    const discountInfo = calculateOrderDiscount(cart.product);
     const finalTotal = subtotal - discountInfo.amount;
 
     return (
@@ -212,7 +256,7 @@ const Cart = () => {
                         </div>
                         {discountInfo.amount > 0 && (
                             <div className="summary-row discount-row text-success" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-                                <span>Extra {discountInfo.percentage}% OFF</span>
+                                <span>Combo Discount Auto Applied</span>
                                 <span>-₹{discountInfo.amount.toLocaleString()}</span>
                             </div>
                         )}
