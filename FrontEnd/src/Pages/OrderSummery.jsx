@@ -3,6 +3,7 @@ import { useCart } from '../Component/CartContext'; // Adjust path if needed
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { apiUrl } from '../utils/apiConfig';
+import { getAuthUser } from '../utils/auth';
 
 const loadRazorpay = () => {
     return new Promise((resolve) => {
@@ -15,8 +16,9 @@ const loadRazorpay = () => {
 };
 
 const DetailedSummary = ({ selectedAddress, isGuest = false }) => {
-    const { cart, loading } = useCart();
+    const { cart, loading, clearCart } = useCart();
     const [isProcessing, setIsProcessing] = useState(false);
+    const user = getAuthUser();
 
     const navigate = useNavigate();
 
@@ -86,7 +88,7 @@ const DetailedSummary = ({ selectedAddress, isGuest = false }) => {
 
             // 2. Open Razorpay Checkout
             const options = {
-                key: "rzp_test_Sp9X2smiuL6n0F", // Hardcoded per user request, typically from env
+                key: import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_Sp8ow2u4uVKQIl", // Fallback to test key if env is missing
                 amount: amount,
                 currency: currency,
                 name: "Bunbun Clothing",
@@ -104,12 +106,17 @@ const DetailedSummary = ({ selectedAddress, isGuest = false }) => {
                         if (verifyRes.status === 200) {
                             // 4. Create Order in DB
                             const orderPayload = {
-                                userId: isGuest ? 'guest' : "6892e8456c2cbf8ecb95c1ea",
+                                userId: isGuest ? 'guest' : (user?._id || "6892e8456c2cbf8ecb95c1ea"),
                                 guestInfo: isGuest ? {
                                     name: selectedAddress?.guestName || 'Guest',
                                     phone: selectedAddress?.guestPhone || '',
                                 } : undefined,
-                                items: cart.product,
+                                items: cart.product.map(item => ({
+                                    productId: item.productId._id || item.productId,
+                                    quantity: item.quantity,
+                                    size: item.size,
+                                    price: parsePrice(item.productId.selling_price)
+                                })),
                                 amount: {
                                     subtotal: subtotal,
                                     total: finalTotal
@@ -117,16 +124,19 @@ const DetailedSummary = ({ selectedAddress, isGuest = false }) => {
                                 shippingAddress: selectedAddress,
                                 billingAddress: selectedAddress,
                                 paymentDetails: {
+                                    paymentId: response.razorpay_payment_id,
                                     paymentMethod: "Razorpay",
-                                    transactionId: response.razorpay_payment_id
+                                    paymentStatus: "Completed"
                                 }
                             };
 
                             await axios.post(apiUrl('/v1/order/createOrder'), orderPayload);
                             
+                            // 5. Clear Cart
+                            await clearCart();
+
                             alert("Payment successful! Your order has been placed.");
-                            // Normally you'd clear cart and navigate to a success page here
-                            navigate("/"); 
+                            navigate("/my-orders"); 
                         }
                     } catch (err) {
                         console.error(err);

@@ -24,11 +24,8 @@ const Footer = () => {
             <h6 className="fw-bold mb-3">INFORMATION</h6>
             <ul className="list-unstyled">
               <a href="/blog">Blogs</a>
-              <a href="/">Reviews</a>
-              <a href="/">Search</a>
-              <a href="/">Login</a>
+
               <a href="/">FAQs</a>
-              <a href="/">Create Account</a>
             </ul>
           </div>
 
@@ -42,8 +39,6 @@ const Footer = () => {
               <a href="/shipping-policy">Shipping Policy</a>
               <a href="/privacy-policy">Privacy Policy</a>
               <a href="/terms-and-conditions">Terms of Service</a>
-              <a href="/">Track Order</a>
-              <a href="/">Place Return Request</a>
             </ul>
           </div>
 

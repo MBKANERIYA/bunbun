@@ -44,13 +44,19 @@
 }
 
 .profile-link {
-    padding: 1rem 0;
+    display: block;
+    width: 100%;
+    padding: 1rem 15px;
     text-decoration: none;
     border-radius: 10px;
     color: var(--primary-color);
     font-weight: 500;
+    border: none;
     border-bottom: 1px solid #e9ecef;
-    padding: 15px;
+    background: transparent;
+    text-align: left;
+    font-size: 0.95rem;
+    cursor: pointer;
     transition: background-color 0.2s;
 }
 .profile-link:hover {

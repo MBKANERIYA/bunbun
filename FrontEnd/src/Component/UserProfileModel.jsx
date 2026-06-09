@@ -1,8 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 import { getAuthUser, notifyAuthChanged } from '../utils/auth';
 
 const UserProfileModal = ({ isOpen, onClose }) => {
+    const navigate = useNavigate();
+
     if (!isOpen) return null;
 
     const user = getAuthUser();
@@ -11,6 +14,11 @@ const UserProfileModal = ({ isOpen, onClose }) => {
         localStorage.removeItem('authToken');
         notifyAuthChanged();
         onClose();
+    };
+
+    const handleNavigate = (path) => {
+        onClose();
+        navigate(path);
     };
 
     return ReactDOM.createPortal(
@@ -27,9 +35,10 @@ const UserProfileModal = ({ isOpen, onClose }) => {
                 </div>
                 
                 <nav className="profile-nav">
-                    <a href="/cart" className="profile-link">Cart</a>
-                    <a href="/wishlist" className="profile-link">Wishlist</a>
-                    <a href="/edit-profile" className="profile-link">Edit Profile</a>
+                    <button className="profile-link" onClick={() => handleNavigate('/my-orders')}>My Orders</button>
+                    <button className="profile-link" onClick={() => handleNavigate('/cart')}>Cart</button>
+                    <button className="profile-link" onClick={() => handleNavigate('/wishlist')}>Wishlist</button>
+                    <button className="profile-link" onClick={() => handleNavigate('/edit-profile')}>Edit Profile</button>
                 </nav>
 
                 <button className="logout-btn" onClick={handleLogout}>

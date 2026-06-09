@@ -168,3 +168,23 @@ module.exports.removeFromCart = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+module.exports.clearCart = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        let cart = await cartSchema.findOne({ userId });
+        
+        if (cart) {
+            cart.product = [];
+            cart.cartTotal = 0;
+            await cart.save();
+        }
+
+        res.status(200).json({
+            message: "Cart cleared successfully",
+            cart: cart || { userId, product: [], cartTotal: 0 }
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};

@@ -1,5 +1,95 @@
 # Changelog
 
+## 2026-06-09 — My Orders Page & Profile Modal Update
+**What**: Added a "My Orders" button to the user profile modal and created a full My Orders page where users can view their order history.
+**Why**: Users needed a way to track their placed orders from within the app.
+**Files Changed**: `BackEnd/Controllers/Order.Controller.js`, `BackEnd/Routes/Order.Route.js`, `FrontEnd/src/Component/UserProfileModel.jsx`, `FrontEnd/src/Pages/MyOrders.jsx` (new), `FrontEnd/src/Style/MyOrders.css` (new), `FrontEnd/src/Style/UserProfileModel.css`, `FrontEnd/src/App.jsx`
+- **Backend**: Added `getUserOrders` controller that fetches orders by `userId` with product details populated, sorted newest-first. Added `GET /v1/order/user/:userId` route.
+- **Profile Modal**: Added "My Orders" as the first navigation link. Switched from `<a>` tags to `<button>` elements with `useNavigate` for proper SPA navigation (no full page reloads). Modal closes before navigating.
+- **My Orders Page**: Created `MyOrders.jsx` with expandable order cards showing product thumbnails preview, color-coded status badges with icons, price breakdown, delivery address, and payment details. Clicking items navigates to the product page. Includes empty state, loading spinner, and login-required state.
+- **CSS**: Created `MyOrders.css` with premium warm neutral design, smooth slide-down animation for expanded cards, responsive layout for mobile. Updated `UserProfileModel.css` to properly style button-based navigation links.
+- **Routing**: Added `/my-orders` route in `App.jsx`.
+
+## 2026-06-09 — Performance Optimizations (Lazy Loading)
+**What**: Implemented React lazy loading for all routes and added native lazy loading to heavy media assets.
+**Why**: The application was loading all pages and heavy YouTube iframes synchronously on the initial load, leading to high time-to-interactive and UI lagging.
+**Files Changed**: `FrontEnd/src/App.jsx`, `FrontEnd/src/Pages/HomePage.jsx`
+- Wrapped all routes in `React.lazy` and `Suspense` in `App.jsx` to code-split the Javascript bundle.
+- Added `loading="lazy"` to heavy `<iframe>` and `<img>` tags in `HomePage.jsx` to defer loading off-screen media.
+
+## 2026-06-09 — Checkout Flow Enhancements (Clear Cart & Redirect)
+**What**: Automated clearing the cart and redirecting the user to the "My Orders" page after a successful checkout.
+**Why**: The user requested that products be removed from their cart upon purchase completion and that they be immediately taken to their orders history instead of the homepage.
+**Files Changed**: `BackEnd/Controllers/Cart.Controller.js`, `BackEnd/Routes/Cart.Route.js`, `FrontEnd/src/Component/CartContext.jsx`, `FrontEnd/src/Pages/OrderSummery.jsx`
+- Added `/clear/:userId` endpoint to the backend to clear a user's cart in the database.
+- Added `clearCart` utility function to `CartContext.jsx` to clear both guest and logged-in user carts.
+- Modified `OrderSummery.jsx` to invoke `clearCart()` and route to `/my-orders` upon payment success.
+
+## 2026-06-09 — Configured Frontend Environment Variables for Payments
+**What**: Created a `.env` file in the `FrontEnd` directory containing `VITE_RAZORPAY_KEY_ID`.
+**Why**: The Razorpay Key ID was previously hardcoded in `OrderSummery.jsx`. Using an environment variable makes it secure and easy to swap test credentials for production credentials.
+**Files Changed**: `FrontEnd/.env` (new), `FrontEnd/src/Pages/OrderSummery.jsx`
+- Added `.env` with the current test key.
+- Replaced hardcoded key with `import.meta.env.VITE_RAZORPAY_KEY_ID`.
+
+## 2026-06-09 — Fixed Order Creation Payment Validation Error
+**What**: Updated `paymentDetails` structure in `OrderSummery.jsx` and added 'Razorpay' to the `paymentMethod` enum in `Order.Model.js`.
+**Why**: The frontend was sending `paymentMethod: "Razorpay"` and `transactionId`, but the schema expected `paymentId` and strictly enforced an enum that did not include 'Razorpay'. This caused a silent validation failure on order creation.
+**Files Changed**: `FrontEnd/src/Pages/OrderSummery.jsx`, `BackEnd/Models/Order.Model.js`
+- Added 'Razorpay' to the `paymentMethod` enum.
+- Corrected payload key from `transactionId` to `paymentId` and explicitly set `paymentStatus: "Completed"`.
+
+## 2026-06-09 — Fixed Order Creation Validation Error
+**What**: Updated `OrderSummery.jsx` to map the `cart.product` items into the structure required by `Order.Model.js` before sending the order creation request.
+**Why**: The backend order schema required a `price` field for each item, but the frontend was sending the raw `cart.product` array which lacked `price`. This caused a silent Mongoose validation error on the backend (`createOrder` failed with 500), which cascaded to the frontend showing a misleading "Payment verification failed" alert.
+**Files Changed**: `FrontEnd/src/Pages/OrderSummery.jsx`
+- Transformed `items` array to explicitly extract `productId._id`, `quantity`, `size`, and computed `price` using `parsePrice`.
+
+## 2026-06-09 — Fixed Missing Orders in My Orders
+**What**: Updated `OrderSummery.jsx` to use the authenticated user's actual `_id` instead of a hardcoded mock ID during order creation.
+**Why**: After a successful checkout, the newly created order was being saved to a hardcoded user ID (`6892e8456c2cbf8ecb95c1ea`), so when the actual user went to their "My Orders" page, the API request (`/v1/order/user/:userId`) couldn't find any orders matching their real ID.
+**Files Changed**: `FrontEnd/src/Pages/OrderSummery.jsx`
+- Imported `getAuthUser` utility.
+- Dynamically retrieved the logged-in `user._id` and passed it in the `orderPayload` for non-guest checkouts.
+
+## 2026-06-09 — Fixed Razorpay 401 Unauthorized Error
+**What**: Updated the hardcoded Razorpay key in the frontend to match the backend's `RAZORPAY_KEY_ID`.
+**Why**: The Razorpay checkout modal was throwing a `401 Unauthorized` error because the frontend was initializing the payment with `rzp_test_Sp9X2smiuL6n0F`, but the order was created on the backend using `rzp_test_Sp8ow2u4uVKQIl`. Razorpay requires the popup initialization key to exactly match the key used to generate the `order_id`.
+**Files Changed**: `FrontEnd/src/Pages/OrderSummery.jsx`
+- Replaced the hardcoded key with `rzp_test_Sp8ow2u4uVKQIl`.
+
+## 2026-06-09 — Fixed Order Schema Validation Error
+**What**: Changed the `size` property type in `Order.Model.js` from `Number` to `String`.
+**Why**: During checkout, items with string sizes (e.g., 'L', 'XL') were causing Mongoose validation errors (`castNumber`), resulting in 500 internal server errors and preventing successful checkout.
+**Files Changed**: `BackEnd/Models/Order.Model.js`
+- Updated `size` type definition to correctly expect String values.
+
+## 2026-06-09 — Admin Orders Dashboard
+**What**: Added a new "Orders" tab to the Admin Dashboard allowing the admin to view all customer orders.
+**Why**: Admins needed visibility into all customer orders to track sales and manage order statuses.
+**Files Changed**: `BackEnd/Controllers/Order.Controller.js`, `BackEnd/Routes/Order.Route.js`, `FrontEnd/src/Pages/AdminPanel.jsx`, `FrontEnd/src/Style/Admin.css`
+- Created `getAllOrders` controller logic to fetch all orders sorted by date.
+- Added new GET route `/v1/order/getAllOrders`.
+- Updated `AdminPanel.jsx` with a new `activeTab` state for 'orders'.
+- Added an Orders table view detailing Order ID, Date, Customer Info, Amount, Status, and Payment.
+- Styled new `admin-status-badge` dynamically colored based on order state.
+
+## 2026-06-09 — Admin Dashboard Category Filter Cards
+**What**: Added 3 clickable stat cards at the top of the admin dashboard — Total Products, Blouses, and Shapewear — that filter the product table by category when clicked.
+**Why**: Admin needed a quick overview of product counts per category and the ability to filter the table by clicking.
+**Files Changed**: `FrontEnd/src/Pages/AdminPanel.jsx`, `FrontEnd/src/Style/Admin.css`
+- Added `categoryFilter` state to toggle between 'all', 'Blouse', and 'Shapewear'.
+- Replaced single stat card with 3 cards showing computed counts per category.
+- Product table filters based on selected category. Active card gets a blue border highlight with hover lift effect.
+- Added `.admin-stat-card.clickable` and `.admin-stat-card.active` CSS styles with transitions and blue accent.
+
+## 2026-06-09 — Admin Product Preview Button
+**What**: Added a "Preview" button in the admin dashboard product table that opens the product's live page in a new browser tab.
+**Why**: Admins need to quickly preview how a product looks on the storefront without manually navigating.
+**Files Changed**: `FrontEnd/src/Pages/AdminPanel.jsx`, `FrontEnd/src/Style/Admin.css`
+- Added `Preview` button before `Edit` in the action buttons column, using `window.open` with the product's slug URL and `_blank` target.
+- Added `.admin-preview-btn` CSS with blue theme (`#dbeafe` bg, `#1d4ed8` text) to visually distinguish from Edit (gray) and Delete (red).
+
 ## 2026-06-03 â€” Add Guest Cart & Checkout Login Requirement
 **What**: Implemented the ability for users to add products to their cart without logging in, and forced a login prompt when trying to checkout. Guest carts are synced to the backend upon login.
 **Why**: User requested "without login add to cart functionality. login needed at check out page" to reduce friction when browsing and adding items.

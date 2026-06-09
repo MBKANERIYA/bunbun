@@ -255,6 +255,34 @@
     margin-top: 0.3rem;
 }
 
+.admin-stat-card.clickable {
+    cursor: pointer;
+    transition: all 0.25s ease;
+    border: 2px solid transparent;
+    flex: 1;
+}
+
+.admin-stat-card.clickable:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: #e2e8f0;
+}
+
+.admin-stat-card.clickable.active {
+    border-color: #3b82f6;
+    background: linear-gradient(135deg, #eff6ff, #fff);
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.12);
+}
+
+.admin-stat-card.clickable.active .stat-number {
+    color: #3b82f6;
+}
+
+.admin-stat-card.clickable.active .stat-label {
+    color: #3b82f6;
+    font-weight: 600;
+}
+
 /* --- Loading --- */
 .admin-loading {
     text-align: center;
@@ -347,6 +375,23 @@
     display: flex;
     gap: 0.5rem;
     align-items: center;
+}
+
+.admin-preview-btn {
+    background: #dbeafe;
+    color: #1d4ed8;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.admin-preview-btn:hover {
+    background: #3b82f6;
+    color: white;
 }
 
 .admin-delete-btn {
@@ -547,6 +592,21 @@
     opacity: 0.6;
     cursor: not-allowed;
 }
+
+/* --- Status Badges --- */
+.admin-status-badge {
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.status-pending { background: #fef3c7; color: #d97706; }
+.status-processing { background: #e0e7ff; color: #4338ca; }
+.status-shipped { background: #dbeafe; color: #1d4ed8; }
+.status-delivered { background: #d1fae5; color: #059669; }
+.status-cancelled { background: #fee2e2; color: #b91c1c; }
 
 /* --- Responsive --- */
 @media (max-width: 768px) {

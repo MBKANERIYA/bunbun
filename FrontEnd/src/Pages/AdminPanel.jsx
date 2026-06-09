@@ -61,6 +61,11 @@ const AdminPanel = () => {
     });
     const [products, setProducts] = useState([]);
     const [loadingProducts, setLoadingProducts] = useState(false);
+    const [categoryFilter, setCategoryFilter] = useState('all');
+
+    // Orders state
+    const [orders, setOrders] = useState([]);
+    const [loadingOrders, setLoadingOrders] = useState(false);
 
     // Add Product form state
     const [formData, setFormData] = useState(() => {
@@ -144,10 +149,26 @@ const AdminPanel = () => {
 
     // Fetch products when dashboard tab is active
     useEffect(() => {
-        if (isLoggedIn && activeTab === 'dashboard') {
-            fetchProducts();
+        if (isLoggedIn) {
+            if (activeTab === 'dashboard') {
+                fetchProducts();
+            } else if (activeTab === 'orders') {
+                fetchOrders();
+            }
         }
     }, [isLoggedIn, activeTab]);
+
+    const fetchOrders = async () => {
+        setLoadingOrders(true);
+        try {
+            const res = await axios.get(apiUrl('/v1/order/getAllOrders'));
+            setOrders(res.data.data || []);
+        } catch (err) {
+            console.error('Failed to fetch orders:', err);
+        } finally {
+            setLoadingOrders(false);
+        }
+    };
 
     const fetchProducts = async () => {
         setLoadingProducts(true);
@@ -447,6 +468,12 @@ const AdminPanel = () => {
                     >
                         ➕ {editProductId ? 'Edit Product' : 'Add Product'}
                     </button>
+                    <button
+                        className={`admin-nav-item ${activeTab === 'orders' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('orders')}
+                    >
+                        🛒 Orders
+                    </button>
                 </nav>
                 <button className="admin-logout-btn" onClick={handleLogout}>
                     🚪 Logout
@@ -457,7 +484,11 @@ const AdminPanel = () => {
             <main className="admin-main">
                 {/* Top Bar */}
                 <div className="admin-topbar">
-                    <h2>{activeTab === 'dashboard' ? 'All Products' : 'Add New Product'}</h2>
+                    <h2>
+                        {activeTab === 'dashboard' && 'All Products'}
+                        {activeTab === 'addProduct' && 'Add New Product'}
+                        {activeTab === 'orders' && 'All Orders'}
+                    </h2>
                     <span className="admin-topbar-user">👤 Admin</span>
                 </div>
 
@@ -465,9 +496,26 @@ const AdminPanel = () => {
                 {activeTab === 'dashboard' && (
                     <div className="admin-content">
                         <div className="admin-stats-row">
-                            <div className="admin-stat-card">
+                            <div 
+                                className={`admin-stat-card clickable ${categoryFilter === 'all' ? 'active' : ''}`}
+                                onClick={() => setCategoryFilter('all')}
+                            >
                                 <span className="stat-number">{products.length}</span>
                                 <span className="stat-label">Total Products</span>
+                            </div>
+                            <div 
+                                className={`admin-stat-card clickable ${categoryFilter === 'Blouse' ? 'active' : ''}`}
+                                onClick={() => setCategoryFilter('Blouse')}
+                            >
+                                <span className="stat-number">{products.filter(p => p.category === 'Blouse').length}</span>
+                                <span className="stat-label">Blouses</span>
+                            </div>
+                            <div 
+                                className={`admin-stat-card clickable ${categoryFilter === 'Shapewear' ? 'active' : ''}`}
+                                onClick={() => setCategoryFilter('Shapewear')}
+                            >
+                                <span className="stat-number">{products.filter(p => p.category === 'Shapewear').length}</span>
+                                <span className="stat-label">Shapewear</span>
                             </div>
                         </div>
 
@@ -490,40 +538,51 @@ const AdminPanel = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {products.length === 0 ? (
-                                            <tr><td colSpan="9" className="admin-no-data">No products found</td></tr>
-                                        ) : (
-                                            products.map((p, i) => (
-                                                <tr key={p._id}>
-                                                    <td>{i + 1}</td>
-                                                    <td>
-                                                        <img src={p.image} alt={p.name} className="admin-product-thumb" />
-                                                    </td>
-                                                    <td className="admin-product-name">{p.name}</td>
-                                                    <td>{p.sku || '—'}</td>
-                                                    <td>{p.productType || '—'}</td>
-                                                    <td>₹{p.mrp}</td>
-                                                    <td>₹{p.selling_price}</td>
-                                                    <td>{p.category || '—'}</td>
-                                                    <td>
-                                                        <div className="admin-action-btns">
-                                                            <button 
-                                                                className="admin-edit-btn" 
-                                                                onClick={() => handleEditProduct(p)}
-                                                            >
-                                                                Edit
-                                                            </button>
-                                                            <button 
-                                                                className="admin-delete-btn" 
-                                                                onClick={() => handleDeleteProduct(p._id)}
-                                                            >
-                                                                Delete
-                                                            </button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            ))
-                                        )}
+                                        {(() => {
+                                            const filtered = categoryFilter === 'all' 
+                                                ? products 
+                                                : products.filter(p => p.category === categoryFilter);
+                                            return filtered.length === 0 ? (
+                                                <tr><td colSpan="9" className="admin-no-data">No products found</td></tr>
+                                            ) : (
+                                                filtered.map((p, i) => (
+                                                    <tr key={p._id}>
+                                                        <td>{i + 1}</td>
+                                                        <td>
+                                                            <img src={p.image} alt={p.name} className="admin-product-thumb" />
+                                                        </td>
+                                                        <td className="admin-product-name">{p.name}</td>
+                                                        <td>{p.sku || '—'}</td>
+                                                        <td>{p.productType || '—'}</td>
+                                                        <td>₹{p.mrp}</td>
+                                                        <td>₹{p.selling_price}</td>
+                                                        <td>{p.category || '—'}</td>
+                                                        <td>
+                                                            <div className="admin-action-btns">
+                                                                <button 
+                                                                    className="admin-preview-btn" 
+                                                                    onClick={() => window.open(`/product/${p.slug || p.name.replace(/\s+/g, '-').toLowerCase()}`, '_blank')}
+                                                                >
+                                                                    Preview
+                                                                </button>
+                                                                <button 
+                                                                    className="admin-edit-btn" 
+                                                                    onClick={() => handleEditProduct(p)}
+                                                                >
+                                                                    Edit
+                                                                </button>
+                                                                <button 
+                                                                    className="admin-delete-btn" 
+                                                                    onClick={() => handleDeleteProduct(p._id)}
+                                                                >
+                                                                    Delete
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                ))
+                                            );
+                                        })()}
                                     </tbody>
                                 </table>
                             </div>
@@ -783,6 +842,58 @@ const AdminPanel = () => {
                                 </>
                             )}
                         </form>
+                    </div>
+                )}
+
+                {/* ===== ORDERS TABLE ===== */}
+                {activeTab === 'orders' && (
+                    <div className="admin-content">
+                        {loadingOrders ? (
+                            <div className="admin-loading">Loading orders...</div>
+                        ) : (
+                            <div className="admin-table-wrapper">
+                                <table className="admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Date</th>
+                                            <th>Customer</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                            <th>Payment</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {orders.length === 0 ? (
+                                            <tr><td colSpan="6" className="admin-no-data">No orders found</td></tr>
+                                        ) : (
+                                            orders.map((o) => (
+                                                <tr key={o._id}>
+                                                    <td>
+                                                        <strong>#{o._id.slice(-8).toUpperCase()}</strong>
+                                                    </td>
+                                                    <td>{new Date(o.createdAt).toLocaleDateString('en-IN')}</td>
+                                                    <td>
+                                                        <div>{o.guestInfo?.name || (o.userId ? `${o.userId.firstName} ${o.userId.lastName}` : 'Guest')}</div>
+                                                        <small style={{color: '#64748b'}}>{o.guestInfo?.phone || o.userId?.email || ''}</small>
+                                                    </td>
+                                                    <td>₹{o.amount?.total?.toLocaleString()}</td>
+                                                    <td>
+                                                        <span className={`admin-status-badge status-${o.orderStatus?.toLowerCase()}`}>
+                                                            {o.orderStatus}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <div>{o.paymentDetails?.paymentMethod}</div>
+                                                        <small style={{color: o.paymentDetails?.paymentStatus === 'Completed' ? '#10b981' : '#f59e0b'}}>{o.paymentDetails?.paymentStatus}</small>
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
                     </div>
                 )}
             </main>

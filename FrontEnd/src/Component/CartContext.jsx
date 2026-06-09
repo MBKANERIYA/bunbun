@@ -191,6 +191,21 @@ export const CartProvider = ({ children }) => {
         }
     };
 
+    const clearCart = async () => {
+        if (!userId) {
+            localStorage.removeItem('guestCart');
+            setCart({ product: [], cartTotal: 0 });
+            return;
+        }
+
+        try {
+            const { data } = await axios.delete(`${API_BASE}/clear/${userId}`);
+            setCart(data.cart || { product: [], cartTotal: 0 });
+        } catch (err) {
+            console.error("Error clearing cart:", err);
+        }
+    };
+
     const value = {
         cart,
         isCartOpen,
@@ -201,6 +216,7 @@ export const CartProvider = ({ children }) => {
         addToCart,
         updateQuantity,
         removeFromCart,
+        clearCart,
         itemCount: cart?.product?.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0) || 0
     };
 

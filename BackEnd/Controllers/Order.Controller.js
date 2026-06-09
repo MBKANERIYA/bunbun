@@ -1,5 +1,52 @@
 const { orderSchema } = require("../Models");
 
+exports.getAllOrders = async (req, res) => {
+  try {
+    const orders = await orderSchema
+      .find({})
+      .populate("userId", "firstName lastName email")
+      .populate("items.productId", "name image selling_price mrp slug")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      message: "All orders fetched successfully",
+      data: orders
+    });
+  } catch (error) {
+    console.error("Error fetching all orders:", error);
+    res.status(500).json({
+      message: "Server error while fetching all orders",
+      error: error.message
+    });
+  }
+};
+
+exports.getUserOrders = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
+    const orders = await orderSchema
+      .find({ userId })
+      .populate("items.productId", "name image selling_price mrp slug")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      message: "Orders fetched successfully",
+      data: orders
+    });
+  } catch (error) {
+    console.error("Error fetching user orders:", error);
+    res.status(500).json({
+      message: "Server error while fetching orders",
+      error: error.message
+    });
+  }
+};
+
 exports.createOrder = async (req, res) => {
   try {
     const {

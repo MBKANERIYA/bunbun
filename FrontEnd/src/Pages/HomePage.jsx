@@ -258,7 +258,7 @@ const HomePage = () => {
                 <div className="trendingBanner" onClick={() => handleCategoryClick("Saree")} style={{ cursor: "pointer" }}>
                     <picture>
                         <source media="(max-width: 768px)" srcSet="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780897492/blouse_web_banner_vpx0tq.png" />
-                        <img src="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780897480/banner_pc_blouse_jezecv.png" alt="Trending Now Banner" className="img-fluid w-100" />
+                        <img src="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780897480/banner_pc_blouse_jezecv.png" alt="Trending Now Banner" className="img-fluid w-100" loading="lazy" />
                     </picture>
                 </div>
 
@@ -280,7 +280,7 @@ const HomePage = () => {
                     <div className="bestSellerBanner">
                         <picture>
                             <source media="(max-width: 768px)" srcSet="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780897490/shapewearbm_gv9cm9.png" />
-                            <img src="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780897479/SHAPWEAR_BANNER_vs1yeh.png" alt="Bestseller Sarees Banner" />
+                            <img src="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780897479/SHAPWEAR_BANNER_vs1yeh.png" alt="Bestseller Sarees Banner" loading="lazy" />
                         </picture>
                     </div>
                     <div className="tredingProduct mt-4">
@@ -383,6 +383,7 @@ const HomePage = () => {
                                 allowFullScreen
                                 className="w-100"
                                 style={{ aspectRatio: "9/16" }}
+                                loading="lazy"
                             ></iframe>
                         </div>
                     </div>
@@ -396,6 +397,7 @@ const HomePage = () => {
                                 allowFullScreen
                                 className="w-100"
                                 style={{ aspectRatio: "9/16" }}
+                                loading="lazy"
                             ></iframe>
                         </div>
                     </div>
@@ -409,6 +411,7 @@ const HomePage = () => {
                                 allowFullScreen
                                 className="w-100"
                                 style={{ aspectRatio: "9/16" }}
+                                loading="lazy"
                             ></iframe>
                         </div>
                     </div>
@@ -422,6 +425,7 @@ const HomePage = () => {
                                 allowFullScreen
                                 className="w-100"
                                 style={{ aspectRatio: "9/16" }}
+                                loading="lazy"
                             ></iframe>
                         </div>
                     </div>
@@ -435,6 +439,7 @@ const HomePage = () => {
                                 allowFullScreen
                                 className="w-100"
                                 style={{ aspectRatio: "9/16" }}
+                                loading="lazy"
                             ></iframe>
                         </div>
                     </div>

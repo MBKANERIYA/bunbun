@@ -18,7 +18,7 @@ const orderSchema = new mongoose.Schema({
             min: 1
         },
         size: {
-            type: Number
+            type: String
         },
         price: {
             type: Number,
@@ -52,7 +52,7 @@ const orderSchema = new mongoose.Schema({
     },
     paymentDetails: {
         paymentId: { type: String },
-        paymentMethod: { type: String, enum: ['Credit Card', 'Debit Card', 'Net Banking', 'COD'], required: true },
+        paymentMethod: { type: String, enum: ['Credit Card', 'Debit Card', 'Net Banking', 'COD', 'Razorpay'], required: true },
         paymentStatus: { type: String, enum: ['Pending', 'Completed', 'Failed'], default: 'Pending' }
     }
 }, {
