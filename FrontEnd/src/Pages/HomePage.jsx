@@ -420,7 +420,7 @@ const HomePage = () => {
                     ))}
                 </div>
             </div>
-            <section className="featured-shorts mt-5 container-fluid pe-5 ps-5">
+            <section className="featured-shorts mt-5">
                 <h2 className="text-center fw-bold mb-4">FEATURED PRODUCTS</h2>
                 {isMobileView ? (
                     <div className="video-slider-container">
