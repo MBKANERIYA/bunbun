@@ -17,7 +17,7 @@ html {
 }
 
 .navbar-nav {
-    gap: 1.5rem;
+    gap: 5.5rem;
 }
 
 .navbar-nav .nav-link {
@@ -205,8 +205,9 @@ a.icon-btn:hover {
 }
 
 @media (max-width: 991.98px) {
+
     /* Mobile header layout: Toggler (left) | Logo (center) | Icons (right) */
-    .navbar > .container-fluid {
+    .navbar>.container-fluid {
         flex-wrap: wrap;
     }
 
@@ -479,6 +480,7 @@ a.icon-btn:hover {
 
 /* Hide mobile menu elements on desktop */
 @media (min-width: 992px) {
+
     .mobile-menu-overlay,
     .mobile-menu-panel {
         display: none !important;

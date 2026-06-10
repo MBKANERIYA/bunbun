@@ -20,25 +20,25 @@ const Footer = () => {
           </div> */}
 
           {/* Information */}
-          <div className="col-md-2 col-sm-6 mb-4">
+          <div className="col-6 col-md-2 mb-4">
             <h6 className="fw-bold mb-3">INFORMATION</h6>
             <ul className="list-unstyled">
               <a href="/blog">Blogs</a>
-
+              <a href="/about">About Us</a>
               <a href="/">FAQs</a>
+              <a href="/privacy-policy">Privacy Policy</a>
+              <a href="/terms-and-conditions">Terms of Service</a>
             </ul>
           </div>
 
           {/* Customer Care */}
-          <div className="col-md-3 col-sm-6 mb-4">
+          <div className="col-6 col-md-3 mb-4">
             <h6 className="fw-bold mb-3">CUSTOMER CARE</h6>
             <ul className="list-unstyled">
-              <a href="/about">About Us</a>
               <a href="/contact">Contact Us</a>
               <a href="/return-policy">Return Policy</a>
               <a href="/shipping-policy">Shipping Policy</a>
-              <a href="/privacy-policy">Privacy Policy</a>
-              <a href="/terms-and-conditions">Terms of Service</a>
+
             </ul>
           </div>
 

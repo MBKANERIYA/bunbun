@@ -183,8 +183,8 @@ const Header = () => {
                             {/* Desktop Navigation Links (hidden on mobile, shown on lg+) */}
                             <div className="collapse navbar-collapse" id="mainNav">
                                 <ul className="navbar-nav mx-auto">
-                                    <li className="nav-item dropdown">
-                                        <a className="nav-link dropdown-toggle text-danger" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                                    <li className="nav-item dropdown ">
+                                        <a className="nav-link dropdown-toggle text-danger pr-10" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
                                         <div className="dropdown-menu mega-menu">
                                             <div className="row g-4">
 
@@ -208,11 +208,10 @@ const Header = () => {
                                         </div>
                                     </li>
                                     <li className="nav-item dropdown">
-                                        <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <Link className="nav-link dropdown-toggle" to="/collections?category=Blouse" role="button" aria-expanded="false">
                                             Blouse
-                                        </a>
+                                        </Link>
                                         <ul className="dropdown-menu">
-                                            <li><Link className="dropdown-item" to="/collections?category=Blouse">All Blouses</Link></li>
                                             <li><Link className="dropdown-item" to="/collections?category=Blouse&subcategory=Plain">Plain Blouse</Link></li>
                                             <li><Link className="dropdown-item" to="/collections?category=Blouse&subcategory=Printed">Kalamkari Blouse</Link></li>
                                         </ul>
@@ -340,7 +339,6 @@ const Header = () => {
                     </button>
                     <h4 className="mobile-submenu-title">BLOUSE</h4>
                     <ul className="mobile-nav-list">
-                        <li><a onClick={() => handleMobileNavClick('/collections?category=Blouse')}>All Blouses</a></li>
                         <li><a onClick={() => handleMobileNavClick('/collections?category=Blouse&subcategory=Plain')}>Plain Blouse</a></li>
                         <li><a onClick={() => handleMobileNavClick('/collections?category=Blouse&subcategory=Printed')}>Kalamkari Blouse</a></li>
                     </ul>

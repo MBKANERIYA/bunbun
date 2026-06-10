@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-06-10 — Mobile UI Tweaks & Header Updates
+**What**: Updated mobile layout for featured videos and footer columns, and made the Blouse navigation item fetch all blouses on click.
+**Why**: User requested 2 videos per row in a mobile slider, side-by-side footer links, and the top-level Blouse link to be clickable while removing "All Blouses" from the submenu.
+**Files Changed**: `FrontEnd/src/Pages/HomePage.jsx`, `FrontEnd/src/Component/Footer.jsx`, `FrontEnd/src/Component/Header.jsx`
+- **HomePage**: Added resize listener to conditionally render a `react-slick` Slider for the "FEATURED PRODUCTS" YouTube shorts on mobile. Set `slidesToShow: 2` to show exactly 2 videos per row. Kept the Bootstrap grid for desktop.
+- **Footer**: Added `col-6` to the "INFORMATION" and "CUSTOMER CARE" columns to ensure they sit side-by-side in a single row on mobile devices.
+- **Header**: Replaced the desktop "Blouse" `<a>` toggle with a `<Link>` navigating to `/collections?category=Blouse`, removing `data-bs-toggle="dropdown"`. The dropdown still opens on hover via CSS. Removed "All Blouses" from both the desktop dropdown and mobile submenu.
+
 ## 2026-06-09 — My Orders Page & Profile Modal Update
 **What**: Added a "My Orders" button to the user profile modal and created a full My Orders page where users can view their order history.
 **Why**: Users needed a way to track their placed orders from within the app.
@@ -9,6 +17,12 @@
 - **My Orders Page**: Created `MyOrders.jsx` with expandable order cards showing product thumbnails preview, color-coded status badges with icons, price breakdown, delivery address, and payment details. Clicking items navigates to the product page. Includes empty state, loading spinner, and login-required state.
 - **CSS**: Created `MyOrders.css` with premium warm neutral design, smooth slide-down animation for expanded cards, responsive layout for mobile. Updated `UserProfileModel.css` to properly style button-based navigation links.
 - **Routing**: Added `/my-orders` route in `App.jsx`.
+
+## 2026-06-09 — Header Navigation Spacing
+**What**: Increased the gap between navigation items in the desktop header.
+**Why**: The user requested more space between the top-level navigation links to make the header look less cluttered and more spread out.
+**Files Changed**:
+- `FrontEnd/src/Style/Header.css`: Changed `.navbar-nav` gap property from `1.5rem` to `2.5rem`.
 
 ## 2026-06-09 — Cart Sidebar Mobile Optimization
 **What**: Reordered the elements within the mobile Cart Sidebar to push the "Recent View" section to the bottom.

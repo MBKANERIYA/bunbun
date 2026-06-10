@@ -24,7 +24,15 @@ const HomePage = () => {
     const [product, setProduct] = useState([])
     const [recentlyViewed, setRecentlyViewed] = useState([]);
     const [reviews, setReviews] = useState([]);
+    const [isMobileView, setIsMobileView] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const handleResize = () => setIsMobileView(window.innerWidth < 768);
+        handleResize(); // Initial check
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
     const icons = [
         "https://sudathi.com/cdn/shop/files/6_b35ea9ed-5ea0-459f-9371-391249f6e4d0.png?height=160&v=1744868662",
@@ -181,6 +189,23 @@ const HomePage = () => {
         ],
     };
 
+    const videoSliderSettings = {
+        infinite: false,
+        speed: 500,
+        slidesToShow: 2,
+        slidesToScroll: 1,
+        arrows: false,
+        dots: false,
+    };
+
+    const videoIds = [
+        "S7MwBlM3HpU",
+        "NiRjMVy-Tdk",
+        "JXFPwReAGN4",
+        "BEJ9-sMNnNQ",
+        "S7MwBlM3HpU"
+    ];
+
     return (
         <div>
             <PageMeta title="Shop Indian Sarees, Blouses & Shapewear Online" description="Bunbun Clothing - Premium Indian ethnic wear. Shop the latest sarees, blouses, shapewear and more with free shipping." />
@@ -275,28 +300,7 @@ const HomePage = () => {
                     </Slider>
                 </div>
             </section>
-            <section>
-                <div className="bestSeller mt-5">
-                    <h2 className="text-center mb-4 fw-bold">SHAPEWEAR COLLECTION</h2>
-                    <div className="bestSellerBanner">
-                        <picture>
-                            <source media="(max-width: 768px)" srcSet="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780897490/shapewearbm_gv9cm9.png" />
-                            <img src="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780897479/SHAPWEAR_BANNER_vs1yeh.png" alt="Bestseller Sarees Banner" loading="lazy" />
-                        </picture>
-                    </div>
-                    <div className="tredingProduct mt-4">
-                        <Slider {...settings}>
-                            {(product || [])
-                                .filter((p) => p.category === "Shapewear")
-                                .map((product, index) => (
-                                    <div key={index} className="px-2">
-                                        <ProductCard product={product} />
-                                    </div>
-                                ))}
-                        </Slider>
-                    </div>
-                </div>
-            </section>
+
             <section>
                 <div className="bestSeller mt-5">
                     <h2 className="text-center mb-4 fw-bold">KALAMKARI BLOUSES COLLECTION</h2>
@@ -310,6 +314,29 @@ const HomePage = () => {
                         <Slider {...settings}>
                             {(product || [])
                                 .filter((p) => p.category === "Blouse" && p.subcategory === "Printed")
+                                .map((product, index) => (
+                                    <div key={index} className="px-2">
+                                        <ProductCard product={product} />
+                                    </div>
+                                ))}
+                        </Slider>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div className="bestSeller mt-5">
+                    <h2 className="text-center mb-4 fw-bold">SHAPEWEAR COLLECTION</h2>
+                    <div className="bestSellerBanner">
+                        <picture>
+                            <source media="(max-width: 768px)" srcSet="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780897490/shapewearbm_gv9cm9.png" />
+                            <img src="https://res.cloudinary.com/dacwlu4mo/image/upload/v1780897479/SHAPWEAR_BANNER_vs1yeh.png" alt="Bestseller Sarees Banner" loading="lazy" />
+                        </picture>
+                    </div>
+                    <div className="tredingProduct mt-4">
+                        <Slider {...settings}>
+                            {(product || [])
+                                .filter((p) => p.category === "Shapewear")
                                 .map((product, index) => (
                                     <div key={index} className="px-2">
                                         <ProductCard product={product} />
@@ -395,78 +422,47 @@ const HomePage = () => {
             </div>
             <section className="featured-shorts mt-5 container-fluid pe-5 ps-5">
                 <h2 className="text-center fw-bold mb-4">FEATURED PRODUCTS</h2>
-                <div className="row row-cols-2 row-cols-md-5 g-4 justify-content-center">
-                    <div className="col">
-                        <div className="short-video-card">
-                            <iframe
-                                src="https://www.youtube.com/embed/S7MwBlM3HpU?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=S7MwBlM3HpU&playsinline=1"
-                                title="YouTube video player"
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowFullScreen
-                                className="w-100"
-                                style={{ aspectRatio: "9/16" }}
-                                loading="lazy"
-                            ></iframe>
-                        </div>
+                {isMobileView ? (
+                    <div className="video-slider-container">
+                        <Slider {...videoSliderSettings}>
+                            {videoIds.map((id, index) => (
+                                <div key={index} className="px-2">
+                                    <div className="short-video-card">
+                                        <iframe
+                                            src={`https://www.youtube.com/embed/${id}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=${id}&playsinline=1`}
+                                            title={`YouTube video player ${index + 1}`}
+                                            frameBorder="0"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                            allowFullScreen
+                                            className="w-100"
+                                            style={{ aspectRatio: "9/16" }}
+                                            loading="lazy"
+                                        ></iframe>
+                                    </div>
+                                </div>
+                            ))}
+                        </Slider>
                     </div>
-                    <div className="col">
-                        <div className="short-video-card">
-                            <iframe
-                                src="https://www.youtube.com/embed/NiRjMVy-Tdk?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=NiRjMVy-Tdk&playsinline=1"
-                                title="YouTube video player"
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowFullScreen
-                                className="w-100"
-                                style={{ aspectRatio: "9/16" }}
-                                loading="lazy"
-                            ></iframe>
-                        </div>
+                ) : (
+                    <div className="row row-cols-2 row-cols-md-5 g-4 justify-content-center">
+                        {videoIds.map((id, index) => (
+                            <div className="col" key={index}>
+                                <div className="short-video-card">
+                                    <iframe
+                                        src={`https://www.youtube.com/embed/${id}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=${id}&playsinline=1`}
+                                        title={`YouTube video player ${index + 1}`}
+                                        frameBorder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                        allowFullScreen
+                                        className="w-100"
+                                        style={{ aspectRatio: "9/16" }}
+                                        loading="lazy"
+                                    ></iframe>
+                                </div>
+                            </div>
+                        ))}
                     </div>
-                    <div className="col">
-                        <div className="short-video-card">
-                            <iframe
-                                src="https://www.youtube.com/embed/JXFPwReAGN4?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=JXFPwReAGN4&playsinline=1"
-                                title="YouTube video player"
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowFullScreen
-                                className="w-100"
-                                style={{ aspectRatio: "9/16" }}
-                                loading="lazy"
-                            ></iframe>
-                        </div>
-                    </div>
-                    <div className="col">
-                        <div className="short-video-card">
-                            <iframe
-                                src="https://www.youtube.com/embed/BEJ9-sMNnNQ?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=BEJ9-sMNnNQ&playsinline=1"
-                                title="YouTube video player"
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowFullScreen
-                                className="w-100"
-                                style={{ aspectRatio: "9/16" }}
-                                loading="lazy"
-                            ></iframe>
-                        </div>
-                    </div>
-                    <div className="col">
-                        <div className="short-video-card">
-                            <iframe
-                                src="https://www.youtube.com/embed/S7MwBlM3HpU?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=S7MwBlM3HpU&playsinline=1"
-                                title="YouTube video player"
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowFullScreen
-                                className="w-100"
-                                style={{ aspectRatio: "9/16" }}
-                                loading="lazy"
-                            ></iframe>
-                        </div>
-                    </div>
-                </div>
+                )}
             </section>
 
 
