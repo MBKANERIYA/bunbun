@@ -33,4 +33,13 @@ app.use("/v1", async (req, res, next) => {
 
 app.use("/v1", router)
 
+// Serve Frontend Static Files
+const frontendBuildPath = path.join(__dirname, "../FrontEnd/dist");
+app.use(express.static(frontendBuildPath));
+
+// Catch-all route for React Router (must be placed AFTER API routes)
+app.get("*", (req, res) => {
+    res.sendFile(path.join(frontendBuildPath, "index.html"));
+});
+
 module.exports = app
