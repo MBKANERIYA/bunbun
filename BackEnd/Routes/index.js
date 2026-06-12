@@ -8,6 +8,7 @@ let ratingRouter = require("./Rating.Routes.js")
 let addressRouter = require("./Address.Route.js")
 let orderRouter = require("./Order.Route.js")
 let paymentRouter = require("./Payment.Route.js")
+let blogRouter = require("./Blog.Routes.js")
 let router = express.Router()
 
 router.use("/User", userRouter)
@@ -19,5 +20,6 @@ router.use("/rating", ratingRouter)
 router.use("/address", addressRouter)
 router.use("/order", orderRouter)
 router.use("/payment", paymentRouter)
+router.use("/blog", blogRouter)
 
 module.exports = router

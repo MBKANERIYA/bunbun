@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { apiUrl } from '../utils/apiConfig';
 import '../Style/Admin.css';
+import BlogAdmin from '../Component/BlogAdmin';
 
 const ADMIN_USER = 'admin';
 const ADMIN_PASS = 'admin123';
@@ -474,6 +475,12 @@ const AdminPanel = () => {
                     >
                         🛒 Orders
                     </button>
+                    <button
+                        className={`admin-nav-item ${activeTab === 'addBlog' ? 'active' : ''}`}
+                        onClick={() => handleTabChange('addBlog')}
+                    >
+                        📝 Add Blog
+                    </button>
                 </nav>
                 <button className="admin-logout-btn" onClick={handleLogout}>
                     🚪 Logout
@@ -488,6 +495,7 @@ const AdminPanel = () => {
                         {activeTab === 'dashboard' && 'All Products'}
                         {activeTab === 'addProduct' && 'Add New Product'}
                         {activeTab === 'orders' && 'All Orders'}
+                        {activeTab === 'addBlog' && 'Add New Blog'}
                     </h2>
                     <span className="admin-topbar-user">👤 Admin</span>
                 </div>
@@ -856,6 +864,11 @@ const AdminPanel = () => {
                             )}
                         </form>
                     </div>
+                )}
+
+                {/* ===== ADD BLOG FORM ===== */}
+                {activeTab === 'addBlog' && (
+                    <BlogAdmin />
                 )}
 
                 {/* ===== ORDERS TABLE ===== */}

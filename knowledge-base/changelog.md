@@ -1,5 +1,49 @@
 # Changelog
 
+## 2026-06-12 — Advanced Blog Management & SEO Integration
+**What**: Completely redesigned the "Add Blog" admin panel and extended the backend `Blog` model to support advanced formatting, SEO metadata, and dynamic content rendering.
+**Files Changed**: `BackEnd/Models/Blog.Model.js`, `BackEnd/Controllers/Blog.Controller.js`, `BackEnd/Routes/Blog.Routes.js`, `FrontEnd/src/Component/BlogAdmin.jsx`, `FrontEnd/src/Component/BlogContentRenderer.jsx`, `FrontEnd/src/Pages/AdminPanel.jsx`
+- **Database Model**: Extended `blogSchema` to include `author`, `readTime`, `slug`, `metaTitle`, `metaDescription`, `keywords`, and `canonicalUrl`.
+- **Backend API**: Added endpoints to handle edits (`PUT /updateBlog/:id`), deletions (`DELETE /deleteBlog/:id`), and inline image uploads (`POST /uploadImage`) for markdown editing.
+- **Admin Interface**: Implemented an advanced `BlogAdmin` component inspired by modern CMS platforms (e.g., Sanity/Notion). Includes a "Split" view, "Live Preview", inline markdown toolbar, auto-slug generation, and SEO parameter tabs.
+- **Frontend Renderer**: Created `BlogContentRenderer` component to parse and safely render markdown syntax (`##`, `**`, `![]()`, `[]()`) directly within the preview and main UI.
+## 2026-06-12 — Added "Add Blog" Functionality to Admin Panel
+**What**: Created a new admin panel tab and backend route to allow administrators to add new blog posts.
+**Why**: The user requested the ability to add new blogs directly from the admin dashboard instead of relying on seed scripts.
+**Files Changed**: `BackEnd/Controllers/Blog.Controller.js`, `BackEnd/Routes/Blog.Routes.js`, `FrontEnd/src/Pages/AdminPanel.jsx`, `knowledge-base/changelog.md`
+- **Backend API**: Added `addBlog` controller function which utilizes existing Cloudinary and Multer configurations to handle image uploads and save new blogs to MongoDB. Added `POST /addBlog` route.
+- **Frontend Dashboard**: Added a "📝 Add Blog" tab to the Admin sidebar. Created a full form capturing Title, Category, Excerpt, Content, and Cover Image. The form submits using `axios` with `multipart/form-data`.
+## 2026-06-12 — Integrated Blog Data with MongoDB
+**What**: Moved the blog data from hardcoded frontend dummy data to the MongoDB backend. Created Mongoose schema, controller, and routes for fetching blogs, and seeded the database. 
+**Why**: The user requested that the blog data be stored and fetched from the database instead of being statically coded in the frontend.
+**Files Changed**: `BackEnd/Models/Blog.Model.js`, `BackEnd/Controllers/Blog.Controller.js`, `BackEnd/Routes/Blog.Routes.js`, `BackEnd/Routes/index.js`, `BackEnd/seed_blogs.js`, `FrontEnd/src/Pages/Blog.jsx`, `FrontEnd/src/Pages/BlogDetails.jsx`
+- **Backend API**: Created `Blog.Model` with fields matching the existing structure. Created `getAllBlogs` and `getSingleBlog/:id` endpoints. 
+- **Seeding**: Added a `seed_blogs.js` script and executed it to load the initial 6 blogs into the database.
+- **Frontend Integration**: Updated `Blog.jsx` and `BlogDetails.jsx` to fetch data asynchronously via `axios.get` from the `/v1/blog` endpoints. Added loading spinners to both pages. Removed references to `zDummyData`.
+
+## 2026-06-12 — Added Blog Details Page
+**What**: Implemented a `BlogDetails.jsx` page that dynamically displays the full content of a blog post based on its ID from the URL. Refactored the `Blog.jsx` data into a centralized `blogData.js` file and wrapped blog cards with React Router links to navigate to the detailed view.
+**Why**: The user requested that clicking on a blog post on the blog page opens a dedicated details page for that article.
+**Files Changed**: `FrontEnd/src/Pages/BlogDetails.jsx` (new), `FrontEnd/src/zDummyData/blogData.js` (new), `FrontEnd/src/Pages/Blog.jsx`, `FrontEnd/src/App.jsx`
+- **BlogDetails.jsx**: Created a responsive layout for individual blog posts, reading the ID from `useParams()`. Displays full article content, large header image, categories, and a "Back to all blogs" link.
+- **blogData.js**: Extracted the hardcoded array from `Blog.jsx` and added a rich `content` field for each blog post to serve the details page.
+- **Blog.jsx**: Now imports `blogData` and wraps each blog card in a `<Link to={\`/blog/\${post.id}\`}>`.
+- **App.jsx**: Added lazy-loaded route for `/blog/:id` pointing to the new `BlogDetails` component.
+
+## 2026-06-12 — Added Blog Page and Footer Navigation
+**What**: Created a new `/blog` page with a beautiful UI displaying 6 dummy blog posts related to sarees, fashion, and the textile industry. Updated the Footer to use React Router `<Link>` for internal navigation instead of standard anchor tags.
+**Why**: User requested a new blog page populated with 6 random product/industry related blogs and a functional navigation link from the footer.
+**Files Changed**: `FrontEnd/src/Pages/Blog.jsx`, `FrontEnd/src/Component/Footer.jsx`
+- **Blog.jsx**: Replaced placeholder component with a Bootstrap-styled responsive grid of 6 blog cards featuring cover images, categories, publish dates, excerpts, and hover effects. Used `useEffect` to scroll to top on mount.
+- **Footer.jsx**: Refactored `<a>` tags in the INFORMATION and CUSTOMER CARE columns to use `<Link>` components to ensure seamless single-page application navigation without full page reloads.
+
+## 2026-06-11 — Updated Slider Icons
+**What**: Removed old icons from the continuous scrolling icon slider on the home page and replaced them exclusively with three new icons provided by the user. Adjusted CSS to make icons smaller and properly spaced.
+**Why**: The user requested that only the newly provided icons be displayed in the slider, and subsequently asked to reduce their size and increase the spacing between them for a cleaner look.
+**Files Changed**: `FrontEnd/src/Pages/HomePage.jsx`, `FrontEnd/src/Style/HomePage.css`
+- Replaced the hardcoded repeating array of old `sudathi.com` icons in the `icons` array entirely with the 3 new Cloudinary image URLs, repeated to maintain the slider's continuous scrolling effect.
+- Updated `.icon-slide` and `.icon-slide img` CSS rules across desktop and mobile media queries. Set fixed container widths larger than image widths to automatically generate even horizontal spacing between icons. Changed `.icon-slide-track` width to `max-content` for a smoother continuous loop.
+
 ## 2026-06-10 — Mobile UI Tweaks & Header Updates
 **What**: Updated mobile layout for featured videos and footer columns, and made the Blouse navigation item fetch all blouses on click. Adjusted the video section width to match other sections.
 **Why**: User requested 2 videos per row in a mobile slider, side-by-side footer links, the top-level Blouse link to be clickable while removing "All Blouses" from the submenu, and the video section to be full width like other product sliders.

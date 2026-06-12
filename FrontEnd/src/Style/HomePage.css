@@ -162,24 +162,33 @@
     background-color: transparent !important;
     border-radius: 0 !important;
     box-shadow: none !important;
-    z-index: 20 !important; /* higher z-index to stay above images */
+    z-index: 20 !important;
+    /* higher z-index to stay above images */
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
 }
+
 .slick-prev {
-    left: 5px !important; /* Move inside the container */
+    left: 5px !important;
+    /* Move inside the container */
 }
+
 .slick-next {
-    right: 5px !important; /* Move inside the container */
+    right: 5px !important;
+    /* Move inside the container */
 }
+
 .slick-prev:before,
 .slick-next:before {
-    color: #fff !important; /* White color */
-    text-shadow: 0 2px 4px rgba(0,0,0,0.6) !important; /* Shadow to make it visible on light backgrounds */
+    color: #fff !important;
+    /* White color */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6) !important;
+    /* Shadow to make it visible on light backgrounds */
     font-size: 35px !important;
     opacity: 1 !important;
 }
+
 .slick-prev:hover,
 .slick-next:hover {
     background-color: transparent !important;
@@ -188,6 +197,7 @@
 
 /* Hide ALL slider arrows on mobile devices */
 @media (max-width: 767px) {
+
     .slick-prev,
     .slick-next,
     .carousel .control-arrow {
@@ -204,11 +214,13 @@
         transition: all 0.3s ease;
         z-index: 20 !important;
     }
+
     .carousel .control-arrow:before {
         font-size: 40px !important;
         color: #fff !important;
-        text-shadow: 0 2px 5px rgba(0,0,0,0.6) !important;
+        text-shadow: 0 2px 5px rgba(0, 0, 0, 0.6) !important;
     }
+
     .carousel .control-arrow:hover {
         opacity: 1 !important;
         background: transparent !important;
@@ -224,8 +236,7 @@
 
 .icon-slide-track {
     display: flex;
-    width: calc(250px * 14);
-    /* 7 icons * 2 (duplicated) */
+    width: max-content;
     animation: scroll 25s linear infinite;
 }
 
@@ -238,7 +249,7 @@
 }
 
 .icon-slide img {
-    width: 200px;
+    width: 100px;
     height: auto;
     object-fit: contain;
 }
@@ -268,8 +279,10 @@
 }
 
 .short-video-card iframe {
-    pointer-events: none; /* Prevents interaction to hide pause/hover controls */
-    transform: scale(1.25); /* Zooms in slightly to hide top title and bottom watermark */
+    pointer-events: none;
+    /* Prevents interaction to hide pause/hover controls */
+    transform: scale(1.25);
+    /* Zooms in slightly to hide top title and bottom watermark */
     transform-origin: center center;
 }
 
@@ -349,16 +362,16 @@
         height: 70px;
     }
 
-    .icon-slide img {
-        width: 110px;
+    .icon-slide {
+        width: 140px;
     }
 
-    .icon-slide {
-        width: 110px;
+    .icon-slide img {
+        width: 80px;
     }
 
     .icon-slide-track {
-        width: calc(130px * 14);
+        width: max-content;
     }
 
     /* Mobile Hero Banner Curves */
@@ -389,16 +402,16 @@
         height: 60px;
     }
 
-    .icon-slide img {
-        width: 90px;
+    .icon-slide {
+        width: 110px;
     }
 
-    .icon-slide {
-        width: 90px;
+    .icon-slide img {
+        width: 60px;
     }
 
     .icon-slide-track {
-        width: calc(110px * 14);
+        width: max-content;
     }
 }
 

@@ -19,6 +19,7 @@ const PrivacyPolicy = lazy(() => import('./Pages/PrivacyPolicy'));
 const ReturnPolicy = lazy(() => import('./Pages/ReturnPolicy'));
 const ShippingPolicy = lazy(() => import('./Pages/ShippingPolicy'));
 const Blog = lazy(() => import('./Pages/Blog'));
+const BlogDetails = lazy(() => import('./Pages/BlogDetails'));
 const TermAndCondition = lazy(() => import('./Pages/TermAndCondition'));
 const BunbunClothingGold = lazy(() => import('./Pages/BunbunClothingGold'));
 const EditProfile = lazy(() => import('./Pages/EditProfile'));
@@ -56,6 +57,7 @@ const AppLayout = () => {
           <Route path="/product/:slug" element={<ProductDetails />} />
           <Route path="/checkout/address" element={<AddressForm />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:id" element={<BlogDetails />} />
           <Route path="/contact" element={<Contact />} />
 
           {/* ── Policy Pages ── */}

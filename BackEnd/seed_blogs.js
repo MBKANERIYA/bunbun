@@ -1,0 +1,74 @@
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+dotenv.config({ path: '.env' });
+const Blog = require('./Models/Blog.Model');
+
+const blogPosts = [
+  {
+    id: 1,
+    title: "The Art of Draping: 5 Ways to Style Your Silk Saree",
+    excerpt: "Discover the elegant ways to drape a silk saree for any occasion. From the classic Nivi drape to modern fusion styles, elevate your ethnic look.",
+    content: "Silk sarees are a timeless classic. But the way you drape them can completely change your look. Here are 5 ways to style your silk saree: \n\n1. The Classic Nivi Drape: The most common and elegant style.\n2. The Bengali Style: Traditional and regal, with pleats tucked and the pallu draped over both shoulders.\n3. The Gujarati Style: Known as the 'Seedha Pallu', this brings the pallu to the front.\n4. The Maharashtrian Style: Worn like a dhoti, offering great mobility and a unique look.\n5. The Modern Belted Style: Adding a waist belt cinches the waist and gives a contemporary fusion vibe to your traditional saree.",
+    category: "Fashion & Styling",
+    date: "June 10, 2026",
+    imageUrl: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    id: 2,
+    title: "Sustainable Fashion: Why Handloom Sarees Are the Future",
+    excerpt: "Explore the importance of sustainable fashion in the textile industry and why investing in handloom sarees supports local artisans and the environment.",
+    content: "Fast fashion is taking a toll on our planet, but handloom sarees offer a sustainable and beautiful alternative. Handloom weaving is a traditional art that requires no electricity and produces minimal carbon footprint.\n\nBy choosing handloom sarees, you are not only getting a unique, high-quality garment but also supporting the livelihood of skilled artisans across India. Each piece tells a story of the weaver's dedication and heritage. Make a conscious choice for the environment and invest in the slow fashion movement with authentic handloom sarees.",
+    category: "Industry Insights",
+    date: "May 28, 2026",
+    imageUrl: "https://images.unsplash.com/photo-1583391733959-1f5106a72fb3?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    id: 3,
+    title: "Decoding Kanjivaram: The Queen of Silks",
+    excerpt: "Unveil the rich history, intricate motifs, and meticulous weaving process behind the world-renowned Kanjivaram sarees from South India.",
+    content: "Originating from Kanchipuram in Tamil Nadu, Kanjivaram sarees are often regarded as the 'Queen of Silks'. Woven from pure mulberry silk thread, these sarees are famous for their vibrant colors and heavy gold zari work.\n\nThe motifs used in Kanjivaram sarees often draw inspiration from South Indian temple architecture, nature, and mythology. The borders and pallu are woven separately and then delicately interlocked with the body of the saree. A genuine Kanjivaram is a prized possession and a staple in South Indian bridal trousseaus.",
+    category: "Product Spotlight",
+    date: "May 15, 2026",
+    imageUrl: "https://images.unsplash.com/photo-1583391265517-35ff3e18c612?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    id: 4,
+    title: "Top 10 Saree Trends for the Upcoming Wedding Season",
+    excerpt: "Stay ahead of the curve with our curated list of the top saree trends for the upcoming wedding season. From pastel hues to bold metallic borders.",
+    content: "The upcoming wedding season brings a mix of traditional grandeur and modern minimalism. Here are the top trends to watch out for:\n\n1. Pastel Kanjivarams: Soft pinks, mint greens, and powder blues are replacing traditional reds.\n2. Tissue Silk Sarees: Offering a subtle metallic sheen perfect for evening receptions.\n3. Floral Organza: Lightweight, romantic, and beautifully printed.\n4. Heavy Velvet Blouses: Paired with simple sarees for a striking contrast.\n5. Pre-stitched Sarees: For the modern woman who wants elegance without the hassle of draping.",
+    category: "Trends",
+    date: "April 22, 2026",
+    imageUrl: "https://images.unsplash.com/photo-1615886561582-7728df95c470?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    id: 5,
+    title: "How to Care for Your Precious Silk and Cotton Sarees",
+    excerpt: "A comprehensive guide on how to wash, store, and maintain your expensive silk and everyday cotton sarees to ensure they last for generations.",
+    content: "Proper care is essential to maintain the luster and longevity of your sarees.\n\n**Silk Sarees:** Always dry clean your silk sarees. If you must wash them at home, use cold water and a mild shampoo. Do not wring them. Store them in cotton bags, never in plastic, to allow the fabric to breathe. Refold them every few months to prevent permanent creasing along the fold lines.\n\n**Cotton Sarees:** Hand wash cotton sarees separately in cold water, as they tend to bleed color initially. Starch them to maintain their crispness and always dry them in the shade to prevent the colors from fading.",
+    category: "Care Guide",
+    date: "April 05, 2026",
+    imageUrl: "https://images.unsplash.com/photo-1584030373081-f37b7bb4fa8e?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    id: 6,
+    title: "The History of Banarasi Sarees: Woven Stories of Elegance",
+    excerpt: "Take a journey through time and discover the royal origins and evolution of Banarasi weaves, a true symbol of Indian heritage.",
+    content: "Banarasi sarees trace their origins to the Mughal era, when artisans from Persia were brought to India. They blended Islamic motifs like floral patterns and jal (net) with traditional Indian designs, creating the exquisite Banarasi brocade we know today.\n\nWoven in Varanasi, these sarees use gold and silver zari. The intricate weaving process can take anywhere from a few days to several months, depending on the complexity of the design. Today, Banarasi sarees remain a symbol of royal elegance and a testament to India's rich textile heritage.",
+    category: "Heritage",
+    date: "March 18, 2026",
+    imageUrl: "https://images.unsplash.com/photo-1605792657660-596af9009e82?auto=format&fit=crop&q=80&w=800",
+  }
+];
+
+mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(async () => {
+    console.log("Connected to DB, seeding blogs...");
+    await Blog.deleteMany({});
+    await Blog.insertMany(blogPosts);
+    console.log("Seeded blogs successfully!");
+    process.exit(0);
+  })
+  .catch(err => {
+    console.error("Failed to seed", err);
+    process.exit(1);
+  });

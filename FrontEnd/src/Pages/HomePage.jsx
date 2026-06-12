@@ -35,22 +35,24 @@ const HomePage = () => {
     }, []);
 
     const icons = [
-        "https://sudathi.com/cdn/shop/files/6_b35ea9ed-5ea0-459f-9371-391249f6e4d0.png?height=160&v=1744868662",
-        "https://sudathi.com/cdn/shop/files/1_83ec00a7-fff2-49e0-820a-378ab3087e75.png?height=160&v=1744868747",
-        "https://sudathi.com/cdn/shop/files/4_95600bae-e0c1-464e-a79f-bed293329e0e.png?height=160&v=1744868680",
-        "https://sudathi.com/cdn/shop/files/6_b35ea9ed-5ea0-459f-9371-391249f6e4d0.png?height=160&v=1744868662",
-        "https://sudathi.com/cdn/shop/files/1_83ec00a7-fff2-49e0-820a-378ab3087e75.png?height=160&v=1744868747",
-        "https://sudathi.com/cdn/shop/files/4_95600bae-e0c1-464e-a79f-bed293329e0e.png?height=160&v=1744868680",
-        "https://sudathi.com/cdn/shop/files/6_b35ea9ed-5ea0-459f-9371-391249f6e4d0.png?height=160&v=1744868662",
-        "https://sudathi.com/cdn/shop/files/1_83ec00a7-fff2-49e0-820a-378ab3087e75.png?height=160&v=1744868747",
-        "https://sudathi.com/cdn/shop/files/4_95600bae-e0c1-464e-a79f-bed293329e0e.png?height=160&v=1744868680",
-        "https://sudathi.com/cdn/shop/files/6_b35ea9ed-5ea0-459f-9371-391249f6e4d0.png?height=160&v=1744868662",
-        "https://sudathi.com/cdn/shop/files/1_83ec00a7-fff2-49e0-820a-378ab3087e75.png?height=160&v=1744868747",
-        "https://sudathi.com/cdn/shop/files/4_95600bae-e0c1-464e-a79f-bed293329e0e.png?height=160&v=1744868680",
-        "https://sudathi.com/cdn/shop/files/6_b35ea9ed-5ea0-459f-9371-391249f6e4d0.png?height=160&v=1744868662",
-        "https://sudathi.com/cdn/shop/files/1_83ec00a7-fff2-49e0-820a-378ab3087e75.png?height=160&v=1744868747",
-        "https://sudathi.com/cdn/shop/files/4_95600bae-e0c1-464e-a79f-bed293329e0e.png?height=160&v=1744868680",
-
+        "https://res.cloudinary.com/dacwlu4mo/image/upload/v1781171349/7_tbp9wj.png",
+        "https://res.cloudinary.com/dacwlu4mo/image/upload/v1781171349/5_yoeshj.png",
+        "https://res.cloudinary.com/dacwlu4mo/image/upload/v1781171349/6_poqmby.png",
+        "https://res.cloudinary.com/dacwlu4mo/image/upload/v1781171349/7_tbp9wj.png",
+        "https://res.cloudinary.com/dacwlu4mo/image/upload/v1781171349/5_yoeshj.png",
+        "https://res.cloudinary.com/dacwlu4mo/image/upload/v1781171349/6_poqmby.png",
+        "https://res.cloudinary.com/dacwlu4mo/image/upload/v1781171349/7_tbp9wj.png",
+        "https://res.cloudinary.com/dacwlu4mo/image/upload/v1781171349/5_yoeshj.png",
+        "https://res.cloudinary.com/dacwlu4mo/image/upload/v1781171349/6_poqmby.png",
+        "https://res.cloudinary.com/dacwlu4mo/image/upload/v1781171349/7_tbp9wj.png",
+        "https://res.cloudinary.com/dacwlu4mo/image/upload/v1781171349/5_yoeshj.png",
+        "https://res.cloudinary.com/dacwlu4mo/image/upload/v1781171349/6_poqmby.png",
+        "https://res.cloudinary.com/dacwlu4mo/image/upload/v1781171349/7_tbp9wj.png",
+        "https://res.cloudinary.com/dacwlu4mo/image/upload/v1781171349/5_yoeshj.png",
+        "https://res.cloudinary.com/dacwlu4mo/image/upload/v1781171349/6_poqmby.png",
+        "https://res.cloudinary.com/dacwlu4mo/image/upload/v1781171349/7_tbp9wj.png",
+        "https://res.cloudinary.com/dacwlu4mo/image/upload/v1781171349/5_yoeshj.png",
+        "https://res.cloudinary.com/dacwlu4mo/image/upload/v1781171349/6_poqmby.png",
     ];
 
     const medias = [
