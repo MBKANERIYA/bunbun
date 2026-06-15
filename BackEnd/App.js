@@ -38,7 +38,7 @@ const frontendBuildPath = path.join(__dirname, "../FrontEnd/dist");
 app.use(express.static(frontendBuildPath));
 
 // Catch-all route for React Router (must be placed AFTER API routes)
-app.get("*", (req, res) => {
+app.get(/.*/, (req, res) => {
     res.sendFile(path.join(frontendBuildPath, "index.html"));
 });
 

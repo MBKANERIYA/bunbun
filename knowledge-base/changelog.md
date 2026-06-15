@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-06-15 — Fixed Express 5 Catch-All Route Crash
+**What**: Updated the catch-all React Router wildcard from `app.get("*")` to `app.get(/.*/)`.
+**Why**: Express 5 uses a newer version of `path-to-regexp` which strictly forbids unnamed `*` parameters in string paths, causing a `TypeError: Missing parameter name at 1` crash on backend startup. Switched to native regex to bypass `path-to-regexp` parsing.
+**Files Changed**: `BackEnd/App.js`
 ## 2026-06-12 — Advanced Blog Management & SEO Integration
 **What**: Completely redesigned the "Add Blog" admin panel and extended the backend `Blog` model to support advanced formatting, SEO metadata, and dynamic content rendering.
 **Files Changed**: `BackEnd/Models/Blog.Model.js`, `BackEnd/Controllers/Blog.Controller.js`, `BackEnd/Routes/Blog.Routes.js`, `FrontEnd/src/Component/BlogAdmin.jsx`, `FrontEnd/src/Component/BlogContentRenderer.jsx`, `FrontEnd/src/Pages/AdminPanel.jsx`
