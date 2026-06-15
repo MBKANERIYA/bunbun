@@ -67,23 +67,24 @@ const Footer = () => {
           {/* Social Icons */}
           <div className="col-md-6 d-flex align-items-end justify-content-md-end mt-3 mt-md-0">
             <div className="d-flex gap-3">
-              <FaFacebookF size={20} />
-              <FaPinterestP size={20} />
-              <FaInstagram size={20} />
-              <FaLinkedinIn size={20} />
-              <FaYoutube size={20} />
+              <a href="https://www.facebook.com/profile.php?id=61590335113757" target="_blank" rel="noopener noreferrer" className="text-white">
+                <FaFacebookF size={20} />
+              </a>
+              <a href="https://in.pinterest.com/bunbunclothing/" target="_blank" rel="noopener noreferrer" className="text-white">
+                <FaPinterestP size={20} />
+              </a>
+              <a href="https://www.instagram.com/bunbun_clothing/" target="_blank" rel="noopener noreferrer" className="text-white">
+                <FaInstagram size={20} />
+              </a>
+              <a href="#" className="text-white">
+                <FaLinkedinIn size={20} />
+              </a>
+              <a href="https://www.youtube.com/@BunbunClothing" target="_blank" rel="noopener noreferrer" className="text-white">
+                <FaYoutube size={20} />
+              </a>
             </div>
           </div>
         </div>
-
-        {/* Category Links */}
-        <div className="mt-4 pt-3 border-top border-white">
-          <p className="small text-white-50">
-            Saree | Blouses | Shapewear | Sudathi Gold | Sarees Saturday | Silk Saree Sale | Shark Tank Sarees Sale | Bestseller Saree Sale | Summer Saree Sale | Monsoon Sale | Festive Sarees Sale | Rakshabandhan Sale | Ganesh Chaturthi Sale | Republic Day Sale | Wedding Sale | Year End Sale | Makar Sankranti Sale | Onam Sarees Sale | Sarees Starting 599 | Premium Sarees | Wedding Collection | Ready To Wear Sarees | Pre Stitched Sarees | 1 Minute Saree | Banarasi Sarees | Kanjivaram Sarees | Paithani Sarees | Daily Wear Sarees | Party Wear Sarees | Sequence Sarees | Swarovski Sarees | Embellished Sarees | Embroidery Sarees | Budget Sarees | Cotton Sarees | Georgette Sarees | Linen Sarees | Satin Sarees | Printed Sarees | Woven Sarees | Bandhani Sarees | Celebrity Sarees | Floral Sarees Sale | Clearance Sale
-          </p>
-        </div>
-
-        {/* App Download Button */}
 
       </div>
     </footer>

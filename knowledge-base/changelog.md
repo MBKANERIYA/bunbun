@@ -1,5 +1,25 @@
 # Changelog
 
+## 2026-06-15 — Added Social Media Links to Footer
+**What**: Wrapped the social media icons in `Footer.jsx` with active hyperlinks to Bunbun Clothing's official profiles.
+**Why**: The user requested that the Facebook, Instagram, Pinterest, and YouTube footer icons be connected to their respective social media pages.
+**Files Changed**: `FrontEnd/src/Component/Footer.jsx`
+## 2026-06-15 — Updated Shipping Policy
+**What**: Completed the implementation of the `ShippingPolicy.jsx` page with new content.
+**Why**: The user provided a new Shipping Policy detailing free shipping availability, 3-5 day processing time, and 5-7 day standard delivery timelines for Bunbun Clothing.
+**Files Changed**: `FrontEnd/src/Pages/ShippingPolicy.jsx`
+## 2026-06-15 — Updated Return and Exchange Policy
+**What**: Completed the implementation of the `ReturnPolicy.jsx` page with new legal content.
+**Why**: The user provided a new Return and Exchange policy establishing a strict 7-day no-refund, exchange/replacement-only policy for damaged goods specific to Bunbun Clothing.
+**Files Changed**: `FrontEnd/src/Pages/ReturnPolicy.jsx`
+## 2026-06-15 — Updated Terms and Conditions
+**What**: Completely rewrote the `TermAndCondition.jsx` page with newly provided legal content.
+**Why**: The user provided a comprehensive, updated Terms and Conditions text specific to Bunbun Clothing, including liability limitations, governing law, and legal compliance.
+**Files Changed**: `FrontEnd/src/Pages/TermAndCondition.jsx`
+## 2026-06-15 — Updated Privacy Policy
+**What**: Completely rewrote the `PrivacyPolicy.jsx` page with newly provided legal content.
+**Why**: The user provided a comprehensive, updated Privacy Policy text with new legal definitions, cookie policies, and data retention details specific to Bunbun Clothing.
+**Files Changed**: `FrontEnd/src/Pages/PrivacyPolicy.jsx`
 ## 2026-06-15 — Fixed Express 5 Catch-All Route Crash
 **What**: Updated the catch-all React Router wildcard from `app.get("*")` to `app.get(/.*/)`.
 **Why**: Express 5 uses a newer version of `path-to-regexp` which strictly forbids unnamed `*` parameters in string paths, causing a `TypeError: Missing parameter name at 1` crash on backend startup. Switched to native regex to bypass `path-to-regexp` parsing.
