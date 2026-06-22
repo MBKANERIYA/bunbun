@@ -22,6 +22,7 @@ The chatbot is a customer-facing shop assistant mounted on non-admin pages. It g
 - The AI may only rank products supplied by the backend candidate list. Backend validation discards fake or duplicate product IDs.
 - AI Try-On remains disabled unless `AI_TRY_ON_ENABLED=true` and a documented Atomesus image generation API exists.
 - Shopper-facing color fields must use plain language such as "olive", "charcoal", or "cream"; raw hex values are only internal metadata for swatches and AI context.
+- Clothing type is a custom free text field, not a fixed dropdown, because users may upload sarees, kurtis, dupattas, gowns, blouse pieces, or other clothing items.
 
 ## Known Gotchas
 - The user pasted an Atomesus key in chat during planning. Treat that key as compromised and rotate it before production use.

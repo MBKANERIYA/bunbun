@@ -1,7 +1,7 @@
 ## Current Status
 **Last Updated**: 2026-06-22
-**Last Agent Session**: Fixed the chatbot clothing-photo color autofill so shoppers see plain color names instead of raw hex codes, after adding the Atomesus-only chatbot and security/payment follow-up fixes.
-**Test Suite Status**: `npm test --prefix BackEnd`, `npm run lint --prefix FrontEnd`, and `npm run build --prefix FrontEnd` pass after the color-name UI fix.
+**Last Agent Session**: Changed the chatbot clothing type control from a fixed dropdown to a custom free text field, after fixing color autofill to show plain color names.
+**Test Suite Status**: Verification pending after the clothing-type custom field fix.
 
 ## In Progress
 - [ ] Rotate the exposed Atomesus API key outside the repo and set the replacement as `ATOMESUS_API_KEY`.

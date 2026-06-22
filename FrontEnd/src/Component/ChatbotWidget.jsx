@@ -342,13 +342,12 @@ const ChatbotWidget = () => {
                 </div>
                 <div className="chatbot-field">
                     <label htmlFor="chatbot-outfit">Clothing type</label>
-                    <select id="chatbot-outfit" value={answers.outfitType} onChange={(event) => updateAnswer("outfitType", event.target.value)}>
-                        <option value="">Select</option>
-                        <option value="saree">Saree</option>
-                        <option value="lehenga">Lehenga</option>
-                        <option value="skirt">Skirt</option>
-                        <option value="daily outfit">Daily outfit</option>
-                    </select>
+                    <input
+                        id="chatbot-outfit"
+                        value={answers.outfitType}
+                        onChange={(event) => updateAnswer("outfitType", event.target.value)}
+                        placeholder="Saree, lehenga, kurti, dupatta..."
+                    />
                 </div>
                 <div className="chatbot-field">
                     <label htmlFor="chatbot-occasion">Occasion</label>

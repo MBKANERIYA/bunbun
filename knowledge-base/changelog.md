@@ -1,4 +1,15 @@
 # Changelog
+## 2026-06-22 — Made Chatbot Clothing Type A Custom Field
+**What**: Replaced the chatbot "Clothing type" dropdown with a free text input.
+**Why**: Uploaded outfits are not limited to saree, lehenga, skirt, or daily outfit, so shoppers need to describe the clothing item in their own words.
+**Impact**: The chatbot now accepts arbitrary clothing types such as kurti, dupatta, gown, blouse piece, or any user-entered description.
+**Files Changed**: `FrontEnd/src/Component/ChatbotWidget.jsx`, `knowledge-base/changelog.md`, `knowledge-base/chatbot.md`, `knowledge-base/active-context.md`
+**Tests**: `npm test --prefix BackEnd` pass; `npm run lint --prefix FrontEnd` pass; `npm run build --prefix FrontEnd` pass.
+**Commit**: `pending`
+
+- Kept the same `answers.outfitType` payload contract while making the visible control editable.
+- Added user-friendly placeholder examples instead of a fixed option list.
+
 ## 2026-06-22 — Replaced Chatbot Hex Color Autofill With Plain Color Names
 **What**: Changed the chatbot clothing-photo color autofill from raw hex codes to shopper-friendly color names.
 **Why**: Average customers do not know what values like `#e0e0e0` mean, so the stylist form should read like a person describing clothing colors.
