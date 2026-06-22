@@ -25,6 +25,66 @@ const rgbToHex = (r, g, b) => (
     `#${[r, g, b].map((value) => value.toString(16).padStart(2, "0")).join("")}`
 );
 
+const hexToRgb = (hex) => {
+    const value = hex.replace("#", "");
+    return {
+        r: parseInt(value.slice(0, 2), 16),
+        g: parseInt(value.slice(2, 4), 16),
+        b: parseInt(value.slice(4, 6), 16),
+    };
+};
+
+const rgbToColorName = ({ r, g, b }) => {
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    const delta = max - min;
+    const lightness = (max + min) / 2;
+
+    if (delta < 18) {
+        if (lightness < 55) return "black";
+        if (lightness < 105) return "charcoal";
+        if (lightness < 170) return "grey";
+        if (lightness < 220) return "light grey";
+        return "off white";
+    }
+
+    let hue = 0;
+    if (max === r) {
+        hue = ((g - b) / delta) % 6;
+    } else if (max === g) {
+        hue = (b - r) / delta + 2;
+    } else {
+        hue = (r - g) / delta + 4;
+    }
+    hue = Math.round(hue * 60);
+    if (hue < 0) hue += 360;
+
+    const saturation = delta / (255 - Math.abs(2 * lightness - 255));
+
+    if (lightness > 205 && saturation < 0.35) return "cream";
+    if (hue >= 35 && hue < 70 && lightness > 165) return "soft cream";
+    if (hue >= 35 && hue < 70 && saturation < 0.45) return "beige";
+    if (hue >= 40 && hue < 75 && lightness < 135) return "olive";
+    if (hue >= 20 && hue < 40 && lightness < 125) return "brown";
+    if (hue >= 345 || hue < 12) return lightness < 115 ? "maroon" : "red";
+    if (hue >= 12 && hue < 35) return lightness < 125 ? "rust" : "orange";
+    if (hue >= 35 && hue < 55) return "mustard";
+    if (hue >= 55 && hue < 75) return "yellow";
+    if (hue >= 75 && hue < 165) return lightness < 130 ? "green" : "sage green";
+    if (hue >= 165 && hue < 195) return "teal";
+    if (hue >= 195 && hue < 255) return lightness < 105 ? "navy" : "blue";
+    if (hue >= 255 && hue < 290) return "purple";
+    if (hue >= 290 && hue < 345) return lightness < 125 ? "wine" : "pink";
+    return "mixed color";
+};
+
+const colorNameFromHex = (hex) => rgbToColorName(hexToRgb(hex));
+
+const describeColorHints = (colors) => {
+    const names = colors.map(colorNameFromHex);
+    return [...new Set(names)].join(", ");
+};
+
 const extractColorHints = (file) => new Promise((resolve) => {
     const image = new Image();
     const url = URL.createObjectURL(file);
@@ -152,7 +212,7 @@ const ChatbotWidget = () => {
         setColorHints(colors);
         setAnswers((current) => ({
             ...current,
-            clothingColors: colors.join(", "),
+            clothingColors: describeColorHints(colors),
         }));
     };
 
@@ -182,6 +242,7 @@ const ChatbotWidget = () => {
                 clothingImage,
                 attributes: {
                     colorHints,
+                    colorNames: describeColorHints(colorHints),
                     confirmedColors: answers.clothingColors,
                     selectedProductType: selectedProductTypeLabel,
                 },
@@ -257,7 +318,12 @@ const ChatbotWidget = () => {
                 {colorHints.length > 0 && (
                     <div className="chatbot-swatch-row" aria-label="Suggested color hints">
                         {colorHints.map((color) => (
-                            <span key={color} className="chatbot-swatch" style={{ backgroundColor: color }} title={color}></span>
+                            <span
+                                key={color}
+                                className="chatbot-swatch"
+                                style={{ backgroundColor: color }}
+                                title={colorNameFromHex(color)}
+                            ></span>
                         ))}
                     </div>
                 )}

@@ -21,10 +21,12 @@ The chatbot is a customer-facing shop assistant mounted on non-admin pages. It g
 - Do not persist raw clothing uploads. Uploaded files go to the OS temp directory and are deleted in the controller `finally` block.
 - The AI may only rank products supplied by the backend candidate list. Backend validation discards fake or duplicate product IDs.
 - AI Try-On remains disabled unless `AI_TRY_ON_ENABLED=true` and a documented Atomesus image generation API exists.
+- Shopper-facing color fields must use plain language such as "olive", "charcoal", or "cream"; raw hex values are only internal metadata for swatches and AI context.
 
 ## Known Gotchas
 - The user pasted an Atomesus key in chat during planning. Treat that key as compromised and rotate it before production use.
 - Atomesus public docs currently document text chat completions, not image vision/generation. The widget therefore asks the user to confirm color/style attributes extracted locally from the uploaded image.
+- Local image color extraction is approximate. The swatches can use exact CSS colors, but the editable form should describe them in human-friendly terms.
 - The backend caps AI catalog candidates to 30 products so prompts stay compact.
 - The suggestion endpoint returns deterministic fallback products if Atomesus is unavailable or returns invalid IDs.
 

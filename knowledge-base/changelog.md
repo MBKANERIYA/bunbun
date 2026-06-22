@@ -1,4 +1,15 @@
 # Changelog
+## 2026-06-22 — Replaced Chatbot Hex Color Autofill With Plain Color Names
+**What**: Changed the chatbot clothing-photo color autofill from raw hex codes to shopper-friendly color names.
+**Why**: Average customers do not know what values like `#e0e0e0` mean, so the stylist form should read like a person describing clothing colors.
+**Impact**: The visible "Main colors you see" field now uses names such as light grey, olive, charcoal, and cream. The backend still receives exact swatch hex hints separately for AI context.
+**Files Changed**: `FrontEnd/src/Component/ChatbotWidget.jsx`, `knowledge-base/changelog.md`, `knowledge-base/chatbot.md`, `knowledge-base/active-context.md`
+**Tests**: `npm test --prefix BackEnd` pass; `npm run lint --prefix FrontEnd` pass; `npm run build --prefix FrontEnd` pass.
+**Commit**: `pending`
+
+- Added a color-name mapper for locally extracted image swatches.
+- Kept swatch circles visible while replacing the editable input's developer-facing values with plain-language color descriptions.
+
 ## 2026-06-22 — Added Atomesus Chatbot Product Suggestions
 **What**: Added a customer-facing chatbot for AI-assisted product suggestions using Atomesus text reasoning, plus a disabled AI Try-On placeholder.
 **Why**: The site needs a shop-assistant style chatbot that can guide customers toward top product matches while respecting the Atomesus-only provider decision and upload privacy rules.
