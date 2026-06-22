@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import PageMeta from "../Component/PageMeta"
 import axios from "axios"
 import ProductCard from "../Component/ProductCard"
@@ -11,9 +11,14 @@ import { Carousel } from "react-responsive-carousel";
 import { apiUrl } from "../utils/apiConfig";
 import { FaStar } from "react-icons/fa";
 
-
-
-
+const sampleReviews = [
+    { _id: 's1', userName: 'Priya Sharma', userRating: 5, userReview: 'Absolutely love the quality! The blouse fits perfectly and the fabric is so soft. Will definitely buy again.', productName: 'Designer Blouse' },
+    { _id: 's2', userName: 'Anjali Patel', userRating: 5, userReview: 'Best shapewear I have ever purchased. Very comfortable for daily wear and the stitching is flawless.', productName: 'Premium Shapewear' },
+    { _id: 's3', userName: 'Meera Joshi', userRating: 4, userReview: 'Beautiful design and fast delivery. The color was exactly as shown in the pictures. Highly recommended!', productName: 'Silk Saree' },
+    { _id: 's4', userName: 'Kavita Reddy', userRating: 5, userReview: 'Amazing collection and great customer service. The packaging was premium and the product exceeded my expectations.', productName: 'Bridal Blouse' },
+    { _id: 's5', userName: 'Sneha Gupta', userRating: 4, userReview: 'Wonderful experience shopping here. The material quality is top-notch and very reasonably priced for what you get.', productName: 'Cotton Blouse' },
+    { _id: 's6', userName: 'Ritu Agarwal', userRating: 5, userReview: 'I received so many compliments wearing this! The craftsmanship is exceptional. Bunbun never disappoints.', productName: 'Party Wear Blouse' },
+];
 const HomePage = () => {
 
     const [topBanner, setTopBanner] = useState([])
@@ -76,7 +81,7 @@ const HomePage = () => {
 
     const loopMedia = [...medias, ...medias]
 
-    const fetchProducts = async () => {
+    const fetchProducts = useCallback(async () => {
         try {
             let products = await axios.get(apiUrl("/v1/product/getProduct"))
             console.log(products?.data?.product);
@@ -86,11 +91,11 @@ const HomePage = () => {
             console.error("Failed to fetch products:", error);
             setProduct([]);
         }
-    }
+    }, []);
     console.log("ppp", product);
 
 
-    const fetchBanners = async () => {
+    const fetchBanners = useCallback(async () => {
         try {
             let banner = await axios.get(apiUrl("/v1/banner/getBanner"))
             console.log(banner?.data?.banner?.banners);
@@ -104,7 +109,7 @@ const HomePage = () => {
         } catch (error) {
             console.error("Failed to fetch banners:", error);
         }
-    }
+    }, []);
     console.log(categoryImage);
 
     console.log(topBanner);
@@ -112,16 +117,7 @@ const HomePage = () => {
     console.log(bestSellerBanner);
     console.log(exclusiveCollectionBanner);
 
-    const sampleReviews = [
-        { _id: 's1', userName: 'Priya Sharma', userRating: 5, userReview: 'Absolutely love the quality! The blouse fits perfectly and the fabric is so soft. Will definitely buy again.', productName: 'Designer Blouse' },
-        { _id: 's2', userName: 'Anjali Patel', userRating: 5, userReview: 'Best shapewear I have ever purchased. Very comfortable for daily wear and the stitching is flawless.', productName: 'Premium Shapewear' },
-        { _id: 's3', userName: 'Meera Joshi', userRating: 4, userReview: 'Beautiful design and fast delivery. The color was exactly as shown in the pictures. Highly recommended!', productName: 'Silk Saree' },
-        { _id: 's4', userName: 'Kavita Reddy', userRating: 5, userReview: 'Amazing collection and great customer service. The packaging was premium and the product exceeded my expectations.', productName: 'Bridal Blouse' },
-        { _id: 's5', userName: 'Sneha Gupta', userRating: 4, userReview: 'Wonderful experience shopping here. The material quality is top-notch and very reasonably priced for what you get.', productName: 'Cotton Blouse' },
-        { _id: 's6', userName: 'Ritu Agarwal', userRating: 5, userReview: 'I received so many compliments wearing this! The craftsmanship is exceptional. Bunbun never disappoints.', productName: 'Party Wear Blouse' },
-    ];
-
-    const fetchReviews = async () => {
+    const fetchReviews = useCallback(async () => {
         try {
             const response = await axios.get(apiUrl("/v1/rating/getAllReviews"));
             const fetchedReviews = response.data?.reviews || [];
@@ -130,7 +126,7 @@ const HomePage = () => {
             console.error("Failed to fetch reviews:", error);
             setReviews(sampleReviews);
         }
-    }
+    }, []);
 
     useEffect(() => {
         fetchBanners()
@@ -138,7 +134,7 @@ const HomePage = () => {
         fetchReviews()
         const viewedItems = JSON.parse(localStorage.getItem("recentlyViewed")) || [];
         setRecentlyViewed(viewedItems);
-    }, [])
+    }, [fetchBanners, fetchProducts, fetchReviews])
 
     const reviewSliderSettings = {
         infinite: true,

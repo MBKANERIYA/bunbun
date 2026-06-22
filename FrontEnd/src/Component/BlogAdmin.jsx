@@ -421,12 +421,12 @@ export default function BlogAdmin() {
                                                 <button className="admin-edit-btn" onClick={() => handleEdit(post)} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}><Edit3 size={14} /> Edit</button>
                                                 <button className="admin-delete-btn" onClick={async () => {
                                                     if (window.confirm(`Are you sure you want to delete "${post.title}"?`)) {
-                                                        try {
-                                                            await axios.delete(apiUrl(`/v1/blog/deleteBlog/${post._id}`));
-                                                            fetchBlogs();
-                                                        } catch (e) {
-                                                            alert("Failed to delete post.");
-                                                        }
+                                                         try {
+                                                             await axios.delete(apiUrl(`/v1/blog/deleteBlog/${post._id}`));
+                                                             fetchBlogs();
+                                                         } catch {
+                                                             alert("Failed to delete post.");
+                                                         }
                                                     }
                                                 }} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}><Trash2 size={14} /> Delete</button>
                                             </div>

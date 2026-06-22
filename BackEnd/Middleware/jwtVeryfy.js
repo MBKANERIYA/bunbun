@@ -12,7 +12,11 @@ module.exports.tokenVeryfy = (req, res, next) => {
         if (err) {
             return res.status(404).json({ message: "wrong token" })
         }
-        req.user = decode.user
+        // Normalize req.user with direct userId and role fields
+        req.user = {
+            userId: decode.userId || decode._id,
+            role: decode.role || "User"
+        };
         next()
     })
 }
@@ -23,4 +27,15 @@ module.exports.isAdmin = (req, res, next) => {
     } else {
         return res.status(500).json({ message: "you have no access" })
     }
+}
+
+module.exports.isOwner = (req, res, next) => {
+    const userId = req.params.userId || req.body.userId;
+    if (!userId) {
+        return res.status(400).json({ message: "User ID is required" });
+    }
+    if (req.user.userId !== userId && req.user.role !== "Admin") {
+        return res.status(403).json({ message: "You do not have permission to access this resource" });
+    }
+    next();
 }

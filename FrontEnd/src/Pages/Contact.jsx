@@ -3,9 +3,6 @@ import PageMeta from "../Component/PageMeta";
 import { Phone, MessageCircle, ArrowRight } from "lucide-react";
 
 const ContactUs = () => {
-  const slogens = [
-    "India's Most Affordable Fashion",
-  ];
   return (
     <>
       <PageMeta title="Contact Us" description="Get in touch with Bunbun Clothing. Call or WhatsApp us during business hours for any questions." />

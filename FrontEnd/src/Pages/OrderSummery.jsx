@@ -125,7 +125,12 @@ const DetailedSummary = ({ selectedAddress, isGuest = false }) => {
         try {
             // 1. Create order on server (Razorpay order)
             const orderRes = await axios.post(apiUrl('/v1/payment/create-order'), {
-                amount: finalTotal
+                isGuest: isGuest,
+                items: cart.product.map(item => ({
+                    productId: item.productId._id || item.productId,
+                    quantity: item.quantity,
+                    size: item.size
+                }))
             });
 
             const { id: order_id, currency, amount } = orderRes.data;
@@ -150,7 +155,7 @@ const DetailedSummary = ({ selectedAddress, isGuest = false }) => {
                         if (verifyRes.status === 200) {
                             // 4. Create Order in DB
                             const orderPayload = {
-                                userId: isGuest ? 'guest' : (user?._id || "6892e8456c2cbf8ecb95c1ea"),
+                                userId: isGuest ? 'guest' : user?._id,
                                 guestInfo: isGuest ? {
                                     name: selectedAddress?.guestName || 'Guest',
                                     phone: selectedAddress?.guestPhone || '',

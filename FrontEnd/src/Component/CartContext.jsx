@@ -1,11 +1,13 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useState, useContext, useEffect, useCallback } from "react";
 import axios from "axios";
 import { getAuthUserId } from "../utils/auth";
 import { apiUrl } from "../utils/apiConfig";
 
 const CartContext = createContext();
+const API_BASE = apiUrl("/v1/cart");
 
-export let useCart = () => useContext(CartContext);
+export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState(null);
@@ -13,8 +15,6 @@ export const CartProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [userId, setUserId] = useState(getAuthUserId());
-
-    const API_BASE = apiUrl("/v1/cart");
 
     const getGuestCart = () => JSON.parse(localStorage.getItem('guestCart')) || { product: [], cartTotal: 0 };
     const saveGuestCart = (c) => localStorage.setItem('guestCart', JSON.stringify(c));
@@ -81,7 +81,7 @@ export const CartProvider = ({ children }) => {
             }
         };
         syncGuestCart();
-    }, [userId]);
+    }, [fetchCart, userId]);
 
     const openCart = () => setIsCartOpen(true);
     const closeCart = () => setIsCartOpen(false);

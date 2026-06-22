@@ -1,4 +1,33 @@
 # Changelog
+## 2026-06-22 — Added Atomesus Chatbot Product Suggestions
+**What**: Added a customer-facing chatbot for AI-assisted product suggestions using Atomesus text reasoning, plus a disabled AI Try-On placeholder.
+**Why**: The site needs a shop-assistant style chatbot that can guide customers toward top product matches while respecting the Atomesus-only provider decision and upload privacy rules.
+**Impact**: Customer pages now show a floating chatbot launcher. Product suggestions require login and `ATOMESUS_API_KEY` for AI ranking; deterministic fallback suggestions are returned if Atomesus is unavailable. AI Try-On is visibly unavailable until Atomesus documents image generation/editing APIs.
+**Files Changed**: `BackEnd/Controllers/Chatbot.Controller.js`, `BackEnd/Routes/Chatbot.Route.js`, `BackEnd/Services/Atomesus.Services.js`, `BackEnd/Services/StylistRecommendation.Services.js`, `BackEnd/Middleware/chatbotUpload.js`, `FrontEnd/src/Component/ChatbotWidget.jsx`, `FrontEnd/src/utils/chatbotApi.js`, `FrontEnd/src/Style/ChatbotWidget.css`, `FrontEnd/src/App.jsx`, `BackEnd/tests/atomesusService.test.js`, `BackEnd/tests/stylistRecommendation.test.js`, `BackEnd/tests/userRoutes.test.js`, `knowledge-base/chatbot.md`
+**Tests**: `npm test --prefix BackEnd` pass; `npm run lint --prefix FrontEnd` pass; `npm run build --prefix FrontEnd` pass; `npm ci --prefix FrontEnd --dry-run` pass.
+**Commit**: `pending`
+
+- Implemented `/v1/chatbot/suggestions` with authenticated temp image upload, Atomesus prompt construction, product ID validation, and fallback ranking.
+- Mounted a responsive chatbot widget on non-admin pages with login gate, photo color hints, smart styling questions, top-5 result cards, privacy note, and disabled AI Try-On state.
+- Added backend tests for Atomesus error handling, product type filtering, invalid AI ID rejection, fallback recommendations, and the missed profile ownership route guard.
+- Corrected stale KB Vercel adapter documentation from `/api/v1/[...path].js` to `/api/index.js`.
+
+## 2026-06-22 — Completed Security Fix Review Follow-Up
+**What**: Fixed the missed profile ownership protection and removed an accidental frontend dependency introduced during the security/lint pass.
+**Why**: Review of the other agent's changes showed profile read/update routes were still not owner-checked and `FrontEnd/package.json` had an unnecessary `bunbun-clothing-root` file dependency.
+**Impact**: Profile read/update APIs now require the authenticated owner or admin. Frontend install remains reproducible without linking the root package into the frontend package.
+**Files Changed**: `BackEnd/Routes/User.Routes.js`, `BackEnd/package.json`, `FrontEnd/package.json`, `FrontEnd/package-lock.json`, `BackEnd/tests/userRoutes.test.js`
+**Tests**: `npm test --prefix BackEnd` pass; `npm ci --prefix FrontEnd --dry-run` pass; `npm run lint --prefix FrontEnd` pass; `npm run build --prefix FrontEnd` pass.
+**Commit**: `pending`
+
+- Added `tokenVeryfy` and `isOwner` to `/v1/User/UserProfile/:id` and `/v1/User/updateUser/:id`.
+- Added a backend route-level regression test so profile authorization cannot quietly regress.
+- Kept the `jquery` lockfile sync fix while removing the accidental root package dependency from the frontend manifest.
+
+## 2026-06-22 — Secured Project, Recalculated Payments, Fixed Guest Checkout & Linting Errors
+**What**: Secured backend routes with authenticated resource ownership checking, calculated Razorpay payment amounts strictly on the server, fixed database schema crashes on guest checkouts, resolved package-lock issues, and fixed all eslint compilation warnings/errors.
+**Why**: Fix critical vulnerabilities, payment validation issues, guest order failures, and restore build stability.
+**Files Changed**: `BackEnd/Middleware/jwtVeryfy.js`, `BackEnd/Routes/Product.Routes.js`, `BackEnd/Routes/Cart.Route.js`, `BackEnd/Routes/Wishlist.Routes.js`, `BackEnd/Routes/Address.Route.js`, `BackEnd/Routes/Order.Route.js`, `BackEnd/Routes/Payment.Route.js`, `BackEnd/Models/Order.Model.js`, `BackEnd/Controllers/Order.Controller.js`, `FrontEnd/src/Pages/OrderSummery.jsx`, `FrontEnd/src/utils/apiConfig.js`, `FrontEnd/src/Component/CartContext.jsx`, `FrontEnd/src/Component/WishlistContext.jsx`, `FrontEnd/src/Pages/ProductDetails.jsx`, `FrontEnd/src/Pages/Address.jsx`, `FrontEnd/src/Component/LoginModel.jsx`, `FrontEnd/src/Pages/Contact.jsx`, `FrontEnd/src/Component/BlogAdmin.jsx`, `FrontEnd/package-lock.json`, `FrontEnd/package.json`
 
 ## 2026-06-15 — Added Social Media Links to Footer
 **What**: Wrapped the social media icons in `Footer.jsx` with active hyperlinks to Bunbun Clothing's official profiles.

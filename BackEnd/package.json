@@ -21,7 +21,8 @@
   },
   "scripts": {
     "start": "node Server.js",
-    "dev": "nodemon Server.js"
+    "dev": "nodemon Server.js",
+    "test": "node --test"
   },
   "license": "ISC"
 }

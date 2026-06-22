@@ -55,11 +55,31 @@ exports.createOrder = async (req, res) => {
       amount,
       shippingAddress,
       billingAddress,
-      paymentDetails
+      paymentDetails,
+      guestInfo
     } = req.body;
 
     if (!userId) {
       return res.status(400).json({ message: "User ID is required" });
+    }
+
+    // Security check: validate token ownership for registered user checkouts
+    if (userId !== "guest") {
+      const authHeader = req.headers["auth"];
+      if (!authHeader) {
+        return res.status(401).json({ message: "Authentication required for registered users" });
+      }
+      const token = authHeader.split(" ")[1];
+      try {
+        const jwt = require("jsonwebtoken");
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const authUserId = decoded.userId || decoded._id;
+        if (authUserId !== userId && decoded.role !== "Admin") {
+          return res.status(403).json({ message: "You do not have permission to place an order for this user" });
+        }
+      } catch (e) {
+        return res.status(401).json({ message: "Invalid or expired token" });
+      }
     }
 
     if (!items || !Array.isArray(items) || items.length === 0) {
@@ -84,12 +104,13 @@ exports.createOrder = async (req, res) => {
 
     // ✅ Create new order
     const newOrder = new orderSchema({
-      userId,
+      userId: userId === "guest" ? undefined : userId,
       items,
       amount,
       shippingAddress,
       billingAddress,
-      paymentDetails
+      paymentDetails,
+      guestInfo: userId === "guest" ? guestInfo : undefined
     });
 
     await newOrder.save();

@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import axios from "axios";
 import { FaPlus, FaTimes, FaHome } from "react-icons/fa";
 import DetailedSummary from "./OrderSummery";
 import { apiUrl } from "../utils/apiConfig";
 
 import { getAuthUserId } from "../utils/auth";
-import { useNavigate } from "react-router-dom";
 
 const AddAddress = () => {
   const userId = getAuthUserId();
-  const navigate = useNavigate();
   const isGuest = !userId;
 
   const [showForm, setShowForm] = useState(isGuest); // Auto-open form for guests
@@ -32,7 +30,7 @@ const AddAddress = () => {
   });
 
   // Fetch last 3 addresses (only for logged-in users)
-  const fetchAddresses = async () => {
+  const fetchAddresses = useCallback(async () => {
     if (!userId) return;
     try {
       const res = await axios.get(apiUrl(`/v1/address/getAdd/${userId}`));
@@ -51,13 +49,13 @@ const AddAddress = () => {
       console.error("❌ Error fetching addresses:", error);
       setAddresses([]);
     }
-  };
+  }, [userId]);
 
   useEffect(() => {
     if (userId) {
       fetchAddresses();
     }
-  }, [userId]);
+  }, [fetchAddresses, userId]);
 
   const handleChange = async (e) => {
     const { name, value } = e.target;

@@ -4,7 +4,7 @@ const orderSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "UserSchema",
-        required: true
+        required: function() { return !this.guestInfo; }
     },
     items: [{
         productId: {
@@ -54,6 +54,10 @@ const orderSchema = new mongoose.Schema({
         paymentId: { type: String },
         paymentMethod: { type: String, enum: ['Credit Card', 'Debit Card', 'Net Banking', 'COD', 'Razorpay'], required: true },
         paymentStatus: { type: String, enum: ['Pending', 'Completed', 'Failed'], default: 'Pending' }
+    },
+    guestInfo: {
+        name: { type: String },
+        phone: { type: String }
     }
 }, {
     timestamps: true

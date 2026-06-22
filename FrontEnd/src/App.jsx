@@ -5,6 +5,7 @@ import Footer from './Component/Footer';
 import CartSidebar from './Component/CartSidebar';
 import { CartProvider } from './Component/CartContext';
 import { WishlistProvider } from './Component/WishlistContext';
+import ChatbotWidget from './Component/ChatbotWidget';
 
 // Lazy loaded page components
 const HomePage = lazy(() => import("./Pages/HomePage"));
@@ -45,6 +46,7 @@ const AppLayout = () => {
       <ScrollToTop />
       {!isAdmin && <CartSidebar />}
       {!isAdmin && <Header />}
+      {!isAdmin && <ChatbotWidget />}
       
       <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontSize: '1.2rem', color: '#64748b' }}>Loading...</div>}>
         <Routes>

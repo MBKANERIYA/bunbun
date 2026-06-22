@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { apiUrl } from '../utils/apiConfig';
@@ -12,15 +12,7 @@ const MyOrders = () => {
     const navigate = useNavigate();
     const user = getAuthUser();
 
-    useEffect(() => {
-        if (!user?._id) {
-            setLoading(false);
-            return;
-        }
-        fetchOrders();
-    }, []);
-
-    const fetchOrders = async () => {
+    const fetchOrders = useCallback(async () => {
         try {
             const res = await axios.get(apiUrl(`/v1/order/user/${user._id}`));
             setOrders(res.data.data || []);
@@ -29,7 +21,15 @@ const MyOrders = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [user?._id]);
+
+    useEffect(() => {
+        if (!user?._id) {
+            setLoading(false);
+            return;
+        }
+        fetchOrders();
+    }, [fetchOrders, user?._id]);
 
     const getStatusColor = (status) => {
         const colors = {

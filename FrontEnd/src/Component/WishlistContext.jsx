@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useState, useContext, useCallback, useEffect } from 'react';
 import axios from 'axios';
 import { getAuthUserId } from '../utils/auth';

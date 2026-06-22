@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useCart } from "../Component/CartContext";
-import { useWishlist } from "../Component/WishlistContext";
 import { getAuthUser } from "../utils/auth";
 import { apiUrl } from "../utils/apiConfig";
 import {
@@ -36,13 +35,11 @@ const ProductDetails = () => {
     const { slug } = useParams();
     const navigate = useNavigate();
     const { addToCart } = useCart();
-    const { isWishlisted, addToWishlist, removeFromWishlist } = useWishlist();
 
     const [product, setProduct] = useState(null);
     const [authUser, setAuthUser] = useState(getAuthUser());
     const [isAddingToCart, setIsAddingToCart] = useState(false);
     const [isBuyingNow, setIsBuyingNow] = useState(false);
-    const [isTogglingWishlist, setIsTogglingWishlist] = useState(false);
     const [ratings, setRatings] = useState(emptyRatings);
     const [rating, setRating] = useState(0);
     const [review, setReview] = useState("");
@@ -53,7 +50,6 @@ const ProductDetails = () => {
     const [recentlyViewed, setRecentlyViewed] = useState([]);
     const [openAccordion, setOpenAccordion] = useState("product_details");
     const [selectedSize, setSelectedSize] = useState("");
-    const [selectedImage, setSelectedImage] = useState(null);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
     const [showSizeChart, setShowSizeChart] = useState(false);
     const [showReviewForm, setShowReviewForm] = useState(false);
@@ -79,7 +75,6 @@ const ProductDetails = () => {
     };
 
     const userId = authUser?._id || null;
-    const isProductWishlisted = product?._id ? isWishlisted(product._id) : false;
 
     useEffect(() => {
         const syncAuthUser = () => setAuthUser(getAuthUser());
@@ -168,18 +163,6 @@ const ProductDetails = () => {
         const added = await addToCart(product._id, selectedSize);
         setIsBuyingNow(false);
         if (added) navigate("/cart");
-    };
-
-    const handleToggleWishlist = async () => {
-        if (!product?._id) return;
-
-        setIsTogglingWishlist(true);
-        if (isProductWishlisted) {
-            await removeFromWishlist(product._id);
-        } else {
-            await addToWishlist(product._id);
-        }
-        setIsTogglingWishlist(false);
     };
 
     const handleSubmitRating = async (e) => {

@@ -1,7 +1,7 @@
 let express = require("express")
 const { body } = require("express-validator")
 const { UserController } = require("../Controllers");
-const { isAdmin, tokenVeryfy } = require("../Middleware/jwtVeryfy");
+const { isAdmin, isOwner, tokenVeryfy } = require("../Middleware/jwtVeryfy");
 
 let route = express.Router()
 
@@ -33,7 +33,7 @@ route.post("/Register", [
         .withMessage("Gender must be Male, Female, or Other"),
 ], UserController.RegisterUser);
 
-route.get("/UserProfile/:id", tokenVeryfy, UserController.userProfile)
+route.get("/UserProfile/:id", tokenVeryfy, isOwner, UserController.userProfile)
 
 route.get("/allUsers", tokenVeryfy, isAdmin, UserController.getUsers)
 
@@ -41,7 +41,7 @@ route.post("/login", UserController.loginUser);
 
 route.post("/forgot-password", UserController.forgotPassword);
 route.post("/reset-password", body("newPassword").isLength({ min: 6 }).withMessage("Password must be at least 6 characters"), UserController.verifyOtpAndResetPassword);
-route.post("/updateUser/:id", UserController.editUserProfile)
+route.post("/updateUser/:id", tokenVeryfy, isOwner, UserController.editUserProfile)
 
 // Mobile OTP Login
 route.post("/send-login-otp", UserController.sendLoginOtp);

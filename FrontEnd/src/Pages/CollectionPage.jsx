@@ -82,7 +82,7 @@ const CollectionPage = () => {
         // Using replace to avoid polluting browser history with every filter change
         navigate({ search: params.toString() }, { replace: true });
         
-    }, [selectedSubcategories, selectedColor, priceRange, sortBy, loading]);
+    }, [category, maxPrice, navigate, selectedSubcategories, selectedColor, priceRange, sortBy, loading]);
 
 
     // Apply filters and sorting using useMemo for optimization
@@ -104,7 +104,7 @@ const CollectionPage = () => {
             default: break;
         }
         return tempProducts;
-    }, [products, selectedSubcategories, selectedColor, priceRange, sortBy]);
+    }, [products, selectedSubcategories, selectedColor, priceRange, maxPrice, sortBy]);
     
     // Simplified Handlers: just set the state, the useEffect will handle the rest
     const handleSubcategoryChange = (sub) => {

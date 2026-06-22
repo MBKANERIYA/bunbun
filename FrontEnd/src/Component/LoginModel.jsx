@@ -42,7 +42,7 @@ const LoginModal = ({ isOpen, onClose }) => {
         if (!window.recaptchaVerifier) {
             window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
                 size: 'invisible',
-                callback: (response) => {
+                callback: () => {
                     // reCAPTCHA solved
                 }
             });
@@ -73,9 +73,11 @@ const LoginModal = ({ isOpen, onClose }) => {
             if (window.recaptchaVerifier) {
                 try {
                     window.recaptchaVerifier.render().then(function (widgetId) {
-                        grecaptcha.reset(widgetId);
+                        if (window.grecaptcha) {
+                            window.grecaptcha.reset(widgetId);
+                        }
                     });
-                } catch (e) {
+                } catch {
                     // Ignore reset errors
                 }
             }
