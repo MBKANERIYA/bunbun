@@ -1,4 +1,17 @@
 # Changelog
+## 2026-06-22 — Added Chatbot Continuation Flow And Stylist Loader
+**What**: Added visible stylist-loading feedback, a "Show More" path for fresh recommendations, and post-results actions for changing details, starting over, or returning to the main menu.
+**Why**: The chatbot results screen felt like a dead end after showing product suggestions, and users needed clear feedback while the AI stylist was working.
+**Impact**: Product suggestion results now support continuation instead of stopping at the product list. "Show More" excludes products already shown in the current chatbot session where possible.
+**Files Changed**: `BackEnd/Controllers/Chatbot.Controller.js`, `BackEnd/Services/StylistRecommendation.Services.js`, `BackEnd/tests/stylistRecommendation.test.js`, `FrontEnd/src/Component/ChatbotWidget.jsx`, `FrontEnd/src/Style/ChatbotWidget.css`, `knowledge-base/changelog.md`, `knowledge-base/chatbot.md`, `knowledge-base/active-context.md`
+**Tests**: `npm test --prefix BackEnd` pass; `npm run lint --prefix FrontEnd` pass; `npm run build --prefix FrontEnd` pass; `npm ci --prefix FrontEnd --dry-run` pass.
+**Commit**: `pending`
+
+- Added backend support for excluding already-shown product IDs before asking Atomesus for another set.
+- Added a frontend thinking indicator while suggestions are loading.
+- Added post-results actions: Show More, Change Details, Start Over, and Main Menu.
+- Documented that product suggestions use filtered catalog metadata plus locally extracted color hints, not direct image upload to Atomesus vision.
+
 ## 2026-06-22 — Made Chatbot Clothing Type A Custom Field
 **What**: Replaced the chatbot "Clothing type" dropdown with a free text input.
 **Why**: Uploaded outfits are not limited to saree, lehenga, skirt, or daily outfit, so shoppers need to describe the clothing item in their own words.

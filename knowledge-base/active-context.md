@@ -1,7 +1,7 @@
 ## Current Status
 **Last Updated**: 2026-06-22
-**Last Agent Session**: Changed the chatbot clothing type control from a fixed dropdown to a custom free text field, after fixing color autofill to show plain color names.
-**Test Suite Status**: Verification pending after the clothing-type custom field fix.
+**Last Agent Session**: Added chatbot continuation controls, a visible stylist loader, and backend exclusion of already-shown product IDs for more suggestions.
+**Test Suite Status**: `npm test --prefix BackEnd`, `npm run lint --prefix FrontEnd`, `npm run build --prefix FrontEnd`, and `npm ci --prefix FrontEnd --dry-run` pass after the chatbot continuation flow fix.
 
 ## In Progress
 - [ ] Rotate the exposed Atomesus API key outside the repo and set the replacement as `ATOMESUS_API_KEY`.
@@ -16,7 +16,7 @@
 
 ## Next Steps (for the next agent session)
 1. Confirm `ATOMESUS_API_KEY` is configured in local/prod environment.
-2. Perform a browser/API smoke test of `/v1/chatbot/suggestions` with a logged-in user and real catalog data.
+2. Perform a browser/API smoke test of `/v1/chatbot/suggestions` with a logged-in user and real catalog data after production receives the latest commit.
 3. Keep AI Try-On disabled until Atomesus image API support is documented.
 4. Review backend production dependency audit findings before deployment hardening.
 

@@ -63,6 +63,24 @@ const getEligibleProducts = (products, productType) => (
     products.filter((product) => isEligibleProduct(product, productType))
 );
 
+const normalizeProductIdList = (value) => {
+    if (!Array.isArray(value)) return [];
+    return value
+        .map((item) => String(item || "").trim())
+        .filter(Boolean);
+};
+
+const getAlreadyShownProductIds = (attributes = {}) => new Set([
+    ...normalizeProductIdList(attributes.shownProductIds),
+    ...normalizeProductIdList(attributes.excludeProductIds),
+]);
+
+const filterAlreadyShownProducts = (products, attributes = {}) => {
+    const alreadyShownIds = getAlreadyShownProductIds(attributes);
+    if (alreadyShownIds.size === 0) return products;
+    return products.filter((product) => !alreadyShownIds.has(getProductId(product)));
+};
+
 const compactCatalogCandidate = (product) => ({
     id: getProductId(product),
     name: product.name || "",
@@ -178,6 +196,7 @@ module.exports = {
     buildRecommendations,
     buildStylistPrompt,
     compactCatalogCandidate,
+    filterAlreadyShownProducts,
     getEligibleProducts,
     getProductId,
     isEligibleProduct,

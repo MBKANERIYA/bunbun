@@ -23,6 +23,14 @@ The chatbot is a customer-facing shop assistant mounted on non-admin pages. It g
 - AI Try-On remains disabled unless `AI_TRY_ON_ENABLED=true` and a documented Atomesus image generation API exists.
 - Shopper-facing color fields must use plain language such as "olive", "charcoal", or "cream"; raw hex values are only internal metadata for swatches and AI context.
 - Clothing type is a custom free text field, not a fixed dropdown, because users may upload sarees, kurtis, dupattas, gowns, blouse pieces, or other clothing items.
+- Results must not be a dead end. After suggestions, the widget should offer Show More, Change Details, Start Over, and Main Menu actions.
+
+## Recommendation Logic
+- The product type button first narrows the catalog to one supported product group: plain blouse, kalamkari blouse, or shapewear.
+- The backend sends Atomesus a compact candidate list with product ID, name, category, subcategory, color, price, fabric, and work.
+- The uploaded clothing photo is not sent to Atomesus as image/vision input. The frontend extracts approximate color swatches locally and sends color names/hex hints as text metadata.
+- Atomesus can only rank IDs from the supplied candidate list. If it returns invalid, duplicate, or too few IDs, deterministic catalog fallback fills the list.
+- "Show More" sends already-shown product IDs back to the backend so the next request excludes them where fresh catalog matches exist.
 
 ## Known Gotchas
 - The user pasted an Atomesus key in chat during planning. Treat that key as compromised and rotate it before production use.
@@ -30,6 +38,7 @@ The chatbot is a customer-facing shop assistant mounted on non-admin pages. It g
 - Local image color extraction is approximate. The swatches can use exact CSS colors, but the editable form should describe them in human-friendly terms.
 - The backend caps AI catalog candidates to 30 products so prompts stay compact.
 - The suggestion endpoint returns deterministic fallback products if Atomesus is unavailable or returns invalid IDs.
+- "Show More" can run out of fresh matches if the selected product type has a small catalog. In that case the widget should say no more fresh matches and offer changing details or starting over.
 
 ## How It Is Tested
 - Run backend tests with `npm test --prefix BackEnd`.

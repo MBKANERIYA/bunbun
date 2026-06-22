@@ -85,6 +85,8 @@ const describeColorHints = (colors) => {
     return [...new Set(names)].join(", ");
 };
 
+const getRecommendationProductId = (item) => item?.product?._id || "";
+
 const extractColorHints = (file) => new Promise((resolve) => {
     const image = new Image();
     const url = URL.createObjectURL(file);
@@ -139,6 +141,8 @@ const ChatbotWidget = () => {
     const [colorHints, setColorHints] = useState([]);
     const [answers, setAnswers] = useState(defaultAnswers);
     const [results, setResults] = useState([]);
+    const [shownProductIds, setShownProductIds] = useState([]);
+    const [hasMoreSuggestions, setHasMoreSuggestions] = useState(false);
     const [statusText, setStatusText] = useState("");
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -183,6 +187,8 @@ const ChatbotWidget = () => {
         setColorHints([]);
         setAnswers(defaultAnswers);
         setResults([]);
+        setShownProductIds([]);
+        setHasMoreSuggestions(false);
         setStatusText("");
         setError("");
     };
@@ -191,6 +197,8 @@ const ChatbotWidget = () => {
         const file = event.target.files?.[0];
         setError("");
         setResults([]);
+        setShownProductIds([]);
+        setHasMoreSuggestions(false);
         setClothingImage(null);
         setColorHints([]);
         if (previewUrl) URL.revokeObjectURL(previewUrl);
@@ -220,7 +228,7 @@ const ChatbotWidget = () => {
         setAnswers((current) => ({ ...current, [field]: value }));
     };
 
-    const handleSuggest = async () => {
+    const handleSuggest = async ({ append = false } = {}) => {
         if (!requireLogin()) return;
         if (!productType) {
             setError("Choose what you are shopping for.");
@@ -233,10 +241,15 @@ const ChatbotWidget = () => {
 
         setIsLoading(true);
         setError("");
-        setStatusText("Finding the best matches...");
-        setResults([]);
+        setStatusText(append ? "Looking for more fresh options..." : "Finding the best matches...");
+        if (!append) {
+            setResults([]);
+            setShownProductIds([]);
+            setHasMoreSuggestions(false);
+        }
 
         try {
+            const idsToExclude = append ? shownProductIds : [];
             const data = await requestProductSuggestions({
                 productType,
                 clothingImage,
@@ -245,11 +258,34 @@ const ChatbotWidget = () => {
                     colorNames: describeColorHints(colorHints),
                     confirmedColors: answers.clothingColors,
                     selectedProductType: selectedProductTypeLabel,
+                    shownProductIds: idsToExclude,
                 },
                 answers,
             });
-            setResults(data.recommendations || []);
-            setStatusText(data.warning ? "Showing safe catalog matches while the stylist is unavailable." : "Here are the top 5 matches.");
+            const recommendations = data.recommendations || [];
+            const existingIds = new Set(append ? results.map(getRecommendationProductId) : []);
+            const freshRecommendations = recommendations.filter((item) => {
+                const productId = getRecommendationProductId(item);
+                return productId && !existingIds.has(productId);
+            });
+            const nextResults = append ? [...results, ...freshRecommendations] : recommendations;
+            const nextShownIds = [...new Set([
+                ...(append ? shownProductIds : []),
+                ...nextResults.map(getRecommendationProductId).filter(Boolean),
+            ])];
+
+            setResults(nextResults);
+            setShownProductIds(nextShownIds);
+            setHasMoreSuggestions(Boolean(data.hasMore) && freshRecommendations.length > 0);
+
+            if (nextResults.length === 0 || (append && freshRecommendations.length === 0)) {
+                setStatusText("I have shown all fresh matches I can find for this selection. Try changing details or starting over.");
+                setHasMoreSuggestions(false);
+            } else if (append) {
+                setStatusText(`Added ${freshRecommendations.length} more fresh ${freshRecommendations.length === 1 ? "match" : "matches"}.`);
+            } else {
+                setStatusText(data.warning ? "Showing safe catalog matches while the stylist is unavailable. You can still ask for more." : "Here are the first matches. You can ask for more, refine details, or start over.");
+            }
         } catch (err) {
             setError(err.response?.data?.message || "Could not get suggestions right now.");
             setStatusText("");
@@ -261,6 +297,20 @@ const ChatbotWidget = () => {
     const openSuggestions = () => {
         if (!requireLogin()) return;
         resetSuggestion();
+    };
+
+    const handleChangeDetails = () => {
+        setResults([]);
+        setShownProductIds([]);
+        setHasMoreSuggestions(false);
+        setStatusText("Update any detail above, then show matches again.");
+        setError("");
+    };
+
+    const returnToHome = () => {
+        setFlow("home");
+        setStatusText("");
+        setError("");
     };
 
     const renderHome = () => (
@@ -284,7 +334,7 @@ const ChatbotWidget = () => {
             <div className="chatbot-message">
                 AI Try-On will be available once Atomesus supports documented image generation for API users.
             </div>
-            <button className="chatbot-secondary-btn" type="button" onClick={() => setFlow("home")}>
+            <button className="chatbot-secondary-btn" type="button" onClick={returnToHome}>
                 Back
             </button>
         </>
@@ -401,12 +451,22 @@ const ChatbotWidget = () => {
 
             {error && <div className="chatbot-error">{error}</div>}
             {statusText && <p className="chatbot-note">{statusText}</p>}
+            {isLoading && (
+                <div className="chatbot-thinking" role="status" aria-live="polite">
+                    <span className="chatbot-thinking-dots" aria-hidden="true">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                    <span>Stylist is checking your outfit and the catalog...</span>
+                </div>
+            )}
 
             <div className="chatbot-actions">
-                <button className="chatbot-primary-btn" type="button" onClick={handleSuggest} disabled={isLoading}>
+                <button className="chatbot-primary-btn" type="button" onClick={() => handleSuggest()} disabled={isLoading}>
                     {isLoading ? "Checking..." : "Show Matches"}
                 </button>
-                <button className="chatbot-secondary-btn" type="button" onClick={() => setFlow("home")}>
+                <button className="chatbot-secondary-btn" type="button" onClick={returnToHome}>
                     Back
                 </button>
             </div>
@@ -415,11 +475,11 @@ const ChatbotWidget = () => {
                 <>
                     <p className="chatbot-section-title">Top Matches</p>
                     <div className="chatbot-result-list">
-                        {results.map((item) => (
+                        {results.map((item, index) => (
                             <div className="chatbot-result" key={item.product._id}>
                                 <img src={item.product.image} alt={item.product.name} />
                                 <div>
-                                    <h4>{item.rank}. {item.product.name}</h4>
+                                    <h4>{index + 1}. {item.product.name}</h4>
                                     <div className="chatbot-result-price">Rs. {item.product.selling_price}</div>
                                     <p className="chatbot-result-reason">{item.reason}</p>
                                     <button
@@ -435,6 +495,28 @@ const ChatbotWidget = () => {
                                 </div>
                             </div>
                         ))}
+                    </div>
+                    <div className="chatbot-next-step">
+                        <p>Want a different direction?</p>
+                        <div className="chatbot-next-actions">
+                            <button
+                                className="chatbot-primary-btn"
+                                type="button"
+                                onClick={() => handleSuggest({ append: true })}
+                                disabled={isLoading || !hasMoreSuggestions}
+                            >
+                                {isLoading ? "Checking..." : hasMoreSuggestions ? "Show More" : "No More Fresh Matches"}
+                            </button>
+                            <button className="chatbot-secondary-btn" type="button" onClick={handleChangeDetails} disabled={isLoading}>
+                                Change Details
+                            </button>
+                            <button className="chatbot-secondary-btn" type="button" onClick={resetSuggestion} disabled={isLoading}>
+                                Start Over
+                            </button>
+                            <button className="chatbot-secondary-btn" type="button" onClick={returnToHome} disabled={isLoading}>
+                                Main Menu
+                            </button>
+                        </div>
                     </div>
                 </>
             )}

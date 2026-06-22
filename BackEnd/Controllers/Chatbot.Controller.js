@@ -4,6 +4,7 @@ const { callAtomesusChat } = require("../Services/Atomesus.Services");
 const {
     buildRecommendations,
     buildStylistPrompt,
+    filterAlreadyShownProducts,
     getEligibleProducts,
     normalizeProductType,
 } = require("../Services/StylistRecommendation.Services");
@@ -44,7 +45,7 @@ module.exports.getProductSuggestions = async (req, res) => {
         const answers = parseJsonField(req.body.answers);
 
         const products = await productSchema.find({}).lean();
-        const eligibleProducts = getEligibleProducts(products, productType).slice(0, 30);
+        const eligibleProducts = getEligibleProducts(products, productType);
 
         if (eligibleProducts.length === 0) {
             return res.status(404).json({
@@ -53,11 +54,26 @@ module.exports.getProductSuggestions = async (req, res) => {
             });
         }
 
+        const candidateProducts = filterAlreadyShownProducts(eligibleProducts, attributes).slice(0, 30);
+
+        if (candidateProducts.length === 0) {
+            return res.status(200).json({
+                message: "No more fresh product suggestions are available for this selection.",
+                productType,
+                aiStatus: "catalog",
+                usedFallback: false,
+                warning: null,
+                hasMore: false,
+                remainingCandidateCount: 0,
+                recommendations: [],
+            });
+        }
+
         const prompt = buildStylistPrompt({
             productType,
             attributes,
             answers,
-            products: eligibleProducts,
+            products: candidateProducts,
         });
 
         let aiText = "";
@@ -72,11 +88,13 @@ module.exports.getProductSuggestions = async (req, res) => {
         }
 
         const result = buildRecommendations({
-            products: eligibleProducts,
+            products: candidateProducts,
             aiText,
             answers,
             productType,
         });
+
+        const hasMore = candidateProducts.length > result.recommendations.length;
 
         return res.status(200).json({
             message: "Product suggestions generated successfully.",
@@ -84,6 +102,8 @@ module.exports.getProductSuggestions = async (req, res) => {
             aiStatus,
             usedFallback: result.usedFallback || aiStatus === "fallback",
             warning,
+            hasMore,
+            remainingCandidateCount: Math.max(candidateProducts.length - result.recommendations.length, 0),
             recommendations: result.recommendations.map((item) => ({
                 rank: item.rank,
                 reason: item.reason,

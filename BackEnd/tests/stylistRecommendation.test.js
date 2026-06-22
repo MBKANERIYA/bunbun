@@ -3,6 +3,7 @@ const test = require("node:test");
 
 const {
     buildRecommendations,
+    filterAlreadyShownProducts,
     getEligibleProducts,
     normalizeProductType,
 } = require("../Services/StylistRecommendation.Services");
@@ -65,4 +66,16 @@ test("keeps only valid AI product IDs and fills remaining top five from fallback
     );
     assert.equal(result.recommendations.length, 5);
     assert.ok(result.recommendations.every((item) => item.reason));
+});
+
+test("filters already shown products before requesting more suggestions", () => {
+    const remainingProducts = filterAlreadyShownProducts(
+        getEligibleProducts(products, "plain_blouse"),
+        { shownProductIds: ["p1", "p2", "p3"] }
+    );
+
+    assert.deepEqual(
+        remainingProducts.map((product) => product._id),
+        ["p4", "p5"]
+    );
 });
