@@ -1,4 +1,13 @@
 # Changelog
+
+## 2026-06-23 — Fixed Empty Products List for Try-On Categories
+**What**: Expanded the MongoDB query in `TryOn.Controller.js` for Kalamkari and Plain Blouses to properly match the database structure.
+**Why**: The previous query was too strict (`subcategory === "kalamkari"`), resulting in an empty product list when the user clicked "Kalamkari Blouse".
+**Impact**: The Try-On browse page will now successfully fetch and display Kalamkari blouses by checking multiple fields (`subcategory`, `blouseWork`, `productType`, `name`) for the keyword, matching the recommendation engine's logic.
+**Files Changed**: `BackEnd/Controllers/TryOn.Controller.js`, `knowledge-base/changelog.md`
+**Tests**: Verified query logic locally.
+**Commit**: `pending`
+
 ## 2026-06-23 — Added Category Selection to Try-On Flow
 **What**: Inserted a category selection step into the AI Try-On wizard (between uploading a selfie and browsing products).
 **Why**: The user pointed out that dropping straight into the entire product catalog after uploading a selfie resulted in endless "load more" clicks.

@@ -103,9 +103,16 @@ const getTryOnProducts = async (req, res) => {
 
         if (productType) {
             if (productType === "plain_blouse") {
+                query.category = { $regex: "blouse", $options: "i" };
                 query.subcategory = { $regex: "plain", $options: "i" };
             } else if (productType === "kalamkari_blouse") {
-                query.subcategory = { $regex: "kalamkari", $options: "i" };
+                query.category = { $regex: "blouse", $options: "i" };
+                query.$or = [
+                    { subcategory: { $regex: "printed|kalamkari", $options: "i" } },
+                    { blouseWork: { $regex: "kalamkari", $options: "i" } },
+                    { productType: { $regex: "kalamkari", $options: "i" } },
+                    { name: { $regex: "kalamkari", $options: "i" } }
+                ];
             } else if (productType === "shapewear") {
                 query.category = { $regex: "shapewear", $options: "i" };
             }
