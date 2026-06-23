@@ -9,12 +9,20 @@
 
 ## Decision: Atomesus-Only Chatbot AI
 **Date**: 2026-06-22
-**Status**: Accepted
+**Status**: Superseded
 **Context**: The chatbot needs shop-assistant product suggestions and the user provided an Atomesus API key/source.
 **Decision**: Use Atomesus as the only AI provider for chatbot text reasoning. Do not use Gemini, OpenAI, or any fallback provider.
 **Alternatives Considered**: Gemini was considered for image understanding and try-on generation, but the user selected Atomesus only.
-**Consequences**: Product suggestions can be AI-reasoned from text attributes and catalog data. True generated AI Try-On remains disabled until Atomesus documents image generation/editing APIs.
-**Superseded By**: None
+**Consequences**: Product suggestions can be AI-reasoned from text attributes and catalog data.
+**Superseded By**: Decision: Gemini For AI Try-On (2026-06-23)
+
+## Decision: Gemini For AI Try-On
+**Date**: 2026-06-23
+**Status**: Accepted
+**Context**: The user explicitly requested an AI Try-On feature that could synthesize an image of the user wearing a chosen product, and provided a Gemini API key.
+**Decision**: Use Gemini (`gemini-2.5-flash-image`) to power the AI Try-On feature. The Atomesus service will continue powering text-based catalog recommendations.
+**Alternatives Considered**: Relying on Atomesus entirely (superseded, as it lacks documented image generation for this use case).
+**Consequences**: Two different AI providers are now active in the chatbot. Gemini handles visual try-on generation while Atomesus handles conversational style recommendations.
 
 ## Decision: Chatbot Session Privacy
 **Date**: 2026-06-22

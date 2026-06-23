@@ -1,4 +1,15 @@
 # Changelog
+## 2026-06-23 — Implemented AI Try-On Feature via Gemini API
+**What**: Fully implemented the AI Try-On feature utilizing the `@google/genai` library and `gemini-2.5-flash-image` model. Users can now upload a selfie and select a product to see a realistic generated image of themselves wearing it.
+**Why**: The user provided a Gemini API key and requested that the AI Try-On feature actually work rather than being a placeholder.
+**Impact**: Added a dedicated Try-On flow to the chatbot widget, added API endpoints and a backend service to interface with Gemini. Replaced dummy placeholder logic. The frontend now has a 3-step Try-On wizard (Upload Selfie -> Browse Products -> AI Generation).
+**Files Changed**: `BackEnd/Services/GeminiTryOn.Services.js`, `BackEnd/Controllers/TryOn.Controller.js`, `BackEnd/Routes/Chatbot.Route.js`, `BackEnd/.env.example`, `BackEnd/.env`, `FrontEnd/src/utils/chatbotApi.js`, `FrontEnd/src/Component/ChatbotWidget.jsx`, `FrontEnd/src/Style/ChatbotWidget.css`, `knowledge-base/changelog.md`, `knowledge-base/chatbot.md`, `knowledge-base/active-context.md`, `knowledge-base/decisions.md`
+**Tests**: Verified Gemini API key successfully, built frontend cleanly with `npm run build`, verified backend syntax by requiring files.
+**Commit**: `pending`
+
+- Re-enabled AI Try-On feature which was previously disabled due to missing Atomesus provider support.
+- Configured Gemini API fallback with explicit `gemini-2.5-flash-image` model testing.
+
 ## 2026-06-23 — Made Chatbot A Paged Multi-Step Mobile Flow
 **What**: Reworked the chatbot "Suggest Products" experience from one long scrolling form into a paged, mobile-first wizard: Step 1 product type, Step 2 clothing photo, Step 3 style details, then a dedicated results screen. Added a progress bar and a fixed Back/Next footer.
 **Why**: On mobile the single-scroll form required a lot of scrolling. Splitting it into clean, focused steps keeps each screen short and easy to complete on a phone.

@@ -16,3 +16,23 @@ export const requestProductSuggestions = async ({ productType, clothingImage, at
 
     return response.data;
 };
+
+export const checkTryOnStatus = async () => {
+    const response = await axios.get(apiUrl("/v1/chatbot/try-on/status"));
+    return response.data;
+};
+
+export const generateTryOnImage = async (selfieBase64, productId) => {
+    const response = await axios.post(apiUrl("/v1/chatbot/try-on/generate"), {
+        selfieBase64,
+        productId
+    });
+    return response.data;
+};
+
+export const getTryOnProducts = async (params) => {
+    const response = await axios.get(apiUrl("/v1/chatbot/try-on/products"), {
+        params
+    });
+    return response.data;
+};

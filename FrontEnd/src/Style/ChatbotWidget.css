@@ -478,3 +478,16 @@
     animation: none;
   }
 }
+
+.chatbot-tryon-card {
+  border: 1px solid #eadedb;
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  background: #fff;
+  transition: border-color 0.2s;
+}
+
+.chatbot-tryon-card:hover {
+  border-color: #9b1c31;
+}
