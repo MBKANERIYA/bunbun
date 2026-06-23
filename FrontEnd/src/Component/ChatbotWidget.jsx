@@ -156,7 +156,8 @@ const ChatbotWidget = () => {
     
     // TryOn state
     const [isTryOnEnabled, setIsTryOnEnabled] = useState(false);
-    const [tryOnStep, setTryOnStep] = useState(1); // 1: Selfie, 2: Browse, 3: Result
+    const [tryOnStep, setTryOnStep] = useState(1); // 1: Selfie, 2: Category, 3: Browse, 4: Result
+    const [tryOnCategory, setTryOnCategory] = useState("");
     const [tryOnSelfie, setTryOnSelfie] = useState(null); // blob url
     const [tryOnSelfieBase64, setTryOnSelfieBase64] = useState("");
     const [tryOnProductId, setTryOnProductId] = useState(null);
@@ -372,6 +373,8 @@ const ChatbotWidget = () => {
         if (!requireLogin()) return;
         setFlow("tryon");
         setTryOnStep(1);
+        setTryOnCategory("");
+        setTryOnProductsList([]);
         setTryOnResult(null);
         setError("");
         setStatusText("");
@@ -409,11 +412,11 @@ const ChatbotWidget = () => {
         reader.readAsDataURL(file);
     };
 
-    const loadTryOnProducts = async (page = 1) => {
+    const loadTryOnProducts = async (page = 1, category = tryOnCategory) => {
         setIsLoading(true);
         setError("");
         try {
-            const res = await getTryOnProducts({ page, limit: 6 });
+            const res = await getTryOnProducts({ page, limit: 6, productType: category });
             setTryOnProductsList(prev => page === 1 ? res.products : [...prev, ...res.products]);
             setTryOnHasMore(page < res.totalPages);
             setTryOnPage(page);
@@ -424,19 +427,26 @@ const ChatbotWidget = () => {
         }
     };
 
-    const goToTryOnBrowse = () => {
+    const goToTryOnCategory = () => {
         if (!tryOnSelfieBase64) {
             setError("Please upload your photo first.");
             return;
         }
-        setTryOnStep(2);
-        if (tryOnProductsList.length === 0) {
-            loadTryOnProducts(1);
-        }
         // If we came from a suggestion and just uploaded selfie, jump to generate
         if (tryOnProductId) {
             doGenerateTryOn(tryOnSelfieBase64, tryOnProductId);
+            return;
         }
+        setTryOnStep(2);
+    };
+
+    const goToTryOnProducts = () => {
+        if (!tryOnCategory) {
+            setError("Choose a category first.");
+            return;
+        }
+        setTryOnStep(3);
+        loadTryOnProducts(1, tryOnCategory);
     };
 
     const selectTryOnProduct = (product) => {
@@ -446,7 +456,7 @@ const ChatbotWidget = () => {
     };
 
     const doGenerateTryOn = async (selfieBase64, prodId) => {
-        setTryOnStep(3); // Result/Generating
+        setTryOnStep(4); // Result/Generating
         setIsLoading(true);
         setError("");
         setStatusText("AI is generating your try-on image. This may take 15-30 seconds...");
@@ -456,7 +466,7 @@ const ChatbotWidget = () => {
             setStatusText("Here is your virtual try-on!");
         } catch (err) {
             setError(err.response?.data?.message || err.message || "Failed to generate try-on.");
-            setTryOnStep(2); // Go back to browse
+            setTryOnStep(3); // Go back to browse
         } finally {
             setIsLoading(false);
         }
@@ -616,6 +626,27 @@ const ChatbotWidget = () => {
         if (tryOnStep === 2) return (
             <div className="chatbot-step">
                 <div className="chatbot-message">
+                    What category of product would you like to try on?
+                </div>
+                <div className="chatbot-choice-grid">
+                    {PRODUCT_TYPES.map((item) => (
+                        <button
+                            key={item.value}
+                            type="button"
+                            className={`chatbot-choice ${tryOnCategory === item.value ? "active" : ""}`}
+                            onClick={() => setTryOnCategory(item.value)}
+                        >
+                            {item.label}
+                        </button>
+                    ))}
+                </div>
+                {error && <div className="chatbot-error">{error}</div>}
+            </div>
+        );
+
+        if (tryOnStep === 3) return (
+            <div className="chatbot-step">
+                <div className="chatbot-message">
                     Select a product to try on.
                 </div>
                 {error && <div className="chatbot-error">{error}</div>}
@@ -633,14 +664,14 @@ const ChatbotWidget = () => {
                 {isLoading && <p className="chatbot-note">Loading products...</p>}
                 
                 {!isLoading && tryOnHasMore && (
-                    <button className="chatbot-secondary-btn" style={{ width: '100%', marginTop: '10px' }} onClick={() => loadTryOnProducts(tryOnPage + 1)}>
+                    <button className="chatbot-secondary-btn" style={{ width: '100%', marginTop: '10px' }} onClick={() => loadTryOnProducts(tryOnPage + 1, tryOnCategory)}>
                         Load More
                     </button>
                 )}
             </div>
         );
 
-        if (tryOnStep === 3) return (
+        if (tryOnStep === 4) return (
             <div className="chatbot-step">
                 {isLoading ? (
                     <div className="chatbot-thinking" role="status" aria-live="polite">
@@ -665,7 +696,7 @@ const ChatbotWidget = () => {
                                     Buy {tryOnProduct.name}
                                 </button>
                             )}
-                            <button className="chatbot-secondary-btn" onClick={() => setTryOnStep(2)}>
+                            <button className="chatbot-secondary-btn" onClick={() => setTryOnStep(3)}>
                                 Try Another Product
                             </button>
                         </div>
@@ -705,7 +736,7 @@ const ChatbotWidget = () => {
                     {flow === "tryon" && (
                         <div className="chatbot-stepper">
                             <div className="chatbot-step-track">
-                                {[1, 2, 3].map((id) => (
+                                {[1, 2, 3, 4].map((id) => (
                                     <span key={id} className={`chatbot-step-seg ${tryOnStep === id ? "active" : ""} ${tryOnStep > id ? "done" : ""}`}></span>
                                 ))}
                             </div>
@@ -738,13 +769,19 @@ const ChatbotWidget = () => {
                             {tryOnStep === 1 && (
                                 <>
                                     <button className="chatbot-secondary-btn" type="button" onClick={returnToHome}>Main Menu</button>
-                                    <button className="chatbot-primary-btn" type="button" onClick={goToTryOnBrowse} disabled={!tryOnSelfieBase64}>Next</button>
+                                    <button className="chatbot-primary-btn" type="button" onClick={goToTryOnCategory} disabled={!tryOnSelfieBase64}>Next</button>
                                 </>
                             )}
                             {tryOnStep === 2 && (
-                                <button className="chatbot-secondary-btn" type="button" onClick={() => setTryOnStep(1)} disabled={isLoading}>Back</button>
+                                <>
+                                    <button className="chatbot-secondary-btn" type="button" onClick={() => setTryOnStep(1)} disabled={isLoading}>Back</button>
+                                    <button className="chatbot-primary-btn" type="button" onClick={goToTryOnProducts} disabled={!tryOnCategory || isLoading}>Next</button>
+                                </>
                             )}
-                            {tryOnStep === 3 && !isLoading && (
+                            {tryOnStep === 3 && (
+                                <button className="chatbot-secondary-btn" type="button" onClick={() => setTryOnStep(2)} disabled={isLoading}>Back</button>
+                            )}
+                            {tryOnStep === 4 && !isLoading && (
                                 <button className="chatbot-secondary-btn" type="button" onClick={returnToHome}>Main Menu</button>
                             )}
                         </div>

@@ -1,4 +1,12 @@
 # Changelog
+## 2026-06-23 — Added Category Selection to Try-On Flow
+**What**: Inserted a category selection step into the AI Try-On wizard (between uploading a selfie and browsing products).
+**Why**: The user pointed out that dropping straight into the entire product catalog after uploading a selfie resulted in endless "load more" clicks.
+**Impact**: The Try-On flow is now 4 steps. Users must pick a category (Plain Blouse, Kalamkari Blouse, or Shapewear) before browsing products, significantly narrowing down the choices and improving the UX.
+**Files Changed**: `FrontEnd/src/Component/ChatbotWidget.jsx`, `knowledge-base/changelog.md`
+**Tests**: `npm run build` in FrontEnd passes cleanly.
+**Commit**: `pending`
+
 ## 2026-06-23 — Implemented AI Try-On Feature via Gemini API
 **What**: Fully implemented the AI Try-On feature utilizing the `@google/genai` library and `gemini-2.5-flash-image` model. Users can now upload a selfie and select a product to see a realistic generated image of themselves wearing it.
 **Why**: The user provided a Gemini API key and requested that the AI Try-On feature actually work rather than being a placeholder.
