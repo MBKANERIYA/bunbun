@@ -15,9 +15,10 @@ const uploadClothingImage = (req, res, next) => {
     });
 };
 
+// Product suggestions are a public, pre-purchase discovery feature, so they do
+// not require authentication. Only the AI Try-On generation endpoint is gated.
 route.post(
     "/suggestions",
-    tokenVeryfy,
     uploadClothingImage,
     chatbotController.getProductSuggestions
 );

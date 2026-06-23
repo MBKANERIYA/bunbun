@@ -197,6 +197,8 @@ const ChatbotWidget = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [showLogin, setShowLogin] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(Boolean(getAuthUserId()));
+    const [panelLeaving, setPanelLeaving] = useState(false); // animate panel out -> login
+    const [pendingAction, setPendingAction] = useState(null); // resume after login
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -225,13 +227,30 @@ const ChatbotWidget = () => {
         [productType]
     );
 
-    const requireLogin = () => {
+    // Returns true if already authenticated. Otherwise it animates the chatbot
+    // panel out, then reveals the login modal, and stores `resume` so the action
+    // (e.g. AI Try-On) continues automatically once the user logs in.
+    const requireLogin = (resume) => {
         if (getAuthUserId()) {
             setIsLoggedIn(true);
             return true;
         }
-        setShowLogin(true);
+        setPendingAction(resume ? () => resume : null);
+        setPanelLeaving(true);
+        window.setTimeout(() => setShowLogin(true), 280);
         return false;
+    };
+
+    const handleLoginClose = () => {
+        setShowLogin(false);
+        const loggedIn = Boolean(getAuthUserId());
+        setIsLoggedIn(loggedIn);
+        setPanelLeaving(false); // smoothly bring the chatbot panel back
+        const resume = pendingAction;
+        setPendingAction(null);
+        if (loggedIn && typeof resume === "function") {
+            window.setTimeout(() => resume(), 80); // let the panel finish re-entering
+        }
     };
 
     const resetSuggestion = () => {
@@ -391,8 +410,7 @@ const ChatbotWidget = () => {
 
     // --- AI Try-On Flow ---
 
-    const startTryOn = () => {
-        if (!requireLogin()) return;
+    const beginTryOn = () => {
         setFlow("tryon");
         setTryOnStep(1);
         setTryOnCategory("");
@@ -402,8 +420,12 @@ const ChatbotWidget = () => {
         setStatusText("");
     };
 
-    const startTryOnFromSuggestion = (product) => {
-        if (!requireLogin()) return;
+    const startTryOn = () => {
+        if (!requireLogin(() => beginTryOn())) return;
+        beginTryOn();
+    };
+
+    const beginTryOnFromSuggestion = (product) => {
         setTryOnProductId(product._id);
         setTryOnProduct(product);
         setFlow("tryon");
@@ -414,6 +436,11 @@ const ChatbotWidget = () => {
             // Need selfie
             setTryOnStep(1);
         }
+    };
+
+    const startTryOnFromSuggestion = (product) => {
+        if (!requireLogin(() => beginTryOnFromSuggestion(product))) return;
+        beginTryOnFromSuggestion(product);
     };
 
     const handleTryOnSelfieChange = (e) => {
@@ -734,7 +761,7 @@ const ChatbotWidget = () => {
     return (
         <>
             {isOpen && (
-                <section className="chatbot-panel" aria-label="Bunbun shop assistant">
+                <section className={`chatbot-panel ${panelLeaving ? "is-leaving" : ""}`} aria-label="Bunbun shop assistant">
                     <div className="chatbot-header">
                         <div>
                             <h3 className="chatbot-title">Bunbun Assistant</h3>
@@ -817,10 +844,7 @@ const ChatbotWidget = () => {
 
             <LoginModal
                 isOpen={showLogin}
-                onClose={() => {
-                    setShowLogin(false);
-                    setIsLoggedIn(Boolean(getAuthUserId()));
-                }}
+                onClose={handleLoginClose}
             />
         </>
     );

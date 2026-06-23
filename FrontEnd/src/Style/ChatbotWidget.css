@@ -1,7 +1,7 @@
 .chatbot-launcher {
   position: fixed;
-  right: 22px;
-  bottom: 22px;
+  right: calc(22px + env(safe-area-inset-right, 0px));
+  bottom: calc(22px + env(safe-area-inset-bottom, 0px));
   width: 58px;
   height: 58px;
   border-radius: 50%;
@@ -13,12 +13,13 @@
   justify-content: center;
   box-shadow: 0 14px 36px rgba(41, 19, 20, 0.28);
   z-index: 2400;
+  cursor: pointer;
 }
 
 .chatbot-panel {
   position: fixed;
-  right: 22px;
-  bottom: 92px;
+  right: calc(22px + env(safe-area-inset-right, 0px));
+  bottom: calc(92px + env(safe-area-inset-bottom, 0px));
   width: min(390px, calc(100vw - 28px));
   height: min(660px, calc(100vh - 120px));
   background: #fff;
@@ -29,6 +30,46 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  transform-origin: bottom right;
+  animation: chatbotPanelIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Smooth hand-off when we shrink the panel away to reveal the login modal */
+.chatbot-panel.is-leaving {
+  animation: chatbotPanelOut 0.26s cubic-bezier(0.4, 0, 1, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes chatbotPanelIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes chatbotPanelOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(24px) scale(0.92);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .chatbot-panel,
+  .chatbot-panel.is-leaving {
+    animation: none;
+  }
 }
 
 .chatbot-header {
@@ -352,18 +393,64 @@
 
 @media (max-width: 576px) {
   .chatbot-launcher {
-    right: 16px;
-    bottom: 16px;
+    right: calc(16px + env(safe-area-inset-right, 0px));
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
   }
 
+  /* Full-screen sheet on phones, respecting the notch and home indicator */
   .chatbot-panel {
-    right: 14px;
-    bottom: 84px;
-    height: min(640px, calc(100vh - 100px));
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100dvh; /* dynamic viewport height handles the iOS address bar */
+    max-height: 100dvh;
+    border: none;
+    border-radius: 0;
+    transform-origin: center bottom;
+  }
+
+  .chatbot-header {
+    padding-top: calc(14px + env(safe-area-inset-top, 0px));
+    padding-left: calc(16px + env(safe-area-inset-left, 0px));
+    padding-right: calc(16px + env(safe-area-inset-right, 0px));
+  }
+
+  .chatbot-body {
+    padding-left: calc(16px + env(safe-area-inset-left, 0px));
+    padding-right: calc(16px + env(safe-area-inset-right, 0px));
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .chatbot-footer {
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    padding-left: calc(16px + env(safe-area-inset-left, 0px));
+    padding-right: calc(16px + env(safe-area-inset-right, 0px));
   }
 
   .chatbot-next-actions {
     grid-template-columns: 1fr;
+  }
+
+  /* Comfortable touch targets on mobile */
+  .chatbot-choice,
+  .chatbot-secondary-btn,
+  .chatbot-primary-btn {
+    min-height: 46px;
+  }
+
+  .chatbot-close {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* 16px keeps iOS Safari from auto-zooming when an input is focused */
+  .chatbot-field input,
+  .chatbot-field select,
+  .chatbot-field textarea,
+  .chatbot-upload input {
+    font-size: 16px;
   }
 }
 
