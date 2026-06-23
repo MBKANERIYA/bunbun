@@ -12,6 +12,13 @@ const PRODUCT_TYPES = [
     { value: "shapewear", label: "Shapewear" },
 ];
 
+const SUGGEST_STEPS = [
+    { id: 1, label: "Product type" },
+    { id: 2, label: "Clothing photo" },
+    { id: 3, label: "Style details" },
+];
+const TOTAL_SUGGEST_STEPS = SUGGEST_STEPS.length;
+
 const defaultAnswers = {
     outfitType: "",
     occasion: "",
@@ -135,6 +142,7 @@ const extractColorHints = (file) => new Promise((resolve) => {
 const ChatbotWidget = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [flow, setFlow] = useState("home");
+    const [step, setStep] = useState(1);
     const [productType, setProductType] = useState("");
     const [clothingImage, setClothingImage] = useState(null);
     const [previewUrl, setPreviewUrl] = useState("");
@@ -180,6 +188,7 @@ const ChatbotWidget = () => {
 
     const resetSuggestion = () => {
         setFlow("suggest");
+        setStep(1);
         setProductType("");
         setClothingImage(null);
         if (previewUrl) URL.revokeObjectURL(previewUrl);
@@ -286,6 +295,10 @@ const ChatbotWidget = () => {
             } else {
                 setStatusText(data.warning ? "Showing safe catalog matches while the stylist is unavailable. You can still ask for more." : "Here are the first matches. You can ask for more, refine details, or start over.");
             }
+
+            if (!append && nextResults.length > 0) {
+                setStep(4);
+            }
         } catch (err) {
             setError(err.response?.data?.message || "Could not get suggestions right now.");
             setStatusText("");
@@ -303,14 +316,41 @@ const ChatbotWidget = () => {
         setResults([]);
         setShownProductIds([]);
         setHasMoreSuggestions(false);
-        setStatusText("Update any detail above, then show matches again.");
+        setStatusText("");
         setError("");
+        setStep(3);
     };
 
     const returnToHome = () => {
         setFlow("home");
+        setStep(1);
         setStatusText("");
         setError("");
+    };
+
+    const canProceedFromStep = (currentStep) => {
+        if (currentStep === 1) return Boolean(productType);
+        if (currentStep === 2) return Boolean(clothingImage);
+        return true;
+    };
+
+    const goToNextStep = () => {
+        setError("");
+        if (step === 1 && !productType) {
+            setError("Choose what you are shopping for.");
+            return;
+        }
+        if (step === 2 && !clothingImage) {
+            setError("Upload the clothing photo first.");
+            return;
+        }
+        setStep((current) => Math.min(current + 1, TOTAL_SUGGEST_STEPS));
+    };
+
+    const goToPreviousStep = () => {
+        setError("");
+        setStatusText("");
+        setStep((current) => Math.max(current - 1, 1));
     };
 
     const renderHome = () => (
@@ -340,13 +380,11 @@ const ChatbotWidget = () => {
         </>
     );
 
-    const renderSuggestion = () => (
-        <>
+    const renderStepType = () => (
+        <div className="chatbot-step" key="step-type">
             <div className="chatbot-message">
-                Tell me what you want to match, then I will suggest 5 products from the store.
+                What are you shopping for today? Pick one and I will match 5 products to your outfit.
             </div>
-
-            <p className="chatbot-section-title">Product Type</p>
             <div className="chatbot-choice-grid">
                 {PRODUCT_TYPES.map((item) => (
                     <button
@@ -359,8 +397,15 @@ const ChatbotWidget = () => {
                     </button>
                 ))}
             </div>
+            {error && <div className="chatbot-error">{error}</div>}
+        </div>
+    );
 
-            <p className="chatbot-section-title">Clothing Photo</p>
+    const renderStepPhoto = () => (
+        <div className="chatbot-step" key="step-photo">
+            <div className="chatbot-message">
+                Upload a clear photo of the {selectedProductTypeLabel ? selectedProductTypeLabel.toLowerCase() : "item"} you want to match.
+            </div>
             <div className="chatbot-upload">
                 <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleImageChange} />
                 <p className="chatbot-note">We do not store your uploaded photos. They are used only during this session.</p>
@@ -378,8 +423,15 @@ const ChatbotWidget = () => {
                     </div>
                 )}
             </div>
+            {error && <div className="chatbot-error">{error}</div>}
+        </div>
+    );
 
-            <p className="chatbot-section-title">Stylist Questions</p>
+    const renderStepDetails = () => (
+        <div className="chatbot-step" key="step-details">
+            <div className="chatbot-message">
+                A few quick style details and I will find your matches.
+            </div>
             <div className="chatbot-form-grid">
                 <div className="chatbot-field">
                     <label htmlFor="chatbot-colors">Main colors you see</label>
@@ -448,9 +500,8 @@ const ChatbotWidget = () => {
                     />
                 </div>
             </div>
-
             {error && <div className="chatbot-error">{error}</div>}
-            {statusText && <p className="chatbot-note">{statusText}</p>}
+            {statusText && !isLoading && <p className="chatbot-note">{statusText}</p>}
             {isLoading && (
                 <div className="chatbot-thinking" role="status" aria-live="polite">
                     <span className="chatbot-thinking-dots" aria-hidden="true">
@@ -461,67 +512,121 @@ const ChatbotWidget = () => {
                     <span>Stylist is checking your outfit and the catalog...</span>
                 </div>
             )}
+        </div>
+    );
 
-            <div className="chatbot-actions">
-                <button className="chatbot-primary-btn" type="button" onClick={() => handleSuggest()} disabled={isLoading}>
-                    {isLoading ? "Checking..." : "Show Matches"}
+    const renderResults = () => (
+        <div className="chatbot-step" key="step-results">
+            <div className="chatbot-results-head">
+                <button className="chatbot-back-link" type="button" onClick={handleChangeDetails} disabled={isLoading}>
+                    &larr; Change details
                 </button>
-                <button className="chatbot-secondary-btn" type="button" onClick={returnToHome}>
-                    Back
-                </button>
+                <span className="chatbot-results-count">{results.length} matches</span>
             </div>
 
-            {results.length > 0 && (
-                <>
-                    <p className="chatbot-section-title">Top Matches</p>
-                    <div className="chatbot-result-list">
-                        {results.map((item, index) => (
-                            <div className="chatbot-result" key={item.product._id}>
-                                <img src={item.product.image} alt={item.product.name} />
-                                <div>
-                                    <h4>{index + 1}. {item.product.name}</h4>
-                                    <div className="chatbot-result-price">Rs. {item.product.selling_price}</div>
-                                    <p className="chatbot-result-reason">{item.reason}</p>
-                                    <button
-                                        className="chatbot-link-btn"
-                                        type="button"
-                                        onClick={() => {
-                                            setIsOpen(false);
-                                            navigate(`/product/${item.product.slug}`);
-                                        }}
-                                    >
-                                        View Product
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="chatbot-next-step">
-                        <p>Want a different direction?</p>
-                        <div className="chatbot-next-actions">
+            {statusText && <p className="chatbot-note chatbot-results-status">{statusText}</p>}
+            {error && <div className="chatbot-error">{error}</div>}
+
+            <div className="chatbot-result-list">
+                {results.map((item, index) => (
+                    <div className="chatbot-result" key={item.product._id}>
+                        <img src={item.product.image} alt={item.product.name} />
+                        <div>
+                            <h4>{index + 1}. {item.product.name}</h4>
+                            <div className="chatbot-result-price">Rs. {item.product.selling_price}</div>
+                            <p className="chatbot-result-reason">{item.reason}</p>
                             <button
-                                className="chatbot-primary-btn"
+                                className="chatbot-link-btn"
                                 type="button"
-                                onClick={() => handleSuggest({ append: true })}
-                                disabled={isLoading || !hasMoreSuggestions}
+                                onClick={() => {
+                                    setIsOpen(false);
+                                    navigate(`/product/${item.product.slug}`);
+                                }}
                             >
-                                {isLoading ? "Checking..." : hasMoreSuggestions ? "Show More" : "No More Fresh Matches"}
-                            </button>
-                            <button className="chatbot-secondary-btn" type="button" onClick={handleChangeDetails} disabled={isLoading}>
-                                Change Details
-                            </button>
-                            <button className="chatbot-secondary-btn" type="button" onClick={resetSuggestion} disabled={isLoading}>
-                                Start Over
-                            </button>
-                            <button className="chatbot-secondary-btn" type="button" onClick={returnToHome} disabled={isLoading}>
-                                Main Menu
+                                View Product
                             </button>
                         </div>
                     </div>
-                </>
+                ))}
+            </div>
+
+            {isLoading && (
+                <div className="chatbot-thinking" role="status" aria-live="polite">
+                    <span className="chatbot-thinking-dots" aria-hidden="true">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                    <span>Looking for more fresh options...</span>
+                </div>
             )}
-        </>
+
+            <div className="chatbot-next-step">
+                <p>Want a different direction?</p>
+                <div className="chatbot-next-actions">
+                    <button
+                        className="chatbot-primary-btn"
+                        type="button"
+                        onClick={() => handleSuggest({ append: true })}
+                        disabled={isLoading || !hasMoreSuggestions}
+                    >
+                        {isLoading ? "Checking..." : hasMoreSuggestions ? "Show More" : "No More Fresh Matches"}
+                    </button>
+                    <button className="chatbot-secondary-btn" type="button" onClick={handleChangeDetails} disabled={isLoading}>
+                        Change Details
+                    </button>
+                    <button className="chatbot-secondary-btn" type="button" onClick={resetSuggestion} disabled={isLoading}>
+                        Start Over
+                    </button>
+                    <button className="chatbot-secondary-btn" type="button" onClick={returnToHome} disabled={isLoading}>
+                        Main Menu
+                    </button>
+                </div>
+            </div>
+        </div>
     );
+
+    const renderSuggestBody = () => {
+        if (step === 1) return renderStepType();
+        if (step === 2) return renderStepPhoto();
+        if (step === 3) return renderStepDetails();
+        return renderResults();
+    };
+
+    const renderSuggestFooter = () => {
+        if (step > TOTAL_SUGGEST_STEPS) return null;
+        return (
+            <div className="chatbot-footer">
+                <button
+                    className="chatbot-secondary-btn"
+                    type="button"
+                    onClick={step === 1 ? returnToHome : goToPreviousStep}
+                    disabled={isLoading}
+                >
+                    {step === 1 ? "Main Menu" : "Back"}
+                </button>
+                {step < TOTAL_SUGGEST_STEPS ? (
+                    <button
+                        className="chatbot-primary-btn"
+                        type="button"
+                        onClick={goToNextStep}
+                        disabled={!canProceedFromStep(step)}
+                    >
+                        Next
+                    </button>
+                ) : (
+                    <button
+                        className="chatbot-primary-btn"
+                        type="button"
+                        onClick={() => handleSuggest()}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? "Checking..." : "Show Matches"}
+                    </button>
+                )}
+            </div>
+        );
+    };
 
     return (
         <>
@@ -536,11 +641,30 @@ const ChatbotWidget = () => {
                             <X size={19} />
                         </button>
                     </div>
+
+                    {flow === "suggest" && step <= TOTAL_SUGGEST_STEPS && (
+                        <div className="chatbot-stepper" aria-label={`Step ${step} of ${TOTAL_SUGGEST_STEPS}`}>
+                            <div className="chatbot-step-track">
+                                {SUGGEST_STEPS.map((item) => (
+                                    <span
+                                        key={item.id}
+                                        className={`chatbot-step-seg ${step === item.id ? "active" : ""} ${step > item.id ? "done" : ""}`}
+                                    ></span>
+                                ))}
+                            </div>
+                            <p className="chatbot-step-label">
+                                Step {step} of {TOTAL_SUGGEST_STEPS} &middot; {SUGGEST_STEPS[step - 1].label}
+                            </p>
+                        </div>
+                    )}
+
                     <div className="chatbot-body">
                         {flow === "home" && renderHome()}
-                        {flow === "suggest" && renderSuggestion()}
+                        {flow === "suggest" && renderSuggestBody()}
                         {flow === "tryon" && renderTryOn()}
                     </div>
+
+                    {flow === "suggest" && renderSuggestFooter()}
                 </section>
             )}
 
