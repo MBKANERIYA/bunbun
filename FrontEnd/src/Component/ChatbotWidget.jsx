@@ -100,24 +100,48 @@ const extractColorHints = (file) => new Promise((resolve) => {
 
     image.onload = () => {
         const canvas = document.createElement("canvas");
-        const size = 80;
+        const size = 160;
         canvas.width = size;
         canvas.height = size;
         const context = canvas.getContext("2d");
         context.drawImage(image, 0, 0, size, size);
         const { data } = context.getImageData(0, 0, size, size);
         const buckets = new Map();
+        const center = size / 2;
 
-        for (let index = 0; index < data.length; index += 16) {
+        // Subject-aware extraction: weight pixels toward the image center and by
+        // colour saturation, and skip near-grey pixels. This stops busy backgrounds
+        // (walls, shutters, floors) from drowning out the focus garment's colour.
+        for (let index = 0; index < data.length; index += 4) {
             const alpha = data[index + 3];
             if (alpha < 180) continue;
-            const r = Math.round(data[index] / 32) * 32;
-            const g = Math.round(data[index + 1] / 32) * 32;
-            const b = Math.round(data[index + 2] / 32) * 32;
-            const brightness = (r + g + b) / 3;
+
+            const rawR = data[index];
+            const rawG = data[index + 1];
+            const rawB = data[index + 2];
+
+            const max = Math.max(rawR, rawG, rawB);
+            const min = Math.min(rawR, rawG, rawB);
+            const lightness = (max + min) / 2;
+            const denom = 255 - Math.abs(2 * lightness - 255);
+            const saturation = denom === 0 ? 0 : (max - min) / denom;
+            if (saturation < 0.18) continue; // drop greys / shutter / floor
+
+            const brightness = (rawR + rawG + rawB) / 3;
             if (brightness < 24 || brightness > 242) continue;
+
+            const pixel = index / 4;
+            const px = pixel % size;
+            const py = Math.floor(pixel / size);
+            const dist = Math.hypot((px - center) / center, (py - center) / center);
+            const centerWeight = Math.exp(-(dist * dist) / 0.5);
+            const weight = centerWeight * Math.pow(saturation, 1.5);
+
+            const r = Math.round(rawR / 32) * 32;
+            const g = Math.round(rawG / 32) * 32;
+            const b = Math.round(rawB / 32) * 32;
             const key = `${Math.min(r, 255)},${Math.min(g, 255)},${Math.min(b, 255)}`;
-            buckets.set(key, (buckets.get(key) || 0) + 1);
+            buckets.set(key, (buckets.get(key) || 0) + weight);
         }
 
         URL.revokeObjectURL(url);
