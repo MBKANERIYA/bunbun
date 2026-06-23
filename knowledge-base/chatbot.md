@@ -24,6 +24,7 @@ The chatbot is a customer-facing shop assistant mounted on non-admin pages. It g
 - Shopper-facing color fields must use plain language such as "olive", "charcoal", or "cream"; raw hex values are only internal metadata for swatches and AI context.
 - Clothing type is a custom free text field, not a fixed dropdown, because users may upload sarees, kurtis, dupattas, gowns, blouse pieces, or other clothing items.
 - Results must not be a dead end. After suggestions, the widget should offer Show More, Change Details, Start Over, and Main Menu actions.
+- The "Suggest Products" flow is a paged multi-step wizard, not one long scrolling form: Step 1 product type, Step 2 clothing photo, Step 3 style details, then a dedicated results screen. One step renders at a time with a progress bar (`.chatbot-stepper`) and a fixed Back/Next footer (`.chatbot-footer`); the final input step's primary button is "Show Matches". The step model lives in `SUGGEST_STEPS`/`step` state in `ChatbotWidget.jsx`. Keep per-step gating (product type before photo, photo before details) and keep the results screen's continuation controls.
 
 ## Recommendation Logic
 - The product type button first narrows the catalog to one supported product group: plain blouse, kalamkari blouse, or shapewear.

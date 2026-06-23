@@ -1,4 +1,17 @@
 # Changelog
+## 2026-06-23 — Made Chatbot A Paged Multi-Step Mobile Flow
+**What**: Reworked the chatbot "Suggest Products" experience from one long scrolling form into a paged, mobile-first wizard: Step 1 product type, Step 2 clothing photo, Step 3 style details, then a dedicated results screen. Added a progress bar and a fixed Back/Next footer.
+**Why**: On mobile the single-scroll form required a lot of scrolling. Splitting it into clean, focused steps keeps each screen short and easy to complete on a phone.
+**Impact**: Each step shows only its own fields; the primary action becomes "Show Matches" on the final input step. Results open on their own screen and keep the Show More / Change Details / Start Over / Main Menu continuation controls. No backend or API payload changes — the suggestions request contract is unchanged.
+**Files Changed**: `FrontEnd/src/Component/ChatbotWidget.jsx`, `FrontEnd/src/Style/ChatbotWidget.css`, `knowledge-base/changelog.md`, `knowledge-base/chatbot.md`, `knowledge-base/active-context.md`
+**Tests**: `npm run lint --prefix FrontEnd` pass; `npm run build --prefix FrontEnd` pass. Verified the full flow (home → step 1 → step 2 with upload + swatches → step 3 → results) in headless Chromium at 390px width.
+**Commit**: `pending`
+
+- Added a `step` state plus a `SUGGEST_STEPS` progress model; one step renders at a time with a slide-in transition that respects `prefers-reduced-motion`.
+- Added a progress bar (`.chatbot-stepper`) and a sticky footer (`.chatbot-footer`) for Back / Next / Show Matches.
+- Moved the results list to its own step with a "Change details" back link; kept all continuation actions.
+- Per-step validation: product type required before step 2, clothing photo required before step 3.
+
 ## 2026-06-22 — Added Chatbot Continuation Flow And Stylist Loader
 **What**: Added visible stylist-loading feedback, a "Show More" path for fresh recommendations, and post-results actions for changing details, starting over, or returning to the main menu.
 **Why**: The chatbot results screen felt like a dead end after showing product suggestions, and users needed clear feedback while the AI stylist was working.
