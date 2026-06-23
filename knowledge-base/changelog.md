@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-06-23 — Removed Login Requirement for Suggest Products
+**What**: Removed the `requireLogin()` check when opening and submitting the "Suggest Products" flow in the Chatbot Widget. Also removed the "Login required for uploads" subtitle message.
+**Why**: The user requested that the suggest products feature be available to guests without requiring them to sign in.
+**Impact**: Anyone can now upload a photo and receive styling recommendations without needing an account. The AI Try-On feature still requires login.
+**Files Changed**: `FrontEnd/src/Component/ChatbotWidget.jsx`, `knowledge-base/changelog.md`
+**Tests**: `npm run build` completed successfully.
+**Commit**: `pending`
+
 ## 2026-06-23 — Fixed Empty Products List for Try-On Categories
 **What**: Expanded the MongoDB query in `TryOn.Controller.js` for Kalamkari and Plain Blouses to properly match the database structure.
 **Why**: The previous query was too strict (`subcategory === "kalamkari"`), resulting in an empty product list when the user clicked "Kalamkari Blouse".

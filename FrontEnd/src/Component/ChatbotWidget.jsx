@@ -271,7 +271,6 @@ const ChatbotWidget = () => {
     };
 
     const handleSuggest = async ({ append = false } = {}) => {
-        if (!requireLogin()) return;
         if (!productType) {
             setError("Choose what you are shopping for.");
             return;
@@ -341,7 +340,6 @@ const ChatbotWidget = () => {
     };
 
     const openSuggestions = () => {
-        if (!requireLogin()) return;
         resetSuggestion();
     };
 
@@ -716,7 +714,7 @@ const ChatbotWidget = () => {
                     <div className="chatbot-header">
                         <div>
                             <h3 className="chatbot-title">Bunbun Assistant</h3>
-                            <p className="chatbot-subtitle">{isLoggedIn ? "Ready to style your outfit" : "Login required for uploads"}</p>
+                            <p className="chatbot-subtitle">Your personal AI stylist</p>
                         </div>
                         <button className="chatbot-close" type="button" onClick={() => setIsOpen(false)} aria-label="Close chatbot">
                             <X size={19} />
