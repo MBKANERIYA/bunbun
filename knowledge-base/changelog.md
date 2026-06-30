@@ -1,118 +1,5 @@
 # Changelog
 
-## 2026-06-23 — Removed Login Requirement for Suggest Products
-**What**: Removed the `requireLogin()` check when opening and submitting the "Suggest Products" flow in the Chatbot Widget. Also removed the "Login required for uploads" subtitle message.
-**Why**: The user requested that the suggest products feature be available to guests without requiring them to sign in.
-**Impact**: Anyone can now upload a photo and receive styling recommendations without needing an account. The AI Try-On feature still requires login.
-**Files Changed**: `FrontEnd/src/Component/ChatbotWidget.jsx`, `knowledge-base/changelog.md`
-**Tests**: `npm run build` completed successfully.
-**Commit**: `pending`
-
-## 2026-06-23 — Fixed Empty Products List for Try-On Categories
-**What**: Expanded the MongoDB query in `TryOn.Controller.js` for Kalamkari and Plain Blouses to properly match the database structure.
-**Why**: The previous query was too strict (`subcategory === "kalamkari"`), resulting in an empty product list when the user clicked "Kalamkari Blouse".
-**Impact**: The Try-On browse page will now successfully fetch and display Kalamkari blouses by checking multiple fields (`subcategory`, `blouseWork`, `productType`, `name`) for the keyword, matching the recommendation engine's logic.
-**Files Changed**: `BackEnd/Controllers/TryOn.Controller.js`, `knowledge-base/changelog.md`
-**Tests**: Verified query logic locally.
-**Commit**: `pending`
-
-## 2026-06-23 — Added Category Selection to Try-On Flow
-**What**: Inserted a category selection step into the AI Try-On wizard (between uploading a selfie and browsing products).
-**Why**: The user pointed out that dropping straight into the entire product catalog after uploading a selfie resulted in endless "load more" clicks.
-**Impact**: The Try-On flow is now 4 steps. Users must pick a category (Plain Blouse, Kalamkari Blouse, or Shapewear) before browsing products, significantly narrowing down the choices and improving the UX.
-**Files Changed**: `FrontEnd/src/Component/ChatbotWidget.jsx`, `knowledge-base/changelog.md`
-**Tests**: `npm run build` in FrontEnd passes cleanly.
-**Commit**: `pending`
-
-## 2026-06-23 — Implemented AI Try-On Feature via Gemini API
-**What**: Fully implemented the AI Try-On feature utilizing the `@google/genai` library and `gemini-2.5-flash-image` model. Users can now upload a selfie and select a product to see a realistic generated image of themselves wearing it.
-**Why**: The user provided a Gemini API key and requested that the AI Try-On feature actually work rather than being a placeholder.
-**Impact**: Added a dedicated Try-On flow to the chatbot widget, added API endpoints and a backend service to interface with Gemini. Replaced dummy placeholder logic. The frontend now has a 3-step Try-On wizard (Upload Selfie -> Browse Products -> AI Generation).
-**Files Changed**: `BackEnd/Services/GeminiTryOn.Services.js`, `BackEnd/Controllers/TryOn.Controller.js`, `BackEnd/Routes/Chatbot.Route.js`, `BackEnd/.env.example`, `BackEnd/.env`, `FrontEnd/src/utils/chatbotApi.js`, `FrontEnd/src/Component/ChatbotWidget.jsx`, `FrontEnd/src/Style/ChatbotWidget.css`, `knowledge-base/changelog.md`, `knowledge-base/chatbot.md`, `knowledge-base/active-context.md`, `knowledge-base/decisions.md`
-**Tests**: Verified Gemini API key successfully, built frontend cleanly with `npm run build`, verified backend syntax by requiring files.
-**Commit**: `pending`
-
-- Re-enabled AI Try-On feature which was previously disabled due to missing Atomesus provider support.
-- Configured Gemini API fallback with explicit `gemini-2.5-flash-image` model testing.
-
-## 2026-06-23 — Made Chatbot A Paged Multi-Step Mobile Flow
-**What**: Reworked the chatbot "Suggest Products" experience from one long scrolling form into a paged, mobile-first wizard: Step 1 product type, Step 2 clothing photo, Step 3 style details, then a dedicated results screen. Added a progress bar and a fixed Back/Next footer.
-**Why**: On mobile the single-scroll form required a lot of scrolling. Splitting it into clean, focused steps keeps each screen short and easy to complete on a phone.
-**Impact**: Each step shows only its own fields; the primary action becomes "Show Matches" on the final input step. Results open on their own screen and keep the Show More / Change Details / Start Over / Main Menu continuation controls. No backend or API payload changes — the suggestions request contract is unchanged.
-**Files Changed**: `FrontEnd/src/Component/ChatbotWidget.jsx`, `FrontEnd/src/Style/ChatbotWidget.css`, `knowledge-base/changelog.md`, `knowledge-base/chatbot.md`, `knowledge-base/active-context.md`
-**Tests**: `npm run lint --prefix FrontEnd` pass; `npm run build --prefix FrontEnd` pass. Verified the full flow (home → step 1 → step 2 with upload + swatches → step 3 → results) in headless Chromium at 390px width.
-**Commit**: `pending`
-
-- Added a `step` state plus a `SUGGEST_STEPS` progress model; one step renders at a time with a slide-in transition that respects `prefers-reduced-motion`.
-- Added a progress bar (`.chatbot-stepper`) and a sticky footer (`.chatbot-footer`) for Back / Next / Show Matches.
-- Moved the results list to its own step with a "Change details" back link; kept all continuation actions.
-- Per-step validation: product type required before step 2, clothing photo required before step 3.
-
-## 2026-06-22 — Added Chatbot Continuation Flow And Stylist Loader
-**What**: Added visible stylist-loading feedback, a "Show More" path for fresh recommendations, and post-results actions for changing details, starting over, or returning to the main menu.
-**Why**: The chatbot results screen felt like a dead end after showing product suggestions, and users needed clear feedback while the AI stylist was working.
-**Impact**: Product suggestion results now support continuation instead of stopping at the product list. "Show More" excludes products already shown in the current chatbot session where possible.
-**Files Changed**: `BackEnd/Controllers/Chatbot.Controller.js`, `BackEnd/Services/StylistRecommendation.Services.js`, `BackEnd/tests/stylistRecommendation.test.js`, `FrontEnd/src/Component/ChatbotWidget.jsx`, `FrontEnd/src/Style/ChatbotWidget.css`, `knowledge-base/changelog.md`, `knowledge-base/chatbot.md`, `knowledge-base/active-context.md`
-**Tests**: `npm test --prefix BackEnd` pass; `npm run lint --prefix FrontEnd` pass; `npm run build --prefix FrontEnd` pass; `npm ci --prefix FrontEnd --dry-run` pass.
-**Commit**: `pending`
-
-- Added backend support for excluding already-shown product IDs before asking Atomesus for another set.
-- Added a frontend thinking indicator while suggestions are loading.
-- Added post-results actions: Show More, Change Details, Start Over, and Main Menu.
-- Documented that product suggestions use filtered catalog metadata plus locally extracted color hints, not direct image upload to Atomesus vision.
-
-## 2026-06-22 — Made Chatbot Clothing Type A Custom Field
-**What**: Replaced the chatbot "Clothing type" dropdown with a free text input.
-**Why**: Uploaded outfits are not limited to saree, lehenga, skirt, or daily outfit, so shoppers need to describe the clothing item in their own words.
-**Impact**: The chatbot now accepts arbitrary clothing types such as kurti, dupatta, gown, blouse piece, or any user-entered description.
-**Files Changed**: `FrontEnd/src/Component/ChatbotWidget.jsx`, `knowledge-base/changelog.md`, `knowledge-base/chatbot.md`, `knowledge-base/active-context.md`
-**Tests**: `npm test --prefix BackEnd` pass; `npm run lint --prefix FrontEnd` pass; `npm run build --prefix FrontEnd` pass.
-**Commit**: `pending`
-
-- Kept the same `answers.outfitType` payload contract while making the visible control editable.
-- Added user-friendly placeholder examples instead of a fixed option list.
-
-## 2026-06-22 — Replaced Chatbot Hex Color Autofill With Plain Color Names
-**What**: Changed the chatbot clothing-photo color autofill from raw hex codes to shopper-friendly color names.
-**Why**: Average customers do not know what values like `#e0e0e0` mean, so the stylist form should read like a person describing clothing colors.
-**Impact**: The visible "Main colors you see" field now uses names such as light grey, olive, charcoal, and cream. The backend still receives exact swatch hex hints separately for AI context.
-**Files Changed**: `FrontEnd/src/Component/ChatbotWidget.jsx`, `knowledge-base/changelog.md`, `knowledge-base/chatbot.md`, `knowledge-base/active-context.md`
-**Tests**: `npm test --prefix BackEnd` pass; `npm run lint --prefix FrontEnd` pass; `npm run build --prefix FrontEnd` pass.
-**Commit**: `pending`
-
-- Added a color-name mapper for locally extracted image swatches.
-- Kept swatch circles visible while replacing the editable input's developer-facing values with plain-language color descriptions.
-
-## 2026-06-22 — Added Atomesus Chatbot Product Suggestions
-**What**: Added a customer-facing chatbot for AI-assisted product suggestions using Atomesus text reasoning, plus a disabled AI Try-On placeholder.
-**Why**: The site needs a shop-assistant style chatbot that can guide customers toward top product matches while respecting the Atomesus-only provider decision and upload privacy rules.
-**Impact**: Customer pages now show a floating chatbot launcher. Product suggestions require login and `ATOMESUS_API_KEY` for AI ranking; deterministic fallback suggestions are returned if Atomesus is unavailable. AI Try-On is visibly unavailable until Atomesus documents image generation/editing APIs.
-**Files Changed**: `BackEnd/Controllers/Chatbot.Controller.js`, `BackEnd/Routes/Chatbot.Route.js`, `BackEnd/Services/Atomesus.Services.js`, `BackEnd/Services/StylistRecommendation.Services.js`, `BackEnd/Middleware/chatbotUpload.js`, `FrontEnd/src/Component/ChatbotWidget.jsx`, `FrontEnd/src/utils/chatbotApi.js`, `FrontEnd/src/Style/ChatbotWidget.css`, `FrontEnd/src/App.jsx`, `BackEnd/tests/atomesusService.test.js`, `BackEnd/tests/stylistRecommendation.test.js`, `BackEnd/tests/userRoutes.test.js`, `knowledge-base/chatbot.md`
-**Tests**: `npm test --prefix BackEnd` pass; `npm run lint --prefix FrontEnd` pass; `npm run build --prefix FrontEnd` pass; `npm ci --prefix FrontEnd --dry-run` pass.
-**Commit**: `pending`
-
-- Implemented `/v1/chatbot/suggestions` with authenticated temp image upload, Atomesus prompt construction, product ID validation, and fallback ranking.
-- Mounted a responsive chatbot widget on non-admin pages with login gate, photo color hints, smart styling questions, top-5 result cards, privacy note, and disabled AI Try-On state.
-- Added backend tests for Atomesus error handling, product type filtering, invalid AI ID rejection, fallback recommendations, and the missed profile ownership route guard.
-- Corrected stale KB Vercel adapter documentation from `/api/v1/[...path].js` to `/api/index.js`.
-
-## 2026-06-22 — Completed Security Fix Review Follow-Up
-**What**: Fixed the missed profile ownership protection and removed an accidental frontend dependency introduced during the security/lint pass.
-**Why**: Review of the other agent's changes showed profile read/update routes were still not owner-checked and `FrontEnd/package.json` had an unnecessary `bunbun-clothing-root` file dependency.
-**Impact**: Profile read/update APIs now require the authenticated owner or admin. Frontend install remains reproducible without linking the root package into the frontend package.
-**Files Changed**: `BackEnd/Routes/User.Routes.js`, `BackEnd/package.json`, `FrontEnd/package.json`, `FrontEnd/package-lock.json`, `BackEnd/tests/userRoutes.test.js`
-**Tests**: `npm test --prefix BackEnd` pass; `npm ci --prefix FrontEnd --dry-run` pass; `npm run lint --prefix FrontEnd` pass; `npm run build --prefix FrontEnd` pass.
-**Commit**: `pending`
-
-- Added `tokenVeryfy` and `isOwner` to `/v1/User/UserProfile/:id` and `/v1/User/updateUser/:id`.
-- Added a backend route-level regression test so profile authorization cannot quietly regress.
-- Kept the `jquery` lockfile sync fix while removing the accidental root package dependency from the frontend manifest.
-
-## 2026-06-22 — Secured Project, Recalculated Payments, Fixed Guest Checkout & Linting Errors
-**What**: Secured backend routes with authenticated resource ownership checking, calculated Razorpay payment amounts strictly on the server, fixed database schema crashes on guest checkouts, resolved package-lock issues, and fixed all eslint compilation warnings/errors.
-**Why**: Fix critical vulnerabilities, payment validation issues, guest order failures, and restore build stability.
-**Files Changed**: `BackEnd/Middleware/jwtVeryfy.js`, `BackEnd/Routes/Product.Routes.js`, `BackEnd/Routes/Cart.Route.js`, `BackEnd/Routes/Wishlist.Routes.js`, `BackEnd/Routes/Address.Route.js`, `BackEnd/Routes/Order.Route.js`, `BackEnd/Routes/Payment.Route.js`, `BackEnd/Models/Order.Model.js`, `BackEnd/Controllers/Order.Controller.js`, `FrontEnd/src/Pages/OrderSummery.jsx`, `FrontEnd/src/utils/apiConfig.js`, `FrontEnd/src/Component/CartContext.jsx`, `FrontEnd/src/Component/WishlistContext.jsx`, `FrontEnd/src/Pages/ProductDetails.jsx`, `FrontEnd/src/Pages/Address.jsx`, `FrontEnd/src/Component/LoginModel.jsx`, `FrontEnd/src/Pages/Contact.jsx`, `FrontEnd/src/Component/BlogAdmin.jsx`, `FrontEnd/package-lock.json`, `FrontEnd/package.json`
-
 ## 2026-06-15 — Added Social Media Links to Footer
 **What**: Wrapped the social media icons in `Footer.jsx` with active hyperlinks to Bunbun Clothing's official profiles.
 **Why**: The user requested that the Facebook, Instagram, Pinterest, and YouTube footer icons be connected to their respective social media pages.
@@ -361,46 +248,46 @@
 - Added `syncGuestCart` logic in `useEffect` to merge the guest cart into the backend `cart` when the user successfully logs in.
 - Updated `Address.jsx` (Checkout page) to check for `userId`. If not authenticated, alerts the user and redirects to the homepage.
 
-## 2026-06-03 â€” Update Website Favicon
+## 2026-06-03 — Update Website Favicon
 **What**: Changed the website favicon from the default Vite SVG to `b_fav.png`.
 **Why**: User requested to use `b_fav.png` as the favicon to match the brand identity.
 **Files Changed**: `FrontEnd/index.html`
 - Updated the `<link rel="icon">` tag to point to `/b_fav.png` and updated the `type` attribute to `image/png`.
 
-## 2026-06-02 â€” Fix 413 Content Too Large on Vercel Product Upload
+## 2026-06-02 — Fix 413 Content Too Large on Vercel Product Upload
 **What**: Increased body-parser JSON limit from 100KB default to 10MB and hardened frontend error handling for Vercel's 413 response shape.
-**Why**: When adding a product with multiple images, the JSON payload (containing Cloudinary URLs + form data) exceeded body-parser's 100KB default limit, causing a 413 error. Vercel returns 413 errors as `{code, message}` objects â€” when this object was passed directly to React state and rendered as JSX, it caused React Error #31 ("Objects are not valid as a React child").
+**Why**: When adding a product with multiple images, the JSON payload (containing Cloudinary URLs + form data) exceeded body-parser's 100KB default limit, causing a 413 error. Vercel returns 413 errors as `{code, message}` objects — when this object was passed directly to React state and rendered as JSX, it caused React Error #31 ("Objects are not valid as a React child").
 **Files Changed**: `BackEnd/App.js`, `FrontEnd/src/Pages/AdminPanel.jsx`
 - Added `{ limit: '10mb' }` to `bodyParser.json()` and added `bodyParser.urlencoded({ extended: true, limit: '10mb' })`.
 - Rewrote the `handleAddProduct` catch block to safely extract string error messages from any error response shape (Vercel 413 `{code, message}`, standard API `{error}`, or fallback `err.message`), preventing objects from being rendered as React children.
 
-## 2026-06-01 â€” Update Primary Theme Color
+## 2026-06-01 — Update Primary Theme Color
 **What**: Replaced the various blue (`#2c3e50`) and purple (`#5345B9`) primary colors with a consistent dark charcoal (`#333333`) across the entire site.
 **Why**: To ensure visual consistency and match the clean, premium aesthetic set by the main navigation header.
 **Files Changed**: `ProductCard.css`, `ProductPage.css`, `Cart.css`, `CartSidebar.css`, `Collection.css`, `Summary.css`, `AddressForm.css`, `LoginModel.css`, `Footer.jsx`
 - Updated CSS variables (`--primary-color`, `--primary-hover`) from blue/purple hex values to charcoal/dark-gray hex values.
 - Updated hardcoded inline styles and background colors to match the new dark charcoal theme.
-## 2026-06-01 â€” Set Global Font Family to Poppins
+## 2026-06-01 — Set Global Font Family to Poppins
 **What**: Enforced the `Poppins` font family across the entire website.
 **Why**: To standardize the typography and ensure a consistent, modern look on all pages.
 **Files Changed**: `FrontEnd/src/index.css`
 - Imported the `Poppins` font from Google Fonts.
 - Applied it globally to all elements using the `*` selector with `!important` to override any page-specific fonts.
 
-## 2026-06-01 â€” Fix Multer Uploads for Serverless/Vercel
+## 2026-06-01 — Fix Multer Uploads for Serverless/Vercel
 **What**: Changed `multer` upload destination from local `../public/images` folder to the OS temporary directory (`os.tmpdir()`).
 **Why**: Vercel and other serverless environments have a read-only filesystem (EROFS), meaning attempting to save images to `../public` crashes the API. Writing to `/tmp` allows the image to be temporarily stored so Cloudinary can process it.
 **Files Changed**: `Middleware/multer.js`
 - Replaced `fs.mkdirSync` logic with `require('os').tmpdir()`.
 
-## 2026-06-01 â€” Fix Category Import for Vercel Deployment
+## 2026-06-01 — Fix Category Import for Vercel Deployment
 **What**: Fixed an import bug causing product addition to fail in production on Vercel.
 **Why**: Vercel/Serverless environments had an issue resolving the `Category.Model` via a direct nested require statement, causing the backend API to throw an error when trying to add a product to a category. 
 **Files Changed**: `Product.Controller.js`, `Category.Model.js`
 - Imported `categorySchema` directly from the `../Models` index inside `Product.Controller.js` instead of directly requiring the file.
 - Used `mongoose.models.Category || mongoose.model(...)` in `Category.Model.js` to prevent `OverwriteModelError` during Vercel's hot-reloading/serverless instantiations.
 
-## 2026-06-01 â€” Add Category Model for Database Grouping
+## 2026-06-01 — Add Category Model for Database Grouping
 **What**: Created a `Category` collection in the database to group products by category matching the requested `categories` -> `products` array structure.
 **Why**: To properly categorize and index products logically in the database instead of relying solely on loose strings inside the product schema.
 **Files Changed**: `Category.Model.js` (new), `index.js`, `Product.Controller.js`
@@ -408,23 +295,23 @@
 - Seeded "Blouse" and "Shapewear" categories directly into MongoDB.
 - Updated `addProduct` and `deleteProduct` in `Product.Controller.js` to automatically push/pull the Product's Object ID into/from the corresponding Category document upon creation/deletion.
 
-## 2026-06-01 â€” Add Sticky Product Info on Scroll
+## 2026-06-01 — Add Sticky Product Info on Scroll
 **What**: Made the product details column sticky on desktop to support scrolling through large image grids.
 **Why**: When viewing multiple images in the 2x2 grid, users need the Add to Cart button and product info to remain visible as they scroll down the images.
 **Files Changed**: `ProductPage.css`
 - Added `align-items: start;` to `.product-grid-unique`.
 - Added `position: sticky; top: 80px;` to `.product-info-unique`.
 
-## 2026-06-01 â€” Show All Product Images with Gallery
+## 2026-06-01 — Show All Product Images with Gallery
 **What**: Replaced the 2-column image grid on the Product Details page with a main image viewer + scrollable thumbnail strip.
 **Why**: Products can have multiple images; users should see all of them with the main image displayed prominently first.
 **Files Changed**: `ProductDetails.jsx`, `ProductPage.css`
 - Built `allImages` array from `product.image` (first) + `product.images` array.
-- Added `selectedImage` state â€” clicking a thumbnail updates the main image.
+- Added `selectedImage` state — clicking a thumbnail updates the main image.
 - Active thumbnail gets a border highlight; inactive ones are slightly dimmed.
 - CSS uses flexbox for horizontal scrollable thumbnails.
 
-## 2026-06-01 â€” Add Size Selection to Product Page
+## 2026-06-01 — Add Size Selection to Product Page
 **What**: Added L/XL/XXL/XXXL size selector above the Add to Cart button on the Product Details page.
 **Why**: Users need to choose a size before adding products to cart.
 **Files Changed**: `ProductDetails.jsx`, `CartContext.jsx`, `Cart.jsx`, `Cart.Controller.js`, `Cart.Model.js`
@@ -435,14 +322,14 @@
 - Cart Model updated `size` field type from Number to String.
 - Cart UI now displays the selected size next to each item.
 
-## 2026-06-01 â€” Move Product Description Layout
+## 2026-06-01 — Move Product Description Layout
 **What**: Repositioned the product description to sit above the "Product Details" accordion.
 **Why**: To improve visual hierarchy, placing the main product description immediately visible before the collapsible specific details.
 **Files Changed**: `ProductDetails.jsx`
 - Extracted the product description from inside the "PRODUCT DETAILS" accordion.
 - Rendered the description above the accordion block.
 
-## 2026-06-01 â€” Add Product Details Accordion
+## 2026-06-01 — Add Product Details Accordion
 **What**: Updated the "Product Details" page to use an accordion-style layout for product information.
 **Why**: To improve readability and match the requested design for displaying specific product attributes cleanly.
 **Files Changed**: `ProductDetails.jsx`, `ProductPage.css`
@@ -450,13 +337,13 @@
 - Created dynamic accordion sections (Product Details, Return & Exchange, Shipping, Seller Info, Help).
 - Updated `ProductPage.css` to add styling for accordion headers, content, chevrons, and removed bullets for a cleaner list.
 
-## 2026-06-01 â€” Make All Product Fields Mandatory
+## 2026-06-01 — Make All Product Fields Mandatory
 **What**: Updated the "Add Product" form in the Admin Dashboard to enforce required validation on all fields.
 **Why**: Prevent incomplete product entries from being saved to the database.
 **Files Changed**: `AdminPanel.jsx`
 - Added the `required` attribute to all input and textarea fields across the Basic Info, Pricing, Common Details, Blouse Details, and Shapewear Details sections.
 
-## 2026-06-01 â€” Add Shapewear Fields to Admin Dashboard
+## 2026-06-01 — Add Shapewear Fields to Admin Dashboard
 **What**: Updated Admin Dashboard "Add Product" form to be driven by category (Blouse vs Shapewear) and added Shapewear-specific fields.
 **Why**: The admin needs a streamlined way to add Shapewear products with their specific attributes (waist, hip, etc.) distinct from Blouses.
 **Files Changed**: `Product.Model.js`, `AdminPanel.jsx`
@@ -465,7 +352,7 @@
 - The form conditionally renders specific sections and dynamic placeholders based on whether "Blouse" or "Shapewear" is selected.
 - Moved common fields (`SKU`, `Type`, `Wash And Care`, `Weight`) into a "Common Details" section.
 
-## 2026-06-01 â€” Fix Vercel Runtime Crash
+## 2026-06-01 — Fix Vercel Runtime Crash
 **What**: Added `razorpay` to root package.json and fixed `api/index.js` url parsing.
 **Why**: The live Vercel API was returning 500 FUNCTION_INVOCATION_FAILED because `razorpay` was missing from the root dependencies causing a module load crash, and the Vercel rewrite configuration lost the original path.
 **Files Changed**: `package.json`, `api/index.js`, `vercel.json`
@@ -473,7 +360,7 @@
 - Modified `vercel.json` rewrites to use capture groups to forward URLs correctly to `/api/index.js` without losing the original path.
 - Updated `api/index.js` to restore original path from `x-invoke-path` header, gracefully handle init errors, and ensure `req.url` matches expected Express routes.
 
-## 2026-05-28 â€” Fix Vercel Serverless Deployment
+## 2026-05-28 — Fix Vercel Serverless Deployment
 **What**: Configured Vercel deployment correctly to serve backend API and added root package.json
 **Why**: The data was not fetching on the live Vercel website because serverless functions were failing to build and environment variables were missing.
 **Files Changed**: `vercel.json`, `api/v1/[...path].js`, `api/images/[...path].js`, `package.json`
@@ -487,10 +374,10 @@
 - Fixed `vercel.json` rewrites to correctly point to the Vercel-mapped endpoint `/api` instead of `/api/index.js`.
 - Cleaned up test files and old Next.js style `[...path].js` API routes since they aren't supported in plain Node.js deployments on Vercel.
 - **Update:** As per explicit request, completely removed the `api/` folder, root `package.json`, and `vercel.json`. The Vercel serverless integration is now removed, and the root directory strictly contains only the `FrontEnd`, `BackEnd`, and `knowledge-base` folders.
-- Implemented dynamic global cart discount calculation in `Cart.jsx` and `OrderSummery.jsx` according to promotional tiers (10% off > â‚¹2999, 15% off > â‚¹4999, 20% off > â‚¹9999).
+- Implemented dynamic global cart discount calculation in `Cart.jsx` and `OrderSummery.jsx` according to promotional tiers (10% off > ₹2999, 15% off > ₹4999, 20% off > ₹9999).
 - **Payment Gateway:** Added Razorpay integration. Created backend routes (`/create-order` and `/verify-payment`) and integrated the Razorpay checkout overlay in `OrderSummery.jsx` when proceeding to payment.
 
-## 2026-05-29 â€” Admin Panel & User Registration
+## 2026-05-29 — Admin Panel & User Registration
 **What**: Built a full admin panel at `/admin` and added user registration to the login modal
 **Why**: Store owner needs to manage products from a dashboard; new customers need to create accounts
 **Files Changed**: `AdminPanel.jsx`, `Admin.css`, `App.jsx`, `Product.Model.js`, `LoginModel.jsx`, `LoginModel.css`
@@ -500,7 +387,7 @@
 - Extended `Product.Model.js` with 13 new fields (sku, productType, blouseType, blouseColor, blouseFabric, blouseWork, sleeveLength, bustSize, blouseLength, washAndCare, salesPackage, weight, images array)
 - Implemented actual Image File Upload for products. Modified Admin form to send `multipart/form-data`, attached `multer` middleware to `/addProduct`, and utilized existing `cloudinary` configuration to dynamically upload product thumbnails and gallery images to the cloud.
 - Added live image preview generation for both the main image and multiple additional images.
-- Upgraded the "Additional Images" logic to allow *incremental* multi-file uploading (adding more images sequentially without replacing the previous ones) and added remove (âœ•) buttons for each individual thumbnail.
+- Upgraded the "Additional Images" logic to allow *incremental* multi-file uploading (adding more images sequentially without replacing the previous ones) and added remove (✖) buttons for each individual thumbnail.
 - Implemented full "Edit Product" functionality. Added a PUT route (`/updateProduct/:id`) on the backend to handle targeted updates while preserving untouched images. The Admin dashboard now has an "Edit" action button that repopulates the product form, previews existing images, and safely tracks additions/removals of image galleries.
 - Updated the "Category" input in the product form to use a predefined `<select>` dropdown (Saree, Blouse, Suit, Lehenga, Kurti, Accessories) instead of manual text entry to prevent typos and ensure data consistency.
 - Fixed a bug on the Collection Page where products weren't fetching correctly. Changed backend `/filterProduct` logic to use case-insensitive matching for categories, and added validation in the frontend to correctly compute maximum price filters even if some products have invalid or missing pricing.
@@ -512,7 +399,7 @@
   3. **Stale server process:** The old backend process was still running on port 4000, preventing the fixed code from taking effect. Killed the old process (PID 8360) and restarted.
 - Restructured `App.jsx` with `AppLayout` wrapper to hide store Header/Footer/CartSidebar on `/admin` route
 - Added user registration form to `LoginModel.jsx` with toggle between login/register modes
-- Registration form captures firstName, lastName, email, password, mobileNumber, and optional gender â€” matches existing `/v1/User/Register` backend endpoint
+- Registration form captures firstName, lastName, email, password, mobileNumber, and optional gender — matches existing `/v1/User/Register` backend endpoint
 - Added CSS for register form (`.form-row-inline`, `.auth-switch-text`, `.success-message`) in `LoginModel.css`
 - **Product Deletion Feature:**
   - Backend: Added `deleteProduct` in `Product.Services.js`, `deleteProduct` controller in `Product.Controller.js`, and `DELETE /v1/product/deleteProduct/:id` route in `Product.Routes.js`.
@@ -522,7 +409,7 @@
   - Resolved Vercel Out of Memory (OOM) error during `npm install` by removing an unused circular dependency (`"bunbun-clothing-root": "file:.."`) from the `FrontEnd/package.json` file.
   - Optimized the root `package.json` postinstall script to use `--no-audit --no-fund` to further reduce memory usage during Vercel builds.
 
-## 2026-06-01 â€” Add Blouse Size Details Table
+## 2026-06-01 — Add Blouse Size Details Table
 **What**: Added a dynamic size details table for the Blouse category in the admin panel and fetched/displayed these specific size measurements on the Product Details page. Made Sleeve Length and Blouse Work optional fields.
 **Why**: To provide precise sizing information (Bust, Waist, Shoulder, Length) for different blouse sizes and show it contextually on the product page when a size is selected.
 **Files Changed**: `Product.Model.js`, `Product.Controller.js`, `AdminPanel.jsx`, `ProductDetails.jsx`
@@ -533,14 +420,14 @@
 - Updated `ProductDetails.jsx` to dynamically render specific Bust, Waist, Shoulder, and Length measurements based on the user's selected size.
 - Fixed a JSX element syntax error in `AdminPanel.jsx` by wrapping adjacent conditional elements in a React Fragment (`<>...</>`).
 
-## 2026-06-01 â€” Rebrand to Bunbun Clothing
+## 2026-06-01 — Rebrand to Bunbun Clothing
 **What**: Renamed all instances of "Navdhaaga" to "Bunbun Clothing" across the codebase.
 **Why**: User requested to update the website's branding to "Bunbun Clothing".
 **Files Changed**: `App.jsx`, `Footer.jsx`, `Header.jsx`, `LoginModel.jsx`, `About.jsx`, `AdminPanel.jsx`, `BunbunClothingGold.jsx` (renamed from `NadhaagaGold.jsx`), `OrderSummery.jsx`, `PrivacyPolicy.jsx`, `ProductDetails.jsx`, `TermAndCondition.jsx`, `package.json`, etc.
 - Executed global find-and-replace for `Navdhaaga`, `navdhaaga`, and `NAVDHAAGA`.
 - Renamed the frontend React component file `NadhaagaGold.jsx` to `BunbunClothingGold.jsx`.
 
-## 2026-06-01 â€” Persist Add Product Form State
+## 2026-06-01 — Persist Add Product Form State
 **What**: Modified the Admin Panel to save the active tab, product form data, and edit state across page refreshes.
 **Why**: Prevent accidental data loss if the admin refreshes the page midway through adding or editing a complex product (with many size details, etc.).
 **Files Changed**: `AdminPanel.jsx`
