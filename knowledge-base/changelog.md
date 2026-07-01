@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-07-01 — Added Google Analytics Tracking
+**What**: Added Google Analytics gtag.js snippet (G-D4M039BTQQ) to the `<head>` of `index.html`.
+**Why**: To enable site traffic tracking and analytics via Google Analytics.
+**Files Changed**: `FrontEnd/index.html`
+- Inserted the async gtag.js script and configuration block at the top of the `<head>` tag.
+
 ## 2026-06-15 — Added Social Media Links to Footer
 **What**: Wrapped the social media icons in `Footer.jsx` with active hyperlinks to Bunbun Clothing's official profiles.
 **Why**: The user requested that the Facebook, Instagram, Pinterest, and YouTube footer icons be connected to their respective social media pages.
