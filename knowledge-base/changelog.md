@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-07-03 — Fixed Blog Post "Image is required" Error
+**What**: Fixed a bug where creating a new blog post failed with "Image is required" even though an image had been uploaded.
+**Why**: The frontend uploads the featured image separately via `/v1/blog/uploadImage`, gets back a Cloudinary URL, and sends it as `imageUrl` in the JSON body. But the backend `addBlog` controller only checked for `req.file` (a multipart file upload) and rejected the request when only a URL string was provided. Added an `else if (req.body.imageUrl)` branch to accept the pre-uploaded URL.
+**Files Changed**: `BackEnd/Controllers/Blog.Controller.js`
+- Added fallback to accept `req.body.imageUrl` when no file is attached to the request.
+
 ## 2026-07-01 — Added Google Analytics Tracking
 **What**: Added Google Analytics gtag.js snippet (G-D4M039BTQQ) to the `<head>` of `index.html`.
 **Why**: To enable site traffic tracking and analytics via Google Analytics.

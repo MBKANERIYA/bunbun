@@ -54,6 +54,8 @@ const addBlog = async (req, res) => {
         let imageUrl = '';
         if (req.file) {
             imageUrl = await uploadBlogFile(req.file);
+        } else if (req.body.imageUrl) {
+            imageUrl = req.body.imageUrl;
         } else {
             return res.status(400).json({ success: false, message: "Image is required" });
         }
